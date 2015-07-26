@@ -93,6 +93,9 @@
     <Compile Include="..\De.TorstenMandelkow.MetroChart\Controls\FadingListView.cs">
       <Link>Controls\FadingListView.cs</Link>
     </Compile>
+    <Compile Include="..\De.TorstenMandelkow.MetroChart\Controls\GASingleColumnGrid.cs">
+      <Link>Controls\GASingleColumnGrid.cs</Link>
+    </Compile>
     <Compile Include="..\De.TorstenMandelkow.MetroChart\Controls\MinimalWidthTextBlock.cs">
       <Link>Controls\MinimalWidthTextBlock.cs</Link>
     </Compile>
@@ -152,6 +155,12 @@
     </Compile>
     <Compile Include="..\De.TorstenMandelkow.MetroChart\Core\Extensions.cs">
       <Link>Core\Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\De.TorstenMandelkow.MetroChart\Core\GAScatterChart\GAScatterChart.cs">
+      <Link>Core\GAScatterChart\GAScatterChart.cs</Link>
+    </Compile>
+    <Compile Include="..\De.TorstenMandelkow.MetroChart\Core\GAScatterChart\GAScatterPiece.cs">
+      <Link>Core\GAScatterChart\GAScatterPiece.cs</Link>
     </Compile>
     <Compile Include="..\De.TorstenMandelkow.MetroChart\Core\GaugeChart\RadialGaugeChart.cs">
       <Link>Core\GaugeChart\RadialGaugeChart.cs</Link>

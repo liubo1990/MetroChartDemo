@@ -7,7 +7,30 @@
 3. Try puttiing this into another application and write information on how to do it
 
 
+SCATTER CHART TO DO
+1. Issue with points on 0 and maximum - have to increase size of columns by 1/2 width of scatter
+and change the height accordingly
+2. Colour and style of bullets - style name in the series?
+3. Enable the numbers to be turned off
+4. legend
+5.do I want to draw the same way as the multi-chart? - I think it would be best
+
+
+Will have two charts - GAScatterLineChart and GAColumnScatterLineChart
+
+** have a multiTypeSeries where you can set the type to be line, bullet, or both
+** this is how the scatter chart should work instead of the current scatter
+** but this shows I can do IT!
+
+** ** create .cs file in the code, and a link to it in  the librarby
+** ** update the xaml in the code and it will get copied to the library
+** ** can style the charts in the test app Graohs.xaml
+** ** put custom bullet and line styles in Graohs.xaml BUT leave the std GA ones alone
+
 
 setup notes
 If using the solution and not the .dll only (not sure if you can do this?) then add
 reference to the wpf one
+
+Alter the Generic.xaml in the MetroChart (with the code) and the other one gets updated
+Always copy link to .WPF folder too

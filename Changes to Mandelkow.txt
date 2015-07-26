@@ -1,0 +1,7 @@
+Change to test appplication
+Removal of win8 and silverlight code
+Addition of GAScatterChart
+	GAScatterChart and Scatter Piece in CoreChart
+	Addition of GASingleColumnGrid to enable series to be overlayed
+
+Fix core.ChartBase - issue where maximum value of chart wouldnt be picked up if in second or subsequent data groups

@@ -42,13 +42,18 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Presentation" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChartControls\ChartTitle.cs" />
@@ -57,6 +62,7 @@
     <Compile Include="ChartControls\PiePieceLabel.cs" />
     <Compile Include="Controls\ColumnSeriesPanel.cs" />
     <Compile Include="Controls\AutoSizeTextBlock.cs" />
+    <Compile Include="Controls\GASingleColumnGrid.cs" />
     <Compile Include="Controls\UniformGridPanel.cs" />
     <Compile Include="Controls\StackedColumnsPanel.cs" />
     <Compile Include="Controls\MinimalWidthTextBlock.cs" />
@@ -68,6 +74,8 @@
     <Compile Include="Core\BarChart\ClusteredBarChart.cs" />
     <Compile Include="Core\BarChart\BarPiece.cs" />
     <Compile Include="Core\Doughnut\DoughnutChart.cs" />
+    <Compile Include="Core\GAScatterChart\GAScatterChart.cs" />
+    <Compile Include="Core\GAScatterChart\GAScatterPiece.cs" />
     <Compile Include="Core\GaugeChart\RadialGaugeChart.cs" />
     <Compile Include="Core\GaugeChart\RadialGaugePiece.cs" />
     <Compile Include="ChartControls\Legend.cs" />
@@ -98,6 +106,7 @@
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

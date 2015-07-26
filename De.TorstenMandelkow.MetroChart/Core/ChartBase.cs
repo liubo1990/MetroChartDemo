@@ -769,6 +769,7 @@
                     groupedSeries.Add(item);
                 }
 
+                RecalcMaxDataPointValue(); //GA fix issue with max value in second group not being picked up add line
                 UpdateColorsOfDataPoints();
 
                 chartLegendItems.Clear();
