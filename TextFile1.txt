@@ -1,0 +1,13 @@
+1. change namespace - remember to back up everything really well  beforehand.
+	There is a file called XAMLReplaceTargets which has caused issues when I do a copy and replace
+	I think that is what is causing all the issues with my other version not working
+	Does there need to be information about this file put somewhere?
+2. Main Key is some sort of signing key - is it mine now? Can I / should I remove it?
+	Yes, if its not mine
+3. Try puttiing this into another application and write information on how to do it
+
+
+
+setup notes
+If using the solution and not the .dll only (not sure if you can do this?) then add
+reference to the wpf one
