@@ -4,12 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "De.TorstenMandelkow.MetroChart.WPF", "De.TorstenMandelkow.MetroChart.WPF\De.TorstenMandelkow.MetroChart.WPF.csproj", "{4AB4B0DB-780C-48B9-A642-8E527353D957}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FA286411-E476-4BD0-ABE9-7AE69226069C} = {FA286411-E476-4BD0-ABE9-7AE69226069C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "De.TorstenMandelkow.MetroChart", "De.TorstenMandelkow.MetroChart\De.TorstenMandelkow.MetroChart.csproj", "{FA286411-E476-4BD0-ABE9-7AE69226069C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{234C2733-4068-470F-96ED-D111EBF9A10E}"
 	ProjectSection(SolutionItems) = preProject
 		Changes to Mandelkow.txt = Changes to Mandelkow.txt
+		Instructions..txt = Instructions..txt
 		MainKey.snk = MainKey.snk
 		TextFile1.txt = TextFile1.txt
 		XAMLReplace.targets = XAMLReplace.targets
@@ -46,6 +50,7 @@ Global
 		{4AB4B0DB-780C-48B9-A642-8E527353D957}.Release|x64.ActiveCfg = Release|Any CPU
 		{4AB4B0DB-780C-48B9-A642-8E527353D957}.Release|x86.ActiveCfg = Release|Any CPU
 		{FA286411-E476-4BD0-ABE9-7AE69226069C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA286411-E476-4BD0-ABE9-7AE69226069C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA286411-E476-4BD0-ABE9-7AE69226069C}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{FA286411-E476-4BD0-ABE9-7AE69226069C}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{FA286411-E476-4BD0-ABE9-7AE69226069C}.Debug|x86.ActiveCfg = Debug|Any CPU

@@ -46,6 +46,30 @@
                 </GAChart:ChartSeries>
             </GAChart:GAScatterChart.Series>
         </GAChart:GAScatterChart>
+
+        <GAChart:GALineScatterChart
+           Style="{StaticResource MinimalChartStyle}"
+            DataContext="{Binding }"
+            ChartTitle="my test title" 
+            ChartSubTitle="subTitle"
+            >
+            <GAChart:GALineScatterChart.Series >
+                <GAChart:ChartSeries
+                    SeriesTitle="{Binding scatterData.seriesDisplayName}"
+                    DisplayMember="date"
+                    ValueMember="amount"
+                    ItemsSource="{Binding scatterData.Items}"
+                    >
+                </GAChart:ChartSeries>
+                <GAChart:ChartSeries
+                    SeriesTitle="{Binding scatterData1.seriesDisplayName}"
+                    DisplayMember="date"
+                    ValueMember="amount"
+                    ItemsSource="{Binding scatterData1.Items}"
+                    >
+                </GAChart:ChartSeries>
+            </GAChart:GALineScatterChart.Series>
+        </GAChart:GALineScatterChart>
     </StackPanel>
 </Window>
 

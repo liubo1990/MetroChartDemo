@@ -7,6 +7,11 @@
 3. Try puttiing this into another application and write information on how to do it
 
 
+****************************
+** when does xamlReplace.tagets get run? Ide like ot to run each build?
+***********************
+
+
 SCATTER CHART TO DO
 1. Issue with points on 0 and maximum - have to increase size of columns by 1/2 width of scatter
 and change the height accordingly

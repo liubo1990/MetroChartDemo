@@ -1,0 +1,3 @@
+Must incllude the Graphs.xaml in your project
+leave the GALineStyle and GAScatterBulletStyle as defaults are needed.
+If you want your own create them here (or elsewhere)

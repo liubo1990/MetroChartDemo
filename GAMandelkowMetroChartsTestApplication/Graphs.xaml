@@ -10,5 +10,19 @@
             <Setter Property="Height" Value="350"/>
         <Setter Property="Margin" Value="10 10 10 10"/>
         </Style>
+    
+    <Style x:Key="GALineStyle" TargetType="Path" >
+        <Setter Property="StrokeThickness" Value="1"></Setter>
+        <Setter Property="Stroke" Value="Black"></Setter>
+    </Style>
+
+    <Style x:Key="GAScatterBulletStyle" TargetType="Rectangle" >
+        <Setter Property="Height" Value="5"></Setter>
+        <Setter Property="Width" Value="5"></Setter>
+        <Setter Property="RadiusX" Value="2.5"></Setter>
+        <Setter Property="RadiusY" Value="2.5"></Setter>
+        <Setter Property="Fill" Value="Aquamarine"></Setter>
+        <!--set to any value to have it filled, leav blank for line only, the value is ignored-->
+    </Style>
 
 </ResourceDictionary>
