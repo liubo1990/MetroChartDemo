@@ -5,3 +5,12 @@ Addition of GAScatterChart
 	Addition of GASingleColumnGrid to enable series to be overlayed
 
 Fix core.ChartBase - issue where maximum value of chart wouldnt be picked up if in second or subsequent data groups
+
+
+addition of GALineScatterChart
+
+series now contains
+
+SeriesType
+SeriesBulletStyle
+SeriesLineStyle

@@ -26,6 +26,32 @@
     
     public class DataPointGroup : DependencyObject, INotifyPropertyChanged
     {
+        /// <summary>
+        /// The type of the series
+        /// Bullet, Line, Both, Other
+        /// </summary>
+        public static readonly DependencyProperty SeriesTypeProperty =
+           DependencyProperty.Register("GASeriesType",
+           typeof(string),
+           typeof(DataPointGroup),
+           new PropertyMetadata(null));
+
+        /// <summary>
+        /// Name of style for the bullets.
+        /// This should be Path styles, or leave empty to use default
+        /// </summary>
+        public static readonly DependencyProperty GAScatterBulletStyleProperty =
+          DependencyProperty.Register("GAScatterBulletStyle", typeof(String), typeof(DataPointGroup),
+          new PropertyMetadata(null));
+
+        /// <summary>
+        /// Name of style for the lines.
+        /// These should be rectangle styles, or leave empty to use default
+        /// </summary>
+        public static readonly DependencyProperty GALineStyleProperty =
+          DependencyProperty.Register("GALineStyle", typeof(String), typeof(DataPointGroup),
+          new PropertyMetadata(null));
+
         public static readonly DependencyProperty SumOfDataPointGroupProperty =
             DependencyProperty.Register("SumOfDataPointGroup",
             typeof(double),
@@ -54,13 +80,53 @@
 
         public ChartBase ParentChart
         { get; private set; }
+
+        // <summary>
+        /// The type of the series
+        /// Bullet, Line, Both, Other
+        /// </summary>
+        public string GASeriesType
+        {
+            get
+            {
+                return (string)GetValue(SeriesTypeProperty);
+            }
+            set
+            {
+                SetValue(SeriesTypeProperty, value);
+            }
+        }
+
+
+        /// <summary>
+        /// Name of style for the bullets.
+        /// Set using the dependency property
+        /// Used : Height, Width, radiusX, RadiusY, Fill
+        /// The Fill is used like a boolean. If a value is given it is filled with the series value
+        /// If a value isnt given it is left as a stroke only.
+        /// </summary>
+        public string GABulletStyle
+        {
+            get { return (string)GetValue(GAScatterBulletStyleProperty); }
+            set { SetValue(GAScatterBulletStyleProperty, value); }
+        }
+
+        /// <summary>
+        /// Name of style for the Lines.
+        /// Set using the dependency property
+        /// Used : StrokeThickness, Stroke
+        /// </summary>
+        public string GALineStyle
+        {
+            get { return (string)GetValue(GALineStyleProperty); }
+            set { SetValue(GALineStyleProperty, value); }
+        }
        
         public DataPointGroup(ChartBase parentChart, string caption, bool showcaption)
         {
             ParentChart = parentChart;
             Caption = caption;
             ShowCaption = showcaption;
-
             DataPoints = new ObservableCollection<DataPoint>();
             DataPoints.CollectionChanged += Items_CollectionChanged;
         }

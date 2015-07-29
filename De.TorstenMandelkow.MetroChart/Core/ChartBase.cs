@@ -664,6 +664,12 @@
                                 {
                                     dataPointGroup = new DataPointGroup(this, seriesItemCaption, this.Series.Count > 1 ? true : false);
                                     dataPointGroup.PropertyChanged += dataPointGroup_PropertyChanged;
+
+                                    //GA add seriestype and styles
+                                    dataPointGroup.GASeriesType = initialSeries.SeriesType;
+                                    dataPointGroup.GALineStyle = initialSeries.SeriesLineStyle;
+                                    dataPointGroup.GABulletStyle = initialSeries.SeriesBulletStyle;
+                                    
                                     result.Add(dataPointGroup);
 
                                     CreateDataPointGroupBindings(dataPointGroup);
@@ -711,6 +717,12 @@
                             //erstelle für jede Series einen DataPointGroup, darin wird dann für jedes Item in jeder Serie ein DataPoint angelegt
                             DataPointGroup dataPointGroup = new DataPointGroup(this, initialSeries.SeriesTitle, this.Series.Count > 1 ? true : false);
                             dataPointGroup.PropertyChanged += dataPointGroup_PropertyChanged;
+                            
+                            //GA add seriestype and styles
+                            dataPointGroup.GASeriesType = initialSeries.SeriesType;
+                            dataPointGroup.GALineStyle = initialSeries.SeriesLineStyle;
+                            dataPointGroup.GABulletStyle = initialSeries.SeriesBulletStyle;
+
                             result.Add(dataPointGroup);
 
                             CreateDataPointGroupBindings(dataPointGroup);
@@ -731,7 +743,7 @@
                                         datapoint.DisplayMember = allSeries.DisplayMember;
                                         datapoint.ItemBrush = GetItemBrush(seriesIndex);
                                         datapoint.PropertyChanged += groupdItem_PropertyChanged;
-
+                                        
                                         CreateDataPointBindings(datapoint, dataPointGroup);
 
                                         dataPointGroup.DataPoints.Add(datapoint);
@@ -769,7 +781,7 @@
                     groupedSeries.Add(item);
                 }
 
-                RecalcMaxDataPointValue(); //GA fix issue with max value in second group not being picked up add line
+                RecalcMaxDataPointValue(); //GA fix issue with max value in second group not being picked up - add this line
                 UpdateColorsOfDataPoints();
 
                 chartLegendItems.Clear();
@@ -796,7 +808,55 @@
                     }
                 }
                 RecalcSumOfDataPointGroup();
+
+                //TODO: alter this confition?
+                //if (_isGAMultipleSeriesChart)
+                //{
+                   // GACopyPointsForLineGraph(groupedSeries);
+               // }
             }
+        }
+
+         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="groupedSeries"></param>
+        private void GACopyPointsForLineGraph(ObservableCollection<DataPointGroup> groupedSeries)
+        {
+            // copy information from the series and put in fields in the datapointGroup
+            // then in the generic.Xaml bind the properties from the group
+            // to the line piece.
+
+            // so there need to be dependency properties  on the scatterLine piece
+            // series and  datapointgroup
+
+            // SeriesType, GABulletStyle, GALineStyle
+
+            //group.GABulletStyle
+            //group.GAScatterBulletStyle
+            // group.SeriesType (Bullet, Line, Both, Other)
+
+            //foreach (ChartSeries series in this.Series)
+
+            //    foreach (DataPointGroup group in groupedSeries)
+            //    {
+
+    
+            //        for (int counter = 0; counter < group.DataPoints.Count; counter++)
+            //        {
+            //            if (counter + 1 == group.DataPoints.Count)
+            //            {
+            //                group.DataPoints[counter].endValue = null;
+            //            }
+            //            else
+            //            {
+            //                double nextStartValue = (double)group.DataPoints[counter + 1].Value;
+            //                group.DataPoints[counter].endValue = nextStartValue;
+            //            }
+
+            //        }
+            //    }
         }
 
         private bool GetIsRowColumnSwitched()
@@ -817,15 +877,34 @@
             return false;
         }
 
+
+        /// <summary>
+        /// update the colours for the datapoints, or the series
+        /// deopending on the graph type
+        /// </summary>
         private void UpdateColorsOfDataPoints()
         {
+            int index = 0;
             foreach(var dataPointGroup in groupedSeries)
             {
-                int index = 0;
+                bool isGALineOrScatter = (dataPointGroup.GASeriesType == "Bullet"
+                    || dataPointGroup.GASeriesType == "Line" || dataPointGroup.GASeriesType == "Both");
+                if (!isGALineOrScatter)
+                {
+                    index = 0; // reset colour at start of each series for normal graphs
+                }
+                
                 foreach (DataPoint dataPoint in dataPointGroup.DataPoints)
                 {
                     dataPoint.SetValue(DataPoint.ItemBrushProperty, GetItemBrush(index));
-                    index++;
+                    if (!isGALineOrScatter)
+                    {
+                        index++;
+                    } // each point gets different colour normally
+                }
+                if (isGALineOrScatter)
+                {
+                    index++; // GALineScatters get different colour for each series
                 }
             }
             /*

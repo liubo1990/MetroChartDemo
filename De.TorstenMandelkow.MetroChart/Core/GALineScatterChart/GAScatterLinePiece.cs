@@ -40,11 +40,18 @@ namespace De.TorstenMandelkow.MetroChart
 
         private Style _lineStyle;
         private Style _bulletStyle;
-        private Size _bulletSize;
-        private double _bulletRadiusX;
-        private double _bulletRadiusY;
-        private bool _bulletIsFilled;
-        
+        GALineScatterStyling _lineScatterStyle;
+
+
+        /// <summary>
+        /// The type of the series
+        /// Bullet, Line, Both, Other
+        /// </summary>
+        public static readonly DependencyProperty GASeriesTypeProperty =
+           DependencyProperty.Register("GASeriesType",
+           typeof(string),
+           typeof(GAScatterLinePiece),
+           new PropertyMetadata(null));
 
         /// <summary>
         /// Name of style for the bullets.
@@ -52,7 +59,7 @@ namespace De.TorstenMandelkow.MetroChart
         /// </summary>
         public static readonly DependencyProperty GAScatterBulletStyleProperty =
           DependencyProperty.Register("GAScatterBulletStyle", typeof(String), typeof(GAScatterLinePiece),
-          new PropertyMetadata(""));
+          new PropertyMetadata(null));
 
         /// <summary>
         /// Name of style for the lines.
@@ -60,7 +67,7 @@ namespace De.TorstenMandelkow.MetroChart
         /// </summary>
         public static readonly DependencyProperty GALineStyleProperty =
           DependencyProperty.Register("GALineStyle", typeof(String), typeof(GAScatterLinePiece),
-          new PropertyMetadata(""));
+          new PropertyMetadata(null));
 
 
 
@@ -109,6 +116,23 @@ namespace De.TorstenMandelkow.MetroChart
 
         #region Properties
 
+        // <summary>
+        /// The type of the series
+        /// Bullet, Line, Both, Other
+        /// </summary>
+        public string GASeriesType
+        {
+            get
+            {
+                return (string)GetValue(GASeriesTypeProperty);
+            }
+            set
+            {
+                SetValue(GASeriesTypeProperty, value);
+            }
+        }
+
+
         /// <summary>
         /// Name of style for the bullets.
         /// Set using the dependency property
@@ -116,18 +140,25 @@ namespace De.TorstenMandelkow.MetroChart
         /// The Fill is used like a boolean. If a value is given it is filled with the series value
         /// If a value isnt given it is left as a stroke only.
         /// </summary>
-        public string GABulletStyle
+        /// 
+        public string GAScatterBulletStyle
         {
-            get { return (string)GetValue(GAScatterBulletStyleProperty); }
-            set { SetValue(GAScatterBulletStyleProperty, value); }
+            get
+            {
+                return (string)GetValue(GAScatterBulletStyleProperty);
+            }
+            set
+            {
+                SetValue(GAScatterBulletStyleProperty, value);
+            }
         }
-
+        
         /// <summary>
         /// Name of style for the Lines.
         /// Set using the dependency property
         /// Used : StrokeThickness, Stroke
         /// </summary>
-        public string GAScatterBulletStyle
+        public string GALineStyle
         {
             get { return (string)GetValue(GALineStyleProperty); }
             set { SetValue(GALineStyleProperty, value); }
@@ -151,6 +182,7 @@ namespace De.TorstenMandelkow.MetroChart
             set { SetValue(ColumnHeightProperty, value); }
         }
  
+       
         #endregion Properties
 
         #region Methods
@@ -164,13 +196,9 @@ namespace De.TorstenMandelkow.MetroChart
         {
 
             setUpStyles();
-            
 
-            //slice = this.GetTemplateChild("Slice") as Border;
-            //bullet = this.GetTemplateChild("Bullet") as Rectangle;
             _GALine = this.GetTemplateChild("GALine") as Path;
-           // GAPlotCanvas = this.GetTemplateChild("GAChartCanvas") as Canvas;
-           
+          
             //TODO: find a better way of doing this using the name!
             //go up the visual tree to get the GAChart Canvas
             // This will need to be altered if the xaml changes! - is 
@@ -187,31 +215,39 @@ namespace De.TorstenMandelkow.MetroChart
         /// </summary>
         private void setUpStyles()
         {
-            _lineStyle = TryFindResource(GALineStyleProperty) as Style;
-            _bulletStyle = TryFindResource(GAScatterBulletStyle) as Style;
-
-            if (_lineStyle==null)
+            if (!string.IsNullOrEmpty(GALineStyle)) 
+            {
+                _lineStyle = TryFindResource(GALineStyle) as Style;
+            }
+            else
             {
                 _lineStyle = TryFindResource("GALineStyle") as Style;
             }
 
-            if (_bulletStyle == null)
+            if (!string.IsNullOrEmpty(GAScatterBulletStyle))
+            {
+                _bulletStyle = TryFindResource(GAScatterBulletStyle) as Style;
+            }
+            else
+            {
+                _bulletStyle = TryFindResource("GAScatterBulletStyle") as Style;
+            }
+            
+            if (_lineStyle==null)
+            {
+                _lineStyle = TryFindResource("GALineStyle") as Style;
+            }
+            if (_bulletStyle==null)
             {
                 _bulletStyle = TryFindResource("GAScatterBulletStyle") as Style;
             }
 
-            var bulletHeightSetter = _bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Height");
-            var bulletWidthSetter = _bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Width");
-            var butlletRadiusXSetter = _bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "RadiusX");
-            var butlletRadiusYSetter = _bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "RadiusY");
-            var butlletFillSetter = _bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Fill");
+            _lineScatterStyle = new GALineScatterStyling(_lineStyle, _bulletStyle, DataPoints[0]);
 
-            _bulletIsFilled = !(butlletFillSetter == null);
-
-           _bulletSize = new Size((double)bulletWidthSetter.Value,(double)bulletHeightSetter.Value);
-           _bulletRadiusX = (double)butlletRadiusXSetter.Value;
-           _bulletRadiusY = (double)butlletRadiusYSetter.Value;;
+            
         }
+
+       
 
         void GAScatterPiece_Loaded(object sender, RoutedEventArgs e)
         {
@@ -228,14 +264,15 @@ namespace De.TorstenMandelkow.MetroChart
             { 
                 if (_GALine == null) return;
 
+                _GALine.Fill = _lineScatterStyle.fillBrush;
+                _GALine.StrokeThickness = _lineScatterStyle.strokeThickness;
+                _GALine.Stroke = _lineScatterStyle.lineBrush;
+                
+
                 GeometryCollection geomCollection = new GeometryCollection();
                 GeometryGroup group = new GeometryGroup();
                 group.Children = geomCollection;
                 _GALine.Data = group;
-
-
-                _GALine.Stroke = DataPoints[0].ItemBrush;
-                if (_bulletIsFilled) _GALine.Fill = DataPoints[0].ItemBrush;
 
                 Point lineStartPoint = new Point(0, 0);
                 Point lineEndPoint = new Point(0, 0);
@@ -251,9 +288,12 @@ namespace De.TorstenMandelkow.MetroChart
                         double CenterY = _GAPlotCanvas.ActualHeight - (_GAPlotCanvas.ActualHeight * p.PercentageFromMaxDataPointValue);
                         lineStartPoint = new Point(CenterX,CenterY) ;
 
-                        RectangleGeometry bulletGeometry = getRectangleGeometry(CenterX, CenterY);
+                        if (GASeriesType == "Both" || GASeriesType == "Bullet")
+                        {
+                            RectangleGeometry bulletGeometry = getRectangleGeometry(CenterX, CenterY);
 
-                        group.Children.Add(bulletGeometry);
+                            group.Children.Add(bulletGeometry);
+                        }
                        
 
                     }
@@ -266,18 +306,26 @@ namespace De.TorstenMandelkow.MetroChart
                         lineEndPoint.X = CenterX;
                         lineEndPoint.Y = CenterY;
 
-                        LineGeometry l = new LineGeometry();
-                        l.StartPoint = lineStartPoint;
-                        l.EndPoint = lineEndPoint;
+                        if (GASeriesType=="Both" || GASeriesType=="Line")
+                        {
+                            LineGeometry l = new LineGeometry();
+                            l.StartPoint = lineStartPoint;
+                            l.EndPoint = lineEndPoint;
+
+                            group.Children.Add(l);
+                        }
                         
-                        group.Children.Add(l);
 
                         lineStartPoint.X = CenterX;
                         lineStartPoint.Y = CenterY;
 
-                        RectangleGeometry bulletGeometry = getRectangleGeometry(CenterX, CenterY);
+                        if (GASeriesType=="Both" || GASeriesType=="Bullet")
+                        {
+                            RectangleGeometry bulletGeometry = getRectangleGeometry(CenterX, CenterY);
+
+                            group.Children.Add(bulletGeometry);
+                        }
                         
-                        group.Children.Add(bulletGeometry);
                     }
                    
 
@@ -363,9 +411,9 @@ namespace De.TorstenMandelkow.MetroChart
         private RectangleGeometry getRectangleGeometry(double CenterX, double CenterY)
         {
             RectangleGeometry bulletGeometry = new RectangleGeometry();
-            bulletGeometry.RadiusX = _bulletRadiusX;
-            bulletGeometry.RadiusY = _bulletRadiusY;
-            bulletGeometry.Rect = new Rect(new Point(CenterX - (_bulletSize.Width/2), CenterY - (_bulletSize.Height/2)), _bulletSize);
+            bulletGeometry.RadiusX = _lineScatterStyle.scatterXRadius;
+            bulletGeometry.RadiusY = _lineScatterStyle.scatterYRadius;
+            bulletGeometry.Rect = new Rect(new Point(CenterX - (_lineScatterStyle.scatterSize.Width / 2), CenterY - (_lineScatterStyle.scatterSize.Height / 2)), _lineScatterStyle.scatterSize);
             return bulletGeometry;
         }
 

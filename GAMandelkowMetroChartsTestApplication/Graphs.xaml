@@ -13,7 +13,6 @@
     
     <Style x:Key="GALineStyle" TargetType="Path" >
         <Setter Property="StrokeThickness" Value="1"></Setter>
-        <Setter Property="Stroke" Value="Black"></Setter>
     </Style>
 
     <Style x:Key="GAScatterBulletStyle" TargetType="Rectangle" >
@@ -21,8 +20,33 @@
         <Setter Property="Width" Value="5"></Setter>
         <Setter Property="RadiusX" Value="2.5"></Setter>
         <Setter Property="RadiusY" Value="2.5"></Setter>
-        <Setter Property="Fill" Value="Aquamarine"></Setter>
-        <!--set to any value to have it filled, leav blank for line only, the value is ignored-->
+        <Setter Property="Fill" Value="Aqua"></Setter>
+        <!--set to any value to have scatter filled, leav blank for line only, the value is ignored-->
+    </Style>
+
+    <Style x:Key="BlackLineRedFillStyle" TargetType="Path" >
+        <Setter Property="StrokeThickness" Value="1"></Setter>
+        <Setter Property="Stroke" Value="Black"></Setter>
+        <Setter Property="Fill" Value="Red"></Setter>
+        <!-- will be colour of the bullet fill IF BulletStyleFill has a value-->
+
+    </Style>
+
+    <Style x:Key="RectangleFilledStyle" TargetType="Rectangle" >
+        <Setter Property="Height" Value="5"></Setter>
+        <Setter Property="Width" Value="5"></Setter>
+        <Setter Property="RadiusX" Value="0"></Setter>
+        <Setter Property="RadiusY" Value="0"></Setter>
+        <Setter Property="Fill" Value="Aqua"></Setter>
+        <!--set to any value to have scatter filled, leav blank for line only, the value is ignored-->
+    </Style>
+
+    <Style x:Key="NotFilledCircleStyle" TargetType="Rectangle" >
+        <Setter Property="Height" Value="5"></Setter>
+        <Setter Property="Width" Value="5"></Setter>
+        <Setter Property="RadiusX" Value="2.5"></Setter>
+        <Setter Property="RadiusY" Value="2.5"></Setter>
+        <!--set to any value to have scatter filled, leav blank for line only, the value is ignored-->
     </Style>
 
 </ResourceDictionary>

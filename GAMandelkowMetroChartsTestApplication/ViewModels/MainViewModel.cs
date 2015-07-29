@@ -66,6 +66,23 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
                 }
             }
         }
+
+        private GraphSeriesInformation _scatterData2;
+        public GraphSeriesInformation scatterData2
+        {
+            get
+            {
+                return _scatterData2;
+            }
+            set
+            {
+                if (_scatterData2 != value)
+                {
+                    _scatterData2 = value;
+                    RaisePropertyChanged("scatterData2");
+                }
+            }
+        }
        
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -100,6 +117,16 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
             scatterData1.Items.Add(new GraphSeriesDataPoint("fri", 2.8));
             scatterData1.Items.Add(new GraphSeriesDataPoint("sat", 3));
             scatterData1.Items.Add(new GraphSeriesDataPoint("sun", 0));
+
+            scatterData2 = new GraphSeriesInformation();
+            scatterData2.seriesDisplayName = "Series 3";
+            scatterData2.Items.Add(new GraphSeriesDataPoint("mon", 10));
+            scatterData2.Items.Add(new GraphSeriesDataPoint("tue", 23));
+            scatterData2.Items.Add(new GraphSeriesDataPoint("wed", 20));
+            scatterData2.Items.Add(new GraphSeriesDataPoint("thur", 19));
+            scatterData2.Items.Add(new GraphSeriesDataPoint("fri", 7));
+            scatterData2.Items.Add(new GraphSeriesDataPoint("sat", 0));
+            scatterData2.Items.Add(new GraphSeriesDataPoint("sun", 10));
         }
    
     }

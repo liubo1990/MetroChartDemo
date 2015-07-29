@@ -43,6 +43,35 @@ namespace De.TorstenMandelkow.MetroChart
             typeof(string),
             typeof(ChartSeries),
             new PropertyMetadata(null));
+        /// <summary>
+        /// The type of the series
+        /// Bullet, Line, Both, Other
+        /// </summary>
+        public static readonly DependencyProperty SeriesTypeProperty =
+           DependencyProperty.Register("SeriesType",
+           typeof(string),
+           typeof(ChartSeries),
+           new PropertyMetadata(null));
+
+        /// <summary>
+        /// The type of the series
+        /// Bullet, Line, Both, Other
+        /// </summary>
+        public static readonly DependencyProperty SeriesBulletStyleProperty =
+           DependencyProperty.Register("SeriesBulletStyle",
+           typeof(string),
+           typeof(ChartSeries),
+           new PropertyMetadata(null));
+
+        /// <summary>
+        /// The type of the series
+        /// Bullet, Line, Both, Other
+        /// </summary>
+        public static readonly DependencyProperty SeriesLineStyleProperty =
+           DependencyProperty.Register("SeriesLineStyle",
+           typeof(string),
+           typeof(ChartSeries),
+           new PropertyMetadata(null));
         
         public ChartSeries()
         {   
@@ -81,6 +110,54 @@ namespace De.TorstenMandelkow.MetroChart
             set
             {
                 SetValue(ValueMemberProperty, value);
+            }
+        }
+
+        /// <summary>
+        /// The type of the series
+        /// Bullet, Line, Both, Other
+        /// </summary>
+        public string SeriesType
+        {
+            get
+            {
+                return (string)GetValue(SeriesTypeProperty);
+            }
+            set
+            {
+                SetValue(SeriesTypeProperty, value);
+            }
+        }
+
+        /// <summary>
+        /// The style for the bullets
+        /// can be left blank for default
+        /// </summary>
+        public string SeriesBulletStyle
+        {
+            get
+            {
+                return (string)GetValue(SeriesBulletStyleProperty);
+            }
+            set
+            {
+                SetValue(SeriesBulletStyleProperty, value);
+            }
+        }
+
+        /// <summary>
+        /// The style of the series lines
+        /// Can be left blank
+        /// </summary>
+        public string SeriesLineStyle
+        {
+            get
+            {
+                return (string)GetValue(SeriesLineStyleProperty);
+            }
+            set
+            {
+                SetValue(SeriesLineStyleProperty, value);
             }
         }
     }

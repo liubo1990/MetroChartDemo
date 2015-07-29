@@ -169,6 +169,8 @@
             }
         }
 
+        
+
         private static void SumOfDataPointGroupChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             (d as DataPoint).SumOfDataPointGroupChanged(double.Parse(e.NewValue.ToString()));

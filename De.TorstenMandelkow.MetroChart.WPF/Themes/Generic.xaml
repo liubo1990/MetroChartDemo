@@ -1428,6 +1428,7 @@
         </Setter>
     </Style>
 
+    <!--data context for this is the PotterArea.cs-->
     <Style x:Key="GALineScatterBaseChartPlotterAreaStyle" 
            TargetType="local:PlotterArea" 
            BasedOn="{StaticResource BasePlotterAreaStyle}">
@@ -1462,7 +1463,14 @@
         <Setter Property="DataPointItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <local:GAScatterLinePiece DataPoints="{Binding Path=DataPoints}"></local:GAScatterLinePiece>
+                    <!-- bound to the datapointgroup-->
+                    <local:GAScatterLinePiece
+                        DataPoints="{Binding Path=DataPoints}"
+                        GASeriesType="{Binding Path=GASeriesType}"
+                        GAScatterBulletStyle="{Binding Path=GAScatterBulletStyle}"
+                        GALineStyle="{Binding Path=GALineStyle}"
+                        ></local:GAScatterLinePiece>
+                    
                 </DataTemplate>
             </Setter.Value>
         </Setter>

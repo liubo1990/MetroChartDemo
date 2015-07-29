@@ -8,7 +8,7 @@
         >
 
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >
-        <GAChart:PieChart
+        <!--<GAChart:PieChart
             Style="{StaticResource MinimalChartStyle}"
             DataContext="{Binding}"
         ChartTitle="Pie Chart"
@@ -19,7 +19,8 @@
                   SeriesTitle="{Binding scatterData.seriesDisplayName}"
                     DisplayMember="date"
                     ValueMember="amount"
-                    ItemsSource="{Binding scatterData.Items}" />
+                    ItemsSource="{Binding scatterData.Items}" 
+                    />
             </GAChart:PieChart.Series>
         </GAChart:PieChart>
         
@@ -45,13 +46,13 @@
                     >
                 </GAChart:ChartSeries>
             </GAChart:GAScatterChart.Series>
-        </GAChart:GAScatterChart>
+        </GAChart:GAScatterChart>-->
 
         <GAChart:GALineScatterChart
            Style="{StaticResource MinimalChartStyle}"
             DataContext="{Binding }"
-            ChartTitle="my test title" 
-            ChartSubTitle="subTitle"
+            ChartTitle="GA Line/Scatter Chart" 
+            ChartSubTitle="two series - default styles, Both and Bullet types"
             >
             <GAChart:GALineScatterChart.Series >
                 <GAChart:ChartSeries
@@ -59,6 +60,7 @@
                     DisplayMember="date"
                     ValueMember="amount"
                     ItemsSource="{Binding scatterData.Items}"
+                    SeriesType="Both"
                     >
                 </GAChart:ChartSeries>
                 <GAChart:ChartSeries
@@ -66,6 +68,44 @@
                     DisplayMember="date"
                     ValueMember="amount"
                     ItemsSource="{Binding scatterData1.Items}"
+                    SeriesType="Bullet"
+                    >
+                </GAChart:ChartSeries>
+            </GAChart:GALineScatterChart.Series>
+        </GAChart:GALineScatterChart>
+        
+        <GAChart:GALineScatterChart
+           Style="{StaticResource MinimalChartStyle}"
+            DataContext="{Binding }"
+            ChartTitle="GA Line/Scatter Chart" 
+            ChartSubTitle="three series - custom styles, Line and Both types"
+            >
+            <GAChart:GALineScatterChart.Series >
+                <GAChart:ChartSeries
+                    SeriesTitle="{Binding scatterData.seriesDisplayName}"
+                    DisplayMember="date"
+                    ValueMember="amount"
+                    ItemsSource="{Binding scatterData.Items}"
+                    SeriesType="Both"
+                    SeriesBulletStyle="NotFilledCircleStyle"
+                    >
+                </GAChart:ChartSeries>
+                <GAChart:ChartSeries
+                    SeriesTitle="{Binding scatterData1.seriesDisplayName}"
+                    DisplayMember="date"
+                    ValueMember="amount"
+                    ItemsSource="{Binding scatterData1.Items}"
+                    SeriesType="Both"
+                    SeriesBulletStyle="RectangleFilledStyle"
+                    SeriesLineStyle="BlackLineRedFillStyle"
+                    >
+                </GAChart:ChartSeries>
+                <GAChart:ChartSeries
+                    SeriesTitle="{Binding scatterData2.seriesDisplayName}"
+                    DisplayMember="date"
+                    ValueMember="amount"
+                    ItemsSource="{Binding scatterData2.Items}"
+                    SeriesType="Line"
                     >
                 </GAChart:ChartSeries>
             </GAChart:GALineScatterChart.Series>

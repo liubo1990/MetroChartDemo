@@ -159,6 +159,9 @@
     <Compile Include="..\De.TorstenMandelkow.MetroChart\Core\GALineScatterChart\GALineScatterChart.cs">
       <Link>Core\GALineScatterChart\GALineScatterChart.cs</Link>
     </Compile>
+    <Compile Include="..\De.TorstenMandelkow.MetroChart\Core\GALineScatterChart\GALineScatterStyling.cs">
+      <Link>Core\GALineScatterChart\GALineScatterStyling.cs</Link>
+    </Compile>
     <Compile Include="..\De.TorstenMandelkow.MetroChart\Core\GALineScatterChart\GAScatterLinePiece.cs">
       <Link>Core\GALineScatterChart\GAScatterLinePiece.cs</Link>
     </Compile>

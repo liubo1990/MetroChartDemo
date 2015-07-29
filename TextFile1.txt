@@ -9,16 +9,32 @@
 
 ****************************
 ** when does xamlReplace.tagets get run? Ide like ot to run each build?
+** looks like it may not be compatible - there are errors
+** or something else. So stick with doing a clean build first
 ***********************
 
 
 SCATTER CHART TO DO
-1. Issue with points on 0 and maximum - have to increase size of columns by 1/2 width of scatter
-and change the height accordingly
+do I want to do the mouse events and which ones if I do
+// RegisterMouseEvents(bullet); -- do I want to do this on some things?
+ override void InternalOnApplyTemplate()
+
+
 2. Colour and style of bullets - style name in the series?
 3. Enable the numbers to be turned off
 4. legend
-5.do I want to draw the same way as the multi-chart? - I think it would be best
+this is how the other pieces are bound - do I need to do something similar?
+it gets the data from the datapoint into the scatterPiece
+<local:GAScatterPiece
+                                    Background="{Binding Path=ItemBrush}"  
+                                    SelectedBrush="{Binding Path=SelectedBrush}"  
+                                    Percentage="{Binding Path=PercentageFromMaxDataPointValue}"                                                                                                 
+                                    IsClickedByUser="{Binding Path=IsClickedByUser, Mode=TwoWay}"
+                                    IsSelected="{Binding Path=IsSelected}"
+                                    ClientWidth="{Binding Path=RealWidth, ElementName=itemsControl}"
+                                    ClientHeight="{Binding Path=RealHeight, ElementName=itemsControl}"
+                                    >
+
 
 
 Will have two charts - GAScatterLineChart and GAColumnScatterLineChart
