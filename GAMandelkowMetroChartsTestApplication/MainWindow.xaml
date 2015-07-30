@@ -47,32 +47,36 @@
                 </GAChart:ChartSeries>
             </GAChart:GAScatterChart.Series>
         </GAChart:GAScatterChart>-->
-
-        <GAChart:GALineScatterChart
-           Style="{StaticResource MinimalChartStyle}"
-            DataContext="{Binding }"
-            ChartTitle="GA Line/Scatter Chart" 
-            ChartSubTitle="two series - default styles, Both and Bullet types"
-            >
-            <GAChart:GALineScatterChart.Series >
-                <GAChart:ChartSeries
-                    SeriesTitle="{Binding scatterData.seriesDisplayName}"
-                    DisplayMember="date"
-                    ValueMember="amount"
-                    ItemsSource="{Binding scatterData.Items}"
-                    SeriesType="Both"
-                    >
-                </GAChart:ChartSeries>
-                <GAChart:ChartSeries
-                    SeriesTitle="{Binding scatterData1.seriesDisplayName}"
-                    DisplayMember="date"
-                    ValueMember="amount"
-                    ItemsSource="{Binding scatterData1.Items}"
-                    SeriesType="Bullet"
-                    >
-                </GAChart:ChartSeries>
-            </GAChart:GALineScatterChart.Series>
-        </GAChart:GALineScatterChart>
+        <StackPanel Orientation="Vertical">
+            <GAChart:GALineScatterChart
+               Style="{StaticResource MinimalChartStyle}"
+                DataContext="{Binding }"
+                ChartTitle="GA Line/Scatter Chart" 
+                ChartSubTitle="two series - default styles, Both and Bullet types"
+                >
+                <GAChart:GALineScatterChart.Series >
+                    <GAChart:ChartSeries
+                        SeriesTitle="{Binding scatterData.seriesDisplayName}"
+                        DisplayMember="date"
+                        ValueMember="amount"
+                        ItemsSource="{Binding scatterData.Items}"
+                        SeriesType="Both"
+                        >
+                    </GAChart:ChartSeries>
+                    <GAChart:ChartSeries
+                        SeriesTitle="{Binding scatterData1.seriesDisplayName}"
+                        DisplayMember="date"
+                        ValueMember="amount"
+                        ItemsSource="{Binding scatterData1.Items}"
+                        SeriesType="Bullet"
+                        >
+                    </GAChart:ChartSeries>
+                </GAChart:GALineScatterChart.Series>
+            </GAChart:GALineScatterChart>
+            <!--<Expander Header="Show Styling">
+                <TextBlock></TextBlock>
+            </Expander>-->
+        </StackPanel>
         
         <GAChart:GALineScatterChart
            Style="{StaticResource MinimalChartStyle}"

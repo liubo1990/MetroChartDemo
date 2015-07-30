@@ -1419,7 +1419,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:GAScatterLinePiece">
-                    <Canvas Margin="0 0 0 0">
+                    <Canvas Margin="0 0 0 0" >
                         <Path x:Name="GALine" Style="{StaticResource GALineStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" >
                         </Path>
                     </Canvas>
@@ -1443,7 +1443,7 @@
                         ItemTemplate="{TemplateBinding DataPointItemTemplate}">
                             <local:FadingListView.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <Canvas x:Name="GAChartCanvas" Margin="5 10 5 0" >
+                                    <Canvas x:Name="GAChartCanvas" Margin="5 10 5 0">
                                     </Canvas>
                                     <!--<local:GASingleColumnsGrid Margin="0 10 0 0">
                                     </local:GASingleColumnsGrid>-->
@@ -1464,13 +1464,14 @@
             <Setter.Value>
                 <DataTemplate>
                     <!-- bound to the datapointgroup-->
-                    <local:GAScatterLinePiece
+                        <local:GAScatterLinePiece
                         DataPoints="{Binding Path=DataPoints}"
                         GASeriesType="{Binding Path=GASeriesType}"
                         GAScatterBulletStyle="{Binding Path=GAScatterBulletStyle}"
                         GALineStyle="{Binding Path=GALineStyle}"
                         ></local:GAScatterLinePiece>
-                    
+
+
                 </DataTemplate>
             </Setter.Value>
         </Setter>

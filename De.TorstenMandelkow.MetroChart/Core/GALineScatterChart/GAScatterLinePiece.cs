@@ -37,6 +37,7 @@ namespace De.TorstenMandelkow.MetroChart
 
         private Path _GALine = null;
         private Canvas _GAPlotCanvas = null;
+        private Canvas _sizeCanvas = null;
 
         private Style _lineStyle;
         private Style _bulletStyle;
@@ -196,15 +197,28 @@ namespace De.TorstenMandelkow.MetroChart
         {
 
             setUpStyles();
-
-            _GALine = this.GetTemplateChild("GALine") as Path;
+            _GAPlotCanvas = VisualTreeHelper.GetChild(this, 0) as Canvas; //the canvas the GALine is attached to
+            _GALine = VisualTreeHelper.GetChild(_GAPlotCanvas, 0) as Path;
           
             //TODO: find a better way of doing this using the name!
             //go up the visual tree to get the GAChart Canvas
             // This will need to be altered if the xaml changes! - is 
-            DependencyObject obj = VisualTreeHelper.GetParent(this);
-            _GAPlotCanvas = VisualTreeHelper.GetParent(obj) as Canvas;
-            
+           // _GAPlotCanvas = VisualTreeHelper.GetParent(_GALine) as Canvas; //the canvas the GALine is attached to
+            ContentPresenter obj1 =  this.TemplatedParent as ContentPresenter;
+            _sizeCanvas = VisualTreeHelper.GetParent(obj1) as Canvas;
+
+
+
+         
+           
+
+
+            // try putting a canvas around the <local:GAScatterLinePiece<
+            // and drawing on that or adding UI elements to it?
+            // each item has a presenter - find this for each item and add to it
+            // may have to add a canvas to it and make the canvas transaparent
+            // start off with 1 item, 1 series, 1 datapoint and go from there
+
            // RegisterMouseEvents(bullet); -- do I want to do this on some things?
         }
 
@@ -264,6 +278,10 @@ namespace De.TorstenMandelkow.MetroChart
             { 
                 if (_GALine == null) return;
 
+                _GAPlotCanvas.Width =_sizeCanvas.ActualWidth;
+                _GAPlotCanvas.Height = _sizeCanvas.ActualHeight;
+               // _GAPlotCanvas.Margin = sizeCanvas.Margin;
+
                 _GALine.Fill = _lineScatterStyle.fillBrush;
                 _GALine.StrokeThickness = _lineScatterStyle.strokeThickness;
                 _GALine.Stroke = _lineScatterStyle.lineBrush;
@@ -277,7 +295,7 @@ namespace De.TorstenMandelkow.MetroChart
                 Point lineStartPoint = new Point(0, 0);
                 Point lineEndPoint = new Point(0, 0);
                 int count=0;
-                double barWidth = (_GAPlotCanvas.ActualWidth) / DataPoints.Count;
+                double barWidth = (_GAPlotCanvas.Width) / DataPoints.Count;
                 foreach (DataPoint p in DataPoints)
                 {
                     
@@ -285,14 +303,15 @@ namespace De.TorstenMandelkow.MetroChart
                     if (count==0)
                     {
                         double CenterX = (count * barWidth) + (barWidth / 2);
-                        double CenterY = _GAPlotCanvas.ActualHeight - (_GAPlotCanvas.ActualHeight * p.PercentageFromMaxDataPointValue);
+                        double CenterY = _GAPlotCanvas.Height - (_GAPlotCanvas.Height * p.PercentageFromMaxDataPointValue);
                         lineStartPoint = new Point(CenterX,CenterY) ;
 
                         if (GASeriesType == "Both" || GASeriesType == "Bullet")
                         {
-                            RectangleGeometry bulletGeometry = getRectangleGeometry(CenterX, CenterY);
+                            //RectangleGeometry bulletGeometry = getRectangleGeometry(CenterX, CenterY);
 
-                            group.Children.Add(bulletGeometry);
+                            //group.Children.Add(bulletGeometry);
+                            _GAPlotCanvas.Children.Add(getRecatangle(CenterX, CenterY,p));
                         }
                        
 
@@ -301,7 +320,8 @@ namespace De.TorstenMandelkow.MetroChart
                     {
 
                         double CenterX = (count * barWidth) + (barWidth / 2);
-                        double CenterY = _GAPlotCanvas.ActualHeight - (_GAPlotCanvas.ActualHeight * p.PercentageFromMaxDataPointValue);
+                      //  double CenterY = _GAPlotCanvas.ActualHeight - (_GAPlotCanvas.ActualHeight * p.PercentageFromMaxDataPointValue);
+                        double CenterY = _GAPlotCanvas.Height - (_GAPlotCanvas.Height * p.PercentageFromMaxDataPointValue);
 
                         lineEndPoint.X = CenterX;
                         lineEndPoint.Y = CenterY;
@@ -321,80 +341,33 @@ namespace De.TorstenMandelkow.MetroChart
 
                         if (GASeriesType=="Both" || GASeriesType=="Bullet")
                         {
-                            RectangleGeometry bulletGeometry = getRectangleGeometry(CenterX, CenterY);
+                            //RectangleGeometry bulletGeometry = getRectangleGeometry(CenterX, CenterY);
 
-                            group.Children.Add(bulletGeometry);
+                            //group.Children.Add(bulletGeometry);
+
+                            //Rectangle uiRect = new Rectangle();
+                            //uiRect.Height = bulletGeometry.Rect.Height;
+                            //uiRect.Width = bulletGeometry.Rect.Width;
+                            //uiRect.Fill = _lineScatterStyle.fillBrush;
+                            //uiRect.Margin = new Thickness(CenterX, CenterY, 0, 0);
+
+                            _GAPlotCanvas.Children.Add(getRecatangle(CenterX, CenterY,p));
+                          //  DependencyObject obj = VisualTreeHelper.GetParent(this);
+                          //  _GAPlotCanvas = VisualTreeHelper.GetParent(obj) as Canvas;
+                          //  ItemsPresenter obj1 = VisualTreeHelper.GetParent(_GAPlotCanvas) as ItemsPresenter;
+                          // // get templated parent of obj1 then add items to the items list
+                          //  FadingListView itemPanel = obj1.TemplatedParent as FadingListView;
+                          //  // maybe add 1 item and add all the bullets to this
+
+                           
+                            
+                          ////  itemPanel.Items.Add(uiRect);
+                            
                         }
                         
                     }
-                   
-
-
-                    
-                    
-                    // use GALineBullet as a template to get the sizes
-                    // need two paths, one for circles and one for lines? (on path and on line)
-                    // or add rectangles to the canvas and position using margins?
                     count++;
                 }
-
-                // **************should draw the bullets here too
-                //** add the posibility to animate too
-                // copy / use the code to determine the colour of each line (maybe add a seriesColur ro each dataGroup)
-                // see why I can mouse over some and not others (is the canvas of one interfeering with the other , or somethign else)
-                // will need to put the mouse over code onto the points here in code
-                // do I want to be able to put click or right click events on? (later if needed unless really simple)
-
-                //** oh and need to look at the text etc and see why my graph isnt printing them - and hope like &&**^ that this
-                // doesnt upset my stuff
-
-                //** need to tidy up the xaml and write instructions?
-                //** line graph only - with variable to make scatter only or line without scatter (ie hide bits!)
-                //** column plus line
-
-                // can I add rectangles at the correct place with the style and then the user can alter the style without code
-
-                //if (this.ClientWidth <= 0.0)
-                //{
-                //    return;
-                //}
-                //if (this.ClientHeight <= 0.0)
-                //{
-                //    return;
-                //}
-
-                //double startHeight = 0;
-                //if (bullet.Height > 0)
-                //{
-                //    startHeight = bullet.Height;
-                //}
-
-                ////this.bullet.Fill = this.slice.Background;
-                ////Brush clear = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-                ////slice.Background = clear;
-
-                //Double bulletHeight = bullet.Height;
-
-                //DoubleAnimation scaleAnimation = new DoubleAnimation();
-                //scaleAnimation.From = startHeight;
-                //scaleAnimation.To = (this.ClientHeight * Percentage)+(bulletHeight/2)+1;
-                //scaleAnimation.Duration = TimeSpan.FromMilliseconds(withAnimation ? 500 : 0);
-                //scaleAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
-
-
-
-                //Storyboard storyScaleX = new Storyboard();
-                //storyScaleX.Children.Add(scaleAnimation);
-
-                //Storyboard.SetTarget(storyScaleX, slice); // animate the slice and the bullet will move with it
-
-#if NETFX_CORE
-                scaleAnimation.EnableDependentAnimation = true;
-                Storyboard.SetTargetProperty(storyScaleX, "Height");
-#else
-               // Storyboard.SetTargetProperty(storyScaleX, new PropertyPath("Height"));
-#endif
-               // storyScaleX.Begin();
    
             }
             catch (Exception ex)
@@ -417,6 +390,30 @@ namespace De.TorstenMandelkow.MetroChart
             return bulletGeometry;
         }
 
+
+        private Rectangle getRecatangle(double CenterX, double CenterY,DataPoint p)
+        {
+            Rectangle rect = new Rectangle();
+            rect.Width = _lineScatterStyle.scatterSize.Width;
+            rect.Height = _lineScatterStyle.scatterSize.Height;
+            rect.RadiusX = _lineScatterStyle.scatterXRadius;
+            rect.RadiusY = _lineScatterStyle.scatterYRadius;
+            rect.Margin = new Thickness(CenterX - (_lineScatterStyle.scatterSize.Width/2), CenterY - (_lineScatterStyle.scatterSize.Height/2), 0, 0);
+            if (_lineScatterStyle.scatterIsFilled)
+            {
+                rect.Fill = _lineScatterStyle.fillBrush;
+            }
+            rect.Stroke = _lineScatterStyle.lineBrush;
+            rect.StrokeThickness = _lineScatterStyle.strokeThickness;
+            rect.ToolTip = p.FormattedValue;;
+           
+            // mouse over in here?
+            //ToolTipService.ToolTip="{Binding Path=FormattedValue}"
+            //will need to put
+            return rect;
+        }
+            
+      
         #endregion Methods
     }
 }

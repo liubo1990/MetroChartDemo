@@ -13,16 +13,33 @@
 ** or something else. So stick with doing a clean build first
 ***********************
 
+** go through generic.xaml and remove the old scatter only stuff**
 
 SCATTER CHART TO DO
-do I want to do the mouse events and which ones if I do
+1 .do I want to do the mouse events and which ones if I do
 // RegisterMouseEvents(bullet); -- do I want to do this on some things?
  override void InternalOnApplyTemplate()
+ 1.5 - background of plot area (canvas) could be coloured
+ 1.6 - what other values should be coloured that previous version can?
 
+2. numbers arent showing ** they used to be on the rectangle the bar was drawn on
+- this is now missing. Either put it back so I can draw the values, leave the number out,
+or draw the numbers in the same code as the bullets?
+DECISION - THERE IS NO NUMBERS DRAWN SO MUST PUT IN THE HOVER ON THE GRAPHS
+(ie each bullet and line needs a mouse over - which I cant do on geometries!!!!!!!!! )
 
-2. Colour and style of bullets - style name in the series?
-3. Enable the numbers to be turned off
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+OR canvas is a UI element? Create a [] of information about bullets, and add each to the canvas
+as UI elements, so then can mouse over without hassles. Psition using margins.
+%%%%%%%%%%%%%%
+
+mouse over line (path) is possible
+maybe add the possiblilty for numbers using the old method on top of mine, and mouse over these.
+then draw the bullets (if needed) in the same colour. or make them transparent if mouse over still works?
+
+3. Enable the numbers to be turned off -hmm, they arent on!!
 4. legend
+
 this is how the other pieces are bound - do I need to do something similar?
 it gets the data from the datapoint into the scatterPiece
 <local:GAScatterPiece
