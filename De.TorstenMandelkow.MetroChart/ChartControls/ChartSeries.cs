@@ -59,7 +59,7 @@ namespace De.TorstenMandelkow.MetroChart
         /// </summary>
         public static readonly DependencyProperty SeriesBulletStyleProperty =
            DependencyProperty.Register("SeriesBulletStyle",
-           typeof(string),
+           typeof(Style),
            typeof(ChartSeries),
            new PropertyMetadata(null));
 
@@ -69,7 +69,7 @@ namespace De.TorstenMandelkow.MetroChart
         /// </summary>
         public static readonly DependencyProperty SeriesLineStyleProperty =
            DependencyProperty.Register("SeriesLineStyle",
-           typeof(string),
+           typeof(Style),
            typeof(ChartSeries),
            new PropertyMetadata(null));
         
@@ -133,11 +133,11 @@ namespace De.TorstenMandelkow.MetroChart
         /// The style for the bullets
         /// can be left blank for default
         /// </summary>
-        public string SeriesBulletStyle
+        public Style SeriesBulletStyle
         {
             get
             {
-                return (string)GetValue(SeriesBulletStyleProperty);
+                return (Style)GetValue(SeriesBulletStyleProperty);
             }
             set
             {
@@ -149,11 +149,11 @@ namespace De.TorstenMandelkow.MetroChart
         /// The style of the series lines
         /// Can be left blank
         /// </summary>
-        public string SeriesLineStyle
+        public Style SeriesLineStyle
         {
             get
             {
-                return (string)GetValue(SeriesLineStyleProperty);
+                return (Style)GetValue(SeriesLineStyleProperty);
             }
             set
             {

@@ -10,6 +10,7 @@
     using System.Reflection;
     using System.Text;
     using System.Windows;
+    using System.Windows.Shapes;
 
 #if NETFX_CORE
     using Windows.UI.Xaml.Controls;
@@ -889,6 +890,7 @@
             {
                 bool isGALineOrScatter = (dataPointGroup.GASeriesType == "Bullet"
                     || dataPointGroup.GASeriesType == "Line" || dataPointGroup.GASeriesType == "Both");
+               
                 if (!isGALineOrScatter)
                 {
                     index = 0; // reset colour at start of each series for normal graphs
@@ -904,6 +906,7 @@
                 }
                 if (isGALineOrScatter)
                 {
+                    updateDataPointGroupLegendStyles(dataPointGroup);
                     index++; // GALineScatters get different colour for each series
                 }
             }
@@ -914,6 +917,82 @@
                 legendItem.ItemBrush = GetItemBrush(legendindex);
             }
             */
+        }
+
+        /// <summary>
+        /// update the legend styles for the GALine and bullet charts
+        /// </summary>
+        /// <param name="dataPointGroup"></param>
+        private void updateDataPointGroupLegendStyles(DataPointGroup dataPointGroup)
+        {
+            Style lineStyle = dataPointGroup.GALineStyle;
+            Style bulletStyle = dataPointGroup.GABulletStyle;
+
+            if (lineStyle == null)
+            {
+                lineStyle = TryFindResource("GALineStyle") as Style;
+            }
+
+            if (bulletStyle == null)
+            {
+                bulletStyle = TryFindResource("GAScatterBulletStyle") as Style;
+            }
+
+            if (lineStyle != null && bulletStyle != null)
+            {
+                //? passibng in values for styles it cant handle? its passing in a  'based on'
+                GALineScatterStyling styling = new GALineScatterStyling(lineStyle, bulletStyle, dataPointGroup.DataPoints[0]); 
+                var lineStrokeSetter = lineStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Stroke");
+                var bulletFillSetter = bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Fill");
+                var bulletStrokeSetter = bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Stroke");
+
+                //bullet styles = style based on esxiting but with brush's overridden to account for any pallette colours
+                Style newBulletStyle = new Style(typeof(Rectangle), bulletStyle);
+                newBulletStyle.Setters.Add(new Setter(Rectangle.FillProperty, styling.fillBrush));
+                newBulletStyle.Setters.Add(new Setter(Rectangle.StrokeProperty, styling.lineBrush));
+                
+
+                Style newLineStyle = new Style(typeof(Path), lineStyle);
+                newLineStyle.Setters.Add(new Setter(Path.StrokeProperty, styling.lineBrush));
+                //dataPointGroup.GALegendLineStyle = newLineStyle;
+
+                if (dataPointGroup.GASeriesType=="Both" || dataPointGroup.GASeriesType=="Bullet")
+                {
+                    dataPointGroup.GALegendScatterBulletStyle = newBulletStyle;
+                }
+
+                if (dataPointGroup.GASeriesType == "Both" || dataPointGroup.GASeriesType == "Line")
+                {
+                    dataPointGroup.GALegendLineStyle = newLineStyle;
+                }
+
+                Point start = new Point(0, 0);
+                Point end = new Point(0, 0);
+                var bulletHeight = bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Height");
+                var bulletWidth = bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Width");
+                if (bulletHeight!=null)
+                {
+                    start.Y = ((double)bulletHeight.Value)/2;
+                    end.Y = start.Y;
+                }
+
+                if(bulletWidth!=null)
+                {
+                    end.X = ((double)bulletWidth.Value) * 3;
+                }
+
+                dataPointGroup.GALegendLinePointEnd = end;
+                dataPointGroup.GALegendLinePointStart = start;
+                
+                
+                // now add the other one and bind the styles in the generic.xaml to it
+                // then need to make this visible only for a ga chart?
+                // eiother make another chart type or alter the visibiu=lity via a converter?
+                //also need to make the lines and bullet the right length and position etrc
+            }
+           
+           
+            
         }
 
         private void CreateDataPointBindings(DataPoint datapoint, DataPointGroup dataPointGroup)

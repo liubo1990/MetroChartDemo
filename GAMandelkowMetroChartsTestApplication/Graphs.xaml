@@ -20,15 +20,12 @@
         <Setter Property="Width" Value="7"></Setter>
         <Setter Property="RadiusX" Value="3.5"></Setter>
         <Setter Property="RadiusY" Value="3.5"></Setter>
-        <Setter Property="Fill" Value="Aqua"></Setter>
-        <!--set to any value to have scatter filled, leav blank for line only, the value is ignored-->
+        <Setter Property="StrokeThickness" Value="1"></Setter>
     </Style>
 
     <Style x:Key="BlackLineRedFillStyle" TargetType="Path" >
         <Setter Property="StrokeThickness" Value="1"></Setter>
         <Setter Property="Stroke" Value="Black"></Setter>
-        <Setter Property="Fill" Value="Red"></Setter>
-        <!-- will be colour of the bullet fill IF BulletStyleFill has a value-->
 
     </Style>
 
@@ -37,8 +34,9 @@
         <Setter Property="Width" Value="7"></Setter>
         <Setter Property="RadiusX" Value="0"></Setter>
         <Setter Property="RadiusY" Value="0"></Setter>
-        <Setter Property="Fill" Value="Aqua"></Setter>
-        <!--set to any value to have scatter filled, leav blank for line only, the value is ignored-->
+        <Setter Property="Fill" Value="Red"></Setter>
+        <Setter Property="StrokeThickness" Value="0"></Setter>
+
     </Style>
 
     <Style x:Key="NotFilledCircleStyle" TargetType="Rectangle" >
@@ -46,7 +44,9 @@
         <Setter Property="Width" Value="7"></Setter>
         <Setter Property="RadiusX" Value="3.5"></Setter>
         <Setter Property="RadiusY" Value="3.5"></Setter>
-        <!--set to any value to have scatter filled, leav blank for line only, the value is ignored-->
+        <Setter Property="Fill" Value="Transparent"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+
     </Style>
 
 </ResourceDictionary>

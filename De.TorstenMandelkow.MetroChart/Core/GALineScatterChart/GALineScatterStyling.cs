@@ -13,7 +13,7 @@ namespace De.TorstenMandelkow.MetroChart
         public Brush lineBrush;
         public Brush fillBrush;
         public Double strokeThickness;
-        public bool scatterIsFilled;
+       
         public Size scatterSize;
         public double scatterXRadius;
         public double scatterYRadius;
@@ -33,21 +33,21 @@ namespace De.TorstenMandelkow.MetroChart
             scatterSize = new Size((double)bulletWidthSetter.Value, (double)bulletHeightSetter.Value);
             scatterXRadius = (double)butlletRadiusXSetter.Value;
             scatterYRadius = (double)butlletRadiusYSetter.Value;
-            scatterIsFilled = !(butlletFillSetter == null || butlletFillSetter.Value == null || butlletFillSetter.Value == "");
+            bool scatterColourProvided = !(butlletFillSetter == null || butlletFillSetter.Value == null || butlletFillSetter.Value == "");
             strokeThickness = (double)lineStrokeThicknessSetter.Value;
+            bool lineColourProvided = !(lineStrokeSetter == null || lineStrokeSetter.Value == null || lineStrokeSetter.Value == "");
 
-            // null GASCatterBulletStyle FILL & not-null GALineStyle FILL means use the standard colour
-            if (lineFillSetter == null && scatterIsFilled)
+            if (!scatterColourProvided)
             {
                 fillBrush = firstDataPoint.ItemBrush;
             }
-            else if (lineFillSetter != null && scatterIsFilled)
+            else 
             {
-                fillBrush = (Brush)lineFillSetter.Value;
+                fillBrush = (Brush)butlletFillSetter.Value;
             }
 
             // line stroke - if not set then from the pallette, else from the style
-            if (lineStrokeSetter == null)
+            if (!lineColourProvided)
             {
                 lineBrush = firstDataPoint.ItemBrush;
             }

@@ -91,7 +91,7 @@
                     ValueMember="amount"
                     ItemsSource="{Binding scatterData.Items}"
                     SeriesType="Both"
-                    SeriesBulletStyle="NotFilledCircleStyle"
+                    SeriesBulletStyle="{StaticResource NotFilledCircleStyle}"
                     >
                 </GAChart:ChartSeries>
                 <GAChart:ChartSeries
@@ -100,8 +100,8 @@
                     ValueMember="amount"
                     ItemsSource="{Binding scatterData1.Items}"
                     SeriesType="Both"
-                    SeriesBulletStyle="RectangleFilledStyle"
-                    SeriesLineStyle="BlackLineRedFillStyle"
+                    SeriesBulletStyle="{StaticResource RectangleFilledStyle}"
+                    SeriesLineStyle="{StaticResource BlackLineRedFillStyle }"
                     >
                 </GAChart:ChartSeries>
                 <GAChart:ChartSeries

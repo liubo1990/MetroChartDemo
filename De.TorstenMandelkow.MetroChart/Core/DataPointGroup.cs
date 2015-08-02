@@ -41,16 +41,53 @@
         /// This should be Path styles, or leave empty to use default
         /// </summary>
         public static readonly DependencyProperty GAScatterBulletStyleProperty =
-          DependencyProperty.Register("GAScatterBulletStyle", typeof(String), typeof(DataPointGroup),
+          DependencyProperty.Register("GAScatterBulletStyle", typeof(Style), typeof(DataPointGroup),
           new PropertyMetadata(null));
+
+        /// <summary>
+        /// the style used to stlye the legend - can be differemt from GSCatterBulletStyl as it gets altered
+        /// to take into account the automatic pallette if needed
+        /// </summary>
+        public static readonly DependencyProperty GALegendScatterBulletStyleProperty =
+        DependencyProperty.Register("GALegendScatterBulletStyle", typeof(Style), typeof(DataPointGroup),
+        new PropertyMetadata(null));
+
 
         /// <summary>
         /// Name of style for the lines.
         /// These should be rectangle styles, or leave empty to use default
         /// </summary>
         public static readonly DependencyProperty GALineStyleProperty =
-          DependencyProperty.Register("GALineStyle", typeof(String), typeof(DataPointGroup),
+          DependencyProperty.Register("GALineStyle", typeof(Style), typeof(DataPointGroup),
           new PropertyMetadata(null));
+
+        /// <summary>
+        /// the style used to stlye the legend - can be differemt from GSCatterBulletStyl as it gets altered
+        /// to take into account the automatic pallette if needed
+        /// </summary>
+        public static readonly DependencyProperty GALegendLineStyleProperty =
+         DependencyProperty.Register("GALegendLineStyle", typeof(Style), typeof(DataPointGroup),
+         new PropertyMetadata(null));
+
+        /// <summary>
+        /// start point of line in legend
+        /// </summary>
+        public static readonly DependencyProperty GALegendLinePointStartProperty =
+           DependencyProperty.Register("GALegendLinePointStart",
+           typeof(Point),
+           typeof(DataPointGroup),
+           new PropertyMetadata(new Point(0,0)));
+
+
+        /// <summary>
+        /// end point of line in legend
+        /// </summary>
+        public static readonly DependencyProperty GALegendLinePointEndProperty =
+           DependencyProperty.Register("GALegendLinePointEnd",
+           typeof(Point),
+           typeof(DataPointGroup),
+           new PropertyMetadata(new Point(0, 0)));
+
 
         public static readonly DependencyProperty SumOfDataPointGroupProperty =
             DependencyProperty.Register("SumOfDataPointGroup",
@@ -105,21 +142,46 @@
         /// The Fill is used like a boolean. If a value is given it is filled with the series value
         /// If a value isnt given it is left as a stroke only.
         /// </summary>
-        public string GABulletStyle
+        public Style GABulletStyle
         {
-            get { return (string)GetValue(GAScatterBulletStyleProperty); }
+            get { return (Style)GetValue(GAScatterBulletStyleProperty); }
             set { SetValue(GAScatterBulletStyleProperty, value); }
         }
+
+        public Style GALegendScatterBulletStyle
+        {
+            get { return (Style)GetValue(GALegendScatterBulletStyleProperty); }
+            set { SetValue(GALegendScatterBulletStyleProperty, value); }
+        }
+
+
+        public Point GALegendLinePointStart
+        {
+            get { return (Point)GetValue(GALegendLinePointStartProperty); }
+            set { SetValue(GALegendLinePointStartProperty, value); }
+        }
+        public Point GALegendLinePointEnd
+        {
+            get { return (Point)GetValue(GALegendLinePointEndProperty); }
+            set { SetValue(GALegendLinePointEndProperty, value); }
+        }
+
 
         /// <summary>
         /// Name of style for the Lines.
         /// Set using the dependency property
         /// Used : StrokeThickness, Stroke
         /// </summary>
-        public string GALineStyle
+        public Style GALineStyle
         {
-            get { return (string)GetValue(GALineStyleProperty); }
+            get { return (Style)GetValue(GALineStyleProperty); }
             set { SetValue(GALineStyleProperty, value); }
+        }
+
+        public Style GALegendLineStyle
+        {
+            get { return (Style)GetValue(GALegendLineStyleProperty); }
+            set { SetValue(GALegendLineStyleProperty, value); }
         }
        
         public DataPointGroup(ChartBase parentChart, string caption, bool showcaption)
@@ -130,6 +192,7 @@
             DataPoints = new ObservableCollection<DataPoint>();
             DataPoints.CollectionChanged += Items_CollectionChanged;
         }
+       
 
         void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {

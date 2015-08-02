@@ -39,8 +39,6 @@ namespace De.TorstenMandelkow.MetroChart
         private Canvas _GAPlotCanvas = null;
         private Canvas _sizeCanvas = null;
 
-        private Style _lineStyle;
-        private Style _bulletStyle;
         GALineScatterStyling _lineScatterStyle;
 
 
@@ -59,7 +57,7 @@ namespace De.TorstenMandelkow.MetroChart
         /// This should be Path styles, or leave empty to use default
         /// </summary>
         public static readonly DependencyProperty GAScatterBulletStyleProperty =
-          DependencyProperty.Register("GAScatterBulletStyle", typeof(String), typeof(GAScatterLinePiece),
+          DependencyProperty.Register("GAScatterBulletStyle", typeof(Style), typeof(GAScatterLinePiece),
           new PropertyMetadata(null));
 
         /// <summary>
@@ -67,7 +65,7 @@ namespace De.TorstenMandelkow.MetroChart
         /// These should be rectangle styles, or leave empty to use default
         /// </summary>
         public static readonly DependencyProperty GALineStyleProperty =
-          DependencyProperty.Register("GALineStyle", typeof(String), typeof(GAScatterLinePiece),
+          DependencyProperty.Register("GALineStyle", typeof(Style), typeof(GAScatterLinePiece),
           new PropertyMetadata(null));
 
 
@@ -142,11 +140,11 @@ namespace De.TorstenMandelkow.MetroChart
         /// If a value isnt given it is left as a stroke only.
         /// </summary>
         /// 
-        public string GAScatterBulletStyle
+        public Style GAScatterBulletStyle
         {
             get
             {
-                return (string)GetValue(GAScatterBulletStyleProperty);
+                return (Style)GetValue(GAScatterBulletStyleProperty);
             }
             set
             {
@@ -159,9 +157,9 @@ namespace De.TorstenMandelkow.MetroChart
         /// Set using the dependency property
         /// Used : StrokeThickness, Stroke
         /// </summary>
-        public string GALineStyle
+        public Style GALineStyle
         {
-            get { return (string)GetValue(GALineStyleProperty); }
+            get { return (Style)GetValue(GALineStyleProperty); }
             set { SetValue(GALineStyleProperty, value); }
         }
 
@@ -199,25 +197,9 @@ namespace De.TorstenMandelkow.MetroChart
             setUpStyles();
             _GAPlotCanvas = VisualTreeHelper.GetChild(this, 0) as Canvas; //the canvas the GALine is attached to
             _GALine = VisualTreeHelper.GetChild(_GAPlotCanvas, 0) as Path;
-          
-            //TODO: find a better way of doing this using the name!
-            //go up the visual tree to get the GAChart Canvas
-            // This will need to be altered if the xaml changes! - is 
-           // _GAPlotCanvas = VisualTreeHelper.GetParent(_GALine) as Canvas; //the canvas the GALine is attached to
+ 
             ContentPresenter obj1 =  this.TemplatedParent as ContentPresenter;
-            _sizeCanvas = VisualTreeHelper.GetParent(obj1) as Canvas;
-
-
-
-         
-           
-
-
-            // try putting a canvas around the <local:GAScatterLinePiece<
-            // and drawing on that or adding UI elements to it?
-            // each item has a presenter - find this for each item and add to it
-            // may have to add a canvas to it and make the canvas transaparent
-            // start off with 1 item, 1 series, 1 datapoint and go from there
+            _sizeCanvas = VisualTreeHelper.GetParent(obj1) as Canvas; // used to size the plot canvas
 
            // RegisterMouseEvents(bullet); -- do I want to do this on some things?
         }
@@ -229,34 +211,17 @@ namespace De.TorstenMandelkow.MetroChart
         /// </summary>
         private void setUpStyles()
         {
-            if (!string.IsNullOrEmpty(GALineStyle)) 
+            if (GALineStyle==null) 
             {
-                _lineStyle = TryFindResource(GALineStyle) as Style;
-            }
-            else
-            {
-                _lineStyle = TryFindResource("GALineStyle") as Style;
+                GALineStyle = TryFindResource("GALineStyle") as Style;
             }
 
-            if (!string.IsNullOrEmpty(GAScatterBulletStyle))
+            if (GAScatterBulletStyle==null)
             {
-                _bulletStyle = TryFindResource(GAScatterBulletStyle) as Style;
-            }
-            else
-            {
-                _bulletStyle = TryFindResource("GAScatterBulletStyle") as Style;
-            }
-            
-            if (_lineStyle==null)
-            {
-                _lineStyle = TryFindResource("GALineStyle") as Style;
-            }
-            if (_bulletStyle==null)
-            {
-                _bulletStyle = TryFindResource("GAScatterBulletStyle") as Style;
+                GAScatterBulletStyle = TryFindResource("GAScatterBulletStyle") as Style;
             }
 
-            _lineScatterStyle = new GALineScatterStyling(_lineStyle, _bulletStyle, DataPoints[0]);
+            _lineScatterStyle = new GALineScatterStyling(GALineStyle, GAScatterBulletStyle, DataPoints[0]);
 
             
         }
@@ -278,6 +243,9 @@ namespace De.TorstenMandelkow.MetroChart
             { 
                 if (_GALine == null) return;
 
+                _GALine.Style = ga
+
+
                 _GAPlotCanvas.Width =_sizeCanvas.ActualWidth;
                 _GAPlotCanvas.Height = _sizeCanvas.ActualHeight;
                // _GAPlotCanvas.Margin = sizeCanvas.Margin;
@@ -298,7 +266,6 @@ namespace De.TorstenMandelkow.MetroChart
                 double barWidth = (_GAPlotCanvas.Width) / DataPoints.Count;
                 foreach (DataPoint p in DataPoints)
                 {
-                    
 
                     if (count==0)
                     {
@@ -341,28 +308,7 @@ namespace De.TorstenMandelkow.MetroChart
 
                         if (GASeriesType=="Both" || GASeriesType=="Bullet")
                         {
-                            //RectangleGeometry bulletGeometry = getRectangleGeometry(CenterX, CenterY);
-
-                            //group.Children.Add(bulletGeometry);
-
-                            //Rectangle uiRect = new Rectangle();
-                            //uiRect.Height = bulletGeometry.Rect.Height;
-                            //uiRect.Width = bulletGeometry.Rect.Width;
-                            //uiRect.Fill = _lineScatterStyle.fillBrush;
-                            //uiRect.Margin = new Thickness(CenterX, CenterY, 0, 0);
-
-                            _GAPlotCanvas.Children.Add(getRecatangle(CenterX, CenterY,p));
-                          //  DependencyObject obj = VisualTreeHelper.GetParent(this);
-                          //  _GAPlotCanvas = VisualTreeHelper.GetParent(obj) as Canvas;
-                          //  ItemsPresenter obj1 = VisualTreeHelper.GetParent(_GAPlotCanvas) as ItemsPresenter;
-                          // // get templated parent of obj1 then add items to the items list
-                          //  FadingListView itemPanel = obj1.TemplatedParent as FadingListView;
-                          //  // maybe add 1 item and add all the bullets to this
-
-                           
-                            
-                          ////  itemPanel.Items.Add(uiRect);
-                            
+                            _GAPlotCanvas.Children.Add(getRecatangle(CenterX, CenterY,p));;  
                         }
                         
                     }
@@ -391,6 +337,13 @@ namespace De.TorstenMandelkow.MetroChart
         }
 
 
+        /// <summary>
+        /// get the UI rectangle to be  drawn
+        /// </summary>
+        /// <param name="CenterX"></param>
+        /// <param name="CenterY"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
         private Rectangle getRecatangle(double CenterX, double CenterY,DataPoint p)
         {
             Rectangle rect = new Rectangle();
@@ -399,17 +352,10 @@ namespace De.TorstenMandelkow.MetroChart
             rect.RadiusX = _lineScatterStyle.scatterXRadius;
             rect.RadiusY = _lineScatterStyle.scatterYRadius;
             rect.Margin = new Thickness(CenterX - (_lineScatterStyle.scatterSize.Width/2), CenterY - (_lineScatterStyle.scatterSize.Height/2), 0, 0);
-            if (_lineScatterStyle.scatterIsFilled)
-            {
-                rect.Fill = _lineScatterStyle.fillBrush;
-            }
+            rect.Fill = _lineScatterStyle.fillBrush;
             rect.Stroke = _lineScatterStyle.lineBrush;
             rect.StrokeThickness = _lineScatterStyle.strokeThickness;
             rect.ToolTip = p.FormattedValue;;
-           
-            // mouse over in here?
-            //ToolTipService.ToolTip="{Binding Path=FormattedValue}"
-            //will need to put
             return rect;
         }
             
