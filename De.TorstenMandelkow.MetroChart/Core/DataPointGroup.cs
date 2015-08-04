@@ -26,6 +26,43 @@
     
     public class DataPointGroup : DependencyObject, INotifyPropertyChanged
     {
+        #region properties
+
+        #region original Properties
+
+        public static readonly DependencyProperty SumOfDataPointGroupProperty =
+          DependencyProperty.Register("SumOfDataPointGroup",
+          typeof(double),
+          typeof(DataPointGroup),
+          new PropertyMetadata(0.0));
+
+        public static readonly DependencyProperty SelectedItemProperty =
+            DependencyProperty.Register("SelectedItem",
+            typeof(object),
+            typeof(DataPointGroup),
+            new PropertyMetadata(null));
+
+        public object SelectedItem
+        {
+            get { return (object)GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
+        }
+        public double SumOfDataPointGroup
+        {
+            get { return (double)GetValue(SumOfDataPointGroupProperty); }
+            set { SetValue(SumOfDataPointGroupProperty, value); }
+        }
+
+        public ObservableCollection<DataPoint> DataPoints
+        { get; set; }
+
+        public ChartBase ParentChart
+        { get; private set; }
+
+
+        #endregion
+
+        #region GAProperties
         /// <summary>
         /// The type of the series
         /// Bullet, Line, Both, Other
@@ -76,7 +113,7 @@
            DependencyProperty.Register("GALegendLinePointStart",
            typeof(Point),
            typeof(DataPointGroup),
-           new PropertyMetadata(new Point(0,0)));
+           new PropertyMetadata(new Point(0, 0)));
 
 
         /// <summary>
@@ -88,59 +125,22 @@
            typeof(DataPointGroup),
            new PropertyMetadata(new Point(0, 0)));
 
-
-        public static readonly DependencyProperty SumOfDataPointGroupProperty =
-            DependencyProperty.Register("SumOfDataPointGroup",
-            typeof(double),
-            typeof(DataPointGroup),
-            new PropertyMetadata(0.0));
-
-        public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register("SelectedItem",
-            typeof(object),
-            typeof(DataPointGroup),
-            new PropertyMetadata(null));
-
-        public object SelectedItem
-        {
-            get { return (object)GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }
-        }
-        public double SumOfDataPointGroup
-        {
-            get { return (double)GetValue(SumOfDataPointGroupProperty); }
-            set { SetValue(SumOfDataPointGroupProperty, value); }
-        }
-
-        public ObservableCollection<DataPoint> DataPoints
-        { get; set; }
-
-        public ChartBase ParentChart
-        { get; private set; }
-
         // <summary>
         /// The type of the series
         /// Bullet, Line, Both, Other
         /// </summary>
         public string GASeriesType
         {
-            get
-            {
-                return (string)GetValue(SeriesTypeProperty);
-            }
-            set
-            {
-                SetValue(SeriesTypeProperty, value);
-            }
+            get {  return (string)GetValue(SeriesTypeProperty); }
+            set { SetValue(SeriesTypeProperty, value); }
         }
 
 
         /// <summary>
         /// Name of style for the bullets.
-        /// Set using the dependency property
-        /// Used : Height, Width, radiusX, RadiusY, Fill
-        /// The Fill is used like a boolean. If a value is given it is filled with the series value
-        /// If a value isnt given it is left as a stroke only.
+        /// Set in the graph xaml
+        /// if values not supplied those in base styles are used
+        /// or from the pallette
         /// </summary>
         public Style GABulletStyle
         {
@@ -148,18 +148,27 @@
             set { SetValue(GAScatterBulletStyleProperty, value); }
         }
 
+        /// <summary>
+        /// the 'calculated' style, based on the GABulletStyle
+        /// that contains updated colours if pallette used
+        /// </summary>
         public Style GALegendScatterBulletStyle
         {
             get { return (Style)GetValue(GALegendScatterBulletStyleProperty); }
             set { SetValue(GALegendScatterBulletStyleProperty, value); }
         }
 
-
+        /// <summary>
+        /// start point for the lines in the legened
+        /// </summary>
         public Point GALegendLinePointStart
         {
             get { return (Point)GetValue(GALegendLinePointStartProperty); }
             set { SetValue(GALegendLinePointStartProperty, value); }
         }
+        /// <summary>
+        /// end point for the lines in the legened
+        /// </summary>
         public Point GALegendLinePointEnd
         {
             get { return (Point)GetValue(GALegendLinePointEndProperty); }
@@ -168,9 +177,10 @@
 
 
         /// <summary>
-        /// Name of style for the Lines.
-        /// Set using the dependency property
-        /// Used : StrokeThickness, Stroke
+        /// Name of style for the Line.
+        /// Set in the graph xaml
+        /// if values not supplied those in base styles are used
+        /// or from the pallette
         /// </summary>
         public Style GALineStyle
         {
@@ -178,12 +188,20 @@
             set { SetValue(GALineStyleProperty, value); }
         }
 
+        /// <summary>
+        /// the 'calculated' style, based on the GABulletStyle
+        /// that contains updated colours if pallette used
+        /// </summary>
         public Style GALegendLineStyle
         {
             get { return (Style)GetValue(GALegendLineStyleProperty); }
             set { SetValue(GALegendLineStyleProperty, value); }
         }
+
+        #endregion
        
+        #endregion
+
         public DataPointGroup(ChartBase parentChart, string caption, bool showcaption)
         {
             ParentChart = parentChart;

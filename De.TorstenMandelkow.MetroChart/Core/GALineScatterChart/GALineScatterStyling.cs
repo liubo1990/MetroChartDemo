@@ -8,35 +8,39 @@ using System.Windows;
 
 namespace De.TorstenMandelkow.MetroChart
 {
+    /// <summary>
+    /// gets information about the line and bullet styles
+    /// </summary>
     public class GALineScatterStyling
     {
         public Brush lineBrush;
         public Brush fillBrush;
-        public Double strokeThickness;
-       
         public Size scatterSize;
-        public double scatterXRadius;
-        public double scatterYRadius;
 
+      /// <summary>
+      /// get the information about the line/scatter styles
+      /// set default colours if none supplied in the styles
+      /// used in setting the styles and setting the Legend size in ChartBase
+      /// and to help positioning elements in scatter line piece
+      /// </summary>
+      /// <param name="lineStyle"></param>
+      /// <param name="bulletStyle"></param>
+      /// <param name="firstDataPoint"></param>
         public GALineScatterStyling(Style lineStyle, Style bulletStyle,DataPoint firstDataPoint )
         {
-            var bulletHeightSetter = getSetter(bulletStyle, "Height");
-            var bulletWidthSetter = getSetter(bulletStyle, "Width");
-            var butlletRadiusXSetter = getSetter(bulletStyle, "RadiusX");
-            var butlletRadiusYSetter = getSetter(bulletStyle, "RadiusY");
-            var butlletFillSetter = getSetter(bulletStyle, "Fill");
-
-            var lineFillSetter = getSetter(lineStyle, "Fill");
-            var lineStrokeSetter = getSetter(lineStyle, "Stroke");
-            var lineStrokeThicknessSetter = getSetter(lineStyle, "StrokeThickness");
+            
+            var bulletHeightSetter = getCalculatedSetter(bulletStyle, "Height");
+            var bulletWidthSetter = getCalculatedSetter(bulletStyle, "Width");
+            var butlletFillSetter = getCalculatedSetter(bulletStyle, "Fill",false);
+            var lineFillSetter = getCalculatedSetter(lineStyle, "Fill",false);
+            var lineStrokeSetter = getCalculatedSetter(lineStyle, "Stroke",false);
+            var lineStrokeThicknessSetter = getCalculatedSetter(lineStyle, "StrokeThickness");
 
             scatterSize = new Size((double)bulletWidthSetter.Value, (double)bulletHeightSetter.Value);
-            scatterXRadius = (double)butlletRadiusXSetter.Value;
-            scatterYRadius = (double)butlletRadiusYSetter.Value;
-            bool scatterColourProvided = !(butlletFillSetter == null || butlletFillSetter.Value == null || butlletFillSetter.Value == "");
-            strokeThickness = (double)lineStrokeThicknessSetter.Value;
-            bool lineColourProvided = !(lineStrokeSetter == null || lineStrokeSetter.Value == null || lineStrokeSetter.Value == "");
+            bool scatterColourProvided = !(butlletFillSetter == null || butlletFillSetter.Value == null );
+            bool lineColourProvided = !(lineStrokeSetter == null || lineStrokeSetter.Value == null);
 
+            // fill brush - if none provided use the ones from the pallette
             if (!scatterColourProvided)
             {
                 fillBrush = firstDataPoint.ItemBrush;
@@ -55,6 +59,43 @@ namespace De.TorstenMandelkow.MetroChart
             {
                 lineBrush = (Brush)lineStrokeSetter.Value;
             }
+        }
+
+        /// <summary>
+        /// get the setter for a property using the 'based on' styles if needed
+        /// styles if needed
+        /// </summary>
+        /// <param name="style"></param>
+        /// <param name="propertyname"></param>
+        /// <returns></returns>
+        private Setter getCalculatedSetter(Style style, string propertyname,bool throwError=true)
+        {
+            var propertySetter = getSetter(style, propertyname);
+            if (propertySetter == null)
+            {
+                Style currentStyle = style;
+                while (currentStyle.BasedOn != null)
+                {
+                    currentStyle = currentStyle.BasedOn;
+                    var tempBulletWidthSetter = getSetter(currentStyle, propertyname);
+                    if (tempBulletWidthSetter != null)
+                    {
+                        propertySetter = tempBulletWidthSetter;
+                        break;
+                    }
+
+                }
+
+                if (propertySetter == null)
+                {
+                    if (throwError)
+                    {
+                        throw new Exception("cant find [" + propertyname + "] setter for target [" + style.TargetType.FullName);
+                    }
+                    
+                }
+            }
+            return propertySetter;
         }
 
         /// <summary>

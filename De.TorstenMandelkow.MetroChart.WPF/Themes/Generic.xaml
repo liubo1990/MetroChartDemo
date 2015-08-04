@@ -1562,8 +1562,8 @@
                         <local:GAScatterLinePiece
                         DataPoints="{Binding Path=DataPoints}"
                         GASeriesType="{Binding Path=GASeriesType}"
-                        GAScatterBulletStyle="{Binding Path=GAScatterBulletStyle}"
-                        GALineStyle="{Binding Path=GALineStyle}"
+                        GAScatterBulletStyle="{Binding Path=GALegendScatterBulletStyle}"
+                        GALineStyle="{Binding Path=GALegendLineStyle}"
                         ></local:GAScatterLinePiece>
 
 

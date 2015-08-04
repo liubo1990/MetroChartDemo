@@ -211,6 +211,7 @@ namespace De.TorstenMandelkow.MetroChart
         /// </summary>
         private void setUpStyles()
         {
+            
             if (GALineStyle==null) 
             {
                 GALineStyle = TryFindResource("GALineStyle") as Style;
@@ -243,17 +244,12 @@ namespace De.TorstenMandelkow.MetroChart
             { 
                 if (_GALine == null) return;
 
-                _GALine.Style = ga
-
+                _GALine.Style = this.GALineStyle; 
+               
 
                 _GAPlotCanvas.Width =_sizeCanvas.ActualWidth;
                 _GAPlotCanvas.Height = _sizeCanvas.ActualHeight;
-               // _GAPlotCanvas.Margin = sizeCanvas.Margin;
 
-                _GALine.Fill = _lineScatterStyle.fillBrush;
-                _GALine.StrokeThickness = _lineScatterStyle.strokeThickness;
-                _GALine.Stroke = _lineScatterStyle.lineBrush;
-                
 
                 GeometryCollection geomCollection = new GeometryCollection();
                 GeometryGroup group = new GeometryGroup();
@@ -267,7 +263,7 @@ namespace De.TorstenMandelkow.MetroChart
                 foreach (DataPoint p in DataPoints)
                 {
 
-                    if (count==0)
+                    if (count==0) // first point doesnt get a line
                     {
                         double CenterX = (count * barWidth) + (barWidth / 2);
                         double CenterY = _GAPlotCanvas.Height - (_GAPlotCanvas.Height * p.PercentageFromMaxDataPointValue);
@@ -275,10 +271,9 @@ namespace De.TorstenMandelkow.MetroChart
 
                         if (GASeriesType == "Both" || GASeriesType == "Bullet")
                         {
-                            //RectangleGeometry bulletGeometry = getRectangleGeometry(CenterX, CenterY);
-
-                            //group.Children.Add(bulletGeometry);
-                            _GAPlotCanvas.Children.Add(getRecatangle(CenterX, CenterY,p));
+                            Rectangle rect = getRecatangle(CenterX, CenterY, p);
+                            rect.Style = this.GAScatterBulletStyle;
+                            _GAPlotCanvas.Children.Add(rect);
                         }
                        
 
@@ -287,7 +282,6 @@ namespace De.TorstenMandelkow.MetroChart
                     {
 
                         double CenterX = (count * barWidth) + (barWidth / 2);
-                      //  double CenterY = _GAPlotCanvas.ActualHeight - (_GAPlotCanvas.ActualHeight * p.PercentageFromMaxDataPointValue);
                         double CenterY = _GAPlotCanvas.Height - (_GAPlotCanvas.Height * p.PercentageFromMaxDataPointValue);
 
                         lineEndPoint.X = CenterX;
@@ -308,7 +302,10 @@ namespace De.TorstenMandelkow.MetroChart
 
                         if (GASeriesType=="Both" || GASeriesType=="Bullet")
                         {
-                            _GAPlotCanvas.Children.Add(getRecatangle(CenterX, CenterY,p));;  
+                            Rectangle rect = getRecatangle(CenterX, CenterY, p);
+                            rect.Style = this.GAScatterBulletStyle;
+                            _GAPlotCanvas.Children.Add(rect);
+                           
                         }
                         
                     }
@@ -322,22 +319,6 @@ namespace De.TorstenMandelkow.MetroChart
         }
 
         /// <summary>
-        /// get a rectangle geometry for the bullet
-        /// </summary>
-        /// <param name="CenterX"></param>
-        /// <param name="CenterY"></param>
-        /// <returns></returns>
-        private RectangleGeometry getRectangleGeometry(double CenterX, double CenterY)
-        {
-            RectangleGeometry bulletGeometry = new RectangleGeometry();
-            bulletGeometry.RadiusX = _lineScatterStyle.scatterXRadius;
-            bulletGeometry.RadiusY = _lineScatterStyle.scatterYRadius;
-            bulletGeometry.Rect = new Rect(new Point(CenterX - (_lineScatterStyle.scatterSize.Width / 2), CenterY - (_lineScatterStyle.scatterSize.Height / 2)), _lineScatterStyle.scatterSize);
-            return bulletGeometry;
-        }
-
-
-        /// <summary>
         /// get the UI rectangle to be  drawn
         /// </summary>
         /// <param name="CenterX"></param>
@@ -346,16 +327,11 @@ namespace De.TorstenMandelkow.MetroChart
         /// <returns></returns>
         private Rectangle getRecatangle(double CenterX, double CenterY,DataPoint p)
         {
+            
             Rectangle rect = new Rectangle();
-            rect.Width = _lineScatterStyle.scatterSize.Width;
-            rect.Height = _lineScatterStyle.scatterSize.Height;
-            rect.RadiusX = _lineScatterStyle.scatterXRadius;
-            rect.RadiusY = _lineScatterStyle.scatterYRadius;
             rect.Margin = new Thickness(CenterX - (_lineScatterStyle.scatterSize.Width/2), CenterY - (_lineScatterStyle.scatterSize.Height/2), 0, 0);
-            rect.Fill = _lineScatterStyle.fillBrush;
-            rect.Stroke = _lineScatterStyle.lineBrush;
-            rect.StrokeThickness = _lineScatterStyle.strokeThickness;
-            rect.ToolTip = p.FormattedValue;;
+            rect.ToolTip = p.FormattedValue;
+            
             return rect;
         }
             
