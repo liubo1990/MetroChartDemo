@@ -666,7 +666,7 @@
                                     dataPointGroup = new DataPointGroup(this, seriesItemCaption, this.Series.Count > 1 ? true : false);
                                     dataPointGroup.PropertyChanged += dataPointGroup_PropertyChanged;
 
-                                    //GA add seriestype and styles
+                                    //GA add seriestype and styles to datapoint groups
                                     dataPointGroup.GASeriesType = initialSeries.SeriesType;
                                     dataPointGroup.GALineStyle = initialSeries.SeriesLineStyle;
                                     dataPointGroup.GABulletStyle = initialSeries.SeriesBulletStyle;
@@ -819,47 +819,7 @@
         }
 
          
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="groupedSeries"></param>
-        private void GACopyPointsForLineGraph(ObservableCollection<DataPointGroup> groupedSeries)
-        {
-            // copy information from the series and put in fields in the datapointGroup
-            // then in the generic.Xaml bind the properties from the group
-            // to the line piece.
-
-            // so there need to be dependency properties  on the scatterLine piece
-            // series and  datapointgroup
-
-            // SeriesType, GABulletStyle, GALineStyle
-
-            //group.GABulletStyle
-            //group.GAScatterBulletStyle
-            // group.SeriesType (Bullet, Line, Both, Other)
-
-            //foreach (ChartSeries series in this.Series)
-
-            //    foreach (DataPointGroup group in groupedSeries)
-            //    {
-
-    
-            //        for (int counter = 0; counter < group.DataPoints.Count; counter++)
-            //        {
-            //            if (counter + 1 == group.DataPoints.Count)
-            //            {
-            //                group.DataPoints[counter].endValue = null;
-            //            }
-            //            else
-            //            {
-            //                double nextStartValue = (double)group.DataPoints[counter + 1].Value;
-            //                group.DataPoints[counter].endValue = nextStartValue;
-            //            }
-
-            //        }
-            //    }
-        }
-
+      
         private bool GetIsRowColumnSwitched()
         {
             if (IsRowColumnSwitched)
@@ -946,7 +906,7 @@
                 //bullet styles = style 'based on esxiting' but with brush's overridden to account for any pallette colours
                 Style newBulletStyle = new Style(typeof(Rectangle), bulletStyle);
                 newBulletStyle.Setters.Add(new Setter(Rectangle.FillProperty, styling.fillBrush));
-                newBulletStyle.Setters.Add(new Setter(Rectangle.StrokeProperty, styling.lineBrush));
+                newBulletStyle.Setters.Add(new Setter(Rectangle.StrokeProperty, styling.bulletLineBrush));
                 
                 Style newLineStyle = new Style(typeof(Path), lineStyle);
                 newLineStyle.Setters.Add(new Setter(Path.StrokeProperty, styling.lineBrush));

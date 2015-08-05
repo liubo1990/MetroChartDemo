@@ -77,8 +77,6 @@
     <Compile Include="Core\GALineScatterChart\GALineScatterChart.cs" />
     <Compile Include="Core\GALineScatterChart\GALineScatterStyling.cs" />
     <Compile Include="Core\GALineScatterChart\GAScatterLinePiece.cs" />
-    <Compile Include="Core\GAScatterChart\GAScatterChart.cs" />
-    <Compile Include="Core\GAScatterChart\GAScatterPiece.cs" />
     <Compile Include="Core\GaugeChart\RadialGaugeChart.cs" />
     <Compile Include="Core\GaugeChart\RadialGaugePiece.cs" />
     <Compile Include="ChartControls\Legend.cs" />

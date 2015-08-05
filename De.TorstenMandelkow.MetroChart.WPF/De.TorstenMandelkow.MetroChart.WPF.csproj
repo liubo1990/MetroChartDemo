@@ -165,12 +165,6 @@
     <Compile Include="..\De.TorstenMandelkow.MetroChart\Core\GALineScatterChart\GAScatterLinePiece.cs">
       <Link>Core\GALineScatterChart\GAScatterLinePiece.cs</Link>
     </Compile>
-    <Compile Include="..\De.TorstenMandelkow.MetroChart\Core\GAScatterChart\GAScatterChart.cs">
-      <Link>Core\GAScatterChart\GAScatterChart.cs</Link>
-    </Compile>
-    <Compile Include="..\De.TorstenMandelkow.MetroChart\Core\GAScatterChart\GAScatterPiece.cs">
-      <Link>Core\GAScatterChart\GAScatterPiece.cs</Link>
-    </Compile>
     <Compile Include="..\De.TorstenMandelkow.MetroChart\Core\GaugeChart\RadialGaugeChart.cs">
       <Link>Core\GaugeChart\RadialGaugeChart.cs</Link>
     </Compile>

@@ -6,39 +6,32 @@
 	Yes, if its not mine
 3. Try puttiing this into another application and write information on how to do it
 
-
+test this after changing namespaces
 ****************************
 ** when does xamlReplace.tagets get run? Ide like ot to run each build?
 ** looks like it may not be compatible - there are errors
 ** or something else. So stick with doing a clean build first
 ***********************
 
-** go through generic.xaml and remove the old scatter only stuff** -- done but double check
 
 
+Notes for documentataieon
 
+Only mouse event at the moment is mouse over for tooltips
+mouse over doesnt work byu default for line chart, but can fake it by having a 'both' chart with transparent bullet.
+Done like this so that complex, or many poinmt charts dont have to have tooltips
+No axis markings on horizontal axis for same reason (many points in small space make it messy) May look at max, min values later
 
-** use the same code in the actual bullets? ie bind to the same style - then might be able to use bullets with different lines to the line as well!
 
 
 
 SCATTER CHART TO DO
-1 .do I want to do the mouse events and which ones if I do
-// RegisterMouseEvents(bullet); -- do I want to do this on some things?
- override void InternalOnApplyTemplate()
+
  1.5 - background of plot area (canvas) could be coloured
  1.6 - what other values should be coloured that previous version can? ie what binding or testing
 
 
 
-
-2. numbers arent showing ** they used to be on the rectangle the bar was drawn on
-- this is now missing. Either put it back so I can draw the values, leave the number out,
-or draw the numbers in the same code as the bullets?
-DECISION - THERE IS NO NUMBERS DRAWN SO MUST PUT IN THE HOVER ON THE GRAPHS
-(ie each bullet and line needs a mouse over - which I cant do on geometries!!!!!!!!! )
-
-4. legend = the squares (dont know what Im going to do)     <Style TargetType="local:ChartLegendItem">
 
 this is how the other pieces are bound - do I need to do something similar?
 it gets the data from the datapoint into the scatterPiece

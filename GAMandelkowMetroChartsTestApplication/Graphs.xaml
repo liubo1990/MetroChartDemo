@@ -23,6 +23,17 @@
         <Setter Property="StrokeThickness" Value="1"></Setter>
     </Style>
 
+    <Style x:Key="GATransparentScatterBulletStyle" TargetType="Rectangle" >
+        <Setter Property="Height" Value="7"></Setter>
+        <Setter Property="Width" Value="7"></Setter>
+        <Setter Property="RadiusX" Value="3.5"></Setter>
+        <Setter Property="RadiusY" Value="3.5"></Setter>
+        <Setter Property="StrokeThickness" Value="1"></Setter>
+        <Setter Property="Fill" Value="Transparent"></Setter>
+        <Setter Property="Stroke" Value="Transparent"/>
+    </Style>
+
+
     <Style x:Key="BlackLineRedFillStyle" TargetType="Path" >
         <Setter Property="StrokeThickness" Value="1"></Setter>
         <Setter Property="Stroke" Value="Black"></Setter>

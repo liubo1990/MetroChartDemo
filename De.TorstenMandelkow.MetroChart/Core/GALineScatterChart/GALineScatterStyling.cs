@@ -14,8 +14,10 @@ namespace De.TorstenMandelkow.MetroChart
     public class GALineScatterStyling
     {
         public Brush lineBrush;
+        public Brush bulletLineBrush;
         public Brush fillBrush;
         public Size scatterSize;
+        
 
       /// <summary>
       /// get the information about the line/scatter styles
@@ -32,6 +34,9 @@ namespace De.TorstenMandelkow.MetroChart
             var bulletHeightSetter = getCalculatedSetter(bulletStyle, "Height");
             var bulletWidthSetter = getCalculatedSetter(bulletStyle, "Width");
             var butlletFillSetter = getCalculatedSetter(bulletStyle, "Fill",false);
+            var butlletLineSetter = getCalculatedSetter(bulletStyle, "Stroke", false);
+            bool bulletLineColourProvided = !(butlletLineSetter == null || butlletLineSetter.Value == null);
+
             var lineFillSetter = getCalculatedSetter(lineStyle, "Fill",false);
             var lineStrokeSetter = getCalculatedSetter(lineStyle, "Stroke",false);
             var lineStrokeThicknessSetter = getCalculatedSetter(lineStyle, "StrokeThickness");
@@ -58,6 +63,16 @@ namespace De.TorstenMandelkow.MetroChart
             else
             {
                 lineBrush = (Brush)lineStrokeSetter.Value;
+            }
+
+            // bullet line stroke - if not set then from the pallette, else from the style
+            if (!bulletLineColourProvided)
+            {
+                bulletLineBrush = firstDataPoint.ItemBrush;
+            }
+            else
+            {
+                bulletLineBrush = (Brush)butlletLineSetter.Value;
             }
         }
 
