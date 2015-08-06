@@ -124,9 +124,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\De.TorstenMandelkow.MetroChart.WPF\De.TorstenMandelkow.MetroChart.WPF.csproj">
+    <ProjectReference Include="..\GravityApps.Mandelkow.MetroCharts.WPF\GravityApps.Mandelkow.MetroCharts.WPF.csproj">
       <Project>{4ab4b0db-780c-48b9-a642-8e527353d957}</Project>
-      <Name>De.TorstenMandelkow.MetroChart.WPF</Name>
+      <Name>GravityApps.Mandelkow.MetroCharts.WPF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

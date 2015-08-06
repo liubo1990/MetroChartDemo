@@ -22,7 +22,7 @@ namespace TestApplication.Shared
         public ObservableCollection<string> ChartTypes { get; set; }
         public List<double> FontSizes { get; set; }
         public List<double> DoughnutInnerRadiusRatios { get; set; }
-        public Dictionary<string, De.TorstenMandelkow.MetroChart.ResourceDictionaryCollection> Palettes { get; set; }
+        public Dictionary<string, GravityApps.Mandelkow.MetroCharts.ResourceDictionaryCollection> Palettes { get; set; }
         public List<string> SelectionBrushes { get; set; }
         
         private string selectedChartType = null;
@@ -246,7 +246,7 @@ namespace TestApplication.Shared
 
         private void LoadPalettes()
         {
-            Palettes = new Dictionary<string, De.TorstenMandelkow.MetroChart.ResourceDictionaryCollection>();
+            Palettes = new Dictionary<string, GravityApps.Mandelkow.MetroCharts.ResourceDictionaryCollection>();
             Palettes.Add("Default", null);
 
             var resources = Application.Current.Resources.MergedDictionaries.ToList();
@@ -254,9 +254,9 @@ namespace TestApplication.Shared
             {
                 foreach (var objkey in dict.Keys)
                 {
-                    if(dict[objkey] is De.TorstenMandelkow.MetroChart.ResourceDictionaryCollection)
+                    if(dict[objkey] is GravityApps.Mandelkow.MetroCharts.ResourceDictionaryCollection)
                     {
-                        Palettes.Add(objkey.ToString(), dict[objkey] as De.TorstenMandelkow.MetroChart.ResourceDictionaryCollection);
+                        Palettes.Add(objkey.ToString(), dict[objkey] as GravityApps.Mandelkow.MetroCharts.ResourceDictionaryCollection);
                     }
                 }
             }

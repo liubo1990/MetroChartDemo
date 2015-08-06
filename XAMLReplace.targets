@@ -49,9 +49,9 @@
 
         //replace generic.xaml with the major file
         string mainGenericXAML = SolutionFolder + @"\SPCAF.Client.Core\Themes\Generic.xaml";
-        if(ProjectFolder.Contains("De.TorstenMandelkow.MetroChart"))
+        if(ProjectFolder.Contains("GravityApps.Mandelkow.MetroCharts"))
         {
-          mainGenericXAML = SolutionFolder + @"\De.TorstenMandelkow.MetroChart\Themes\Generic.xaml";
+          mainGenericXAML = SolutionFolder + @"\GravityApps.Mandelkow.MetroCharts\Themes\Generic.xaml";
         }
         else if(ProjectFolder.Contains("TestApplication"))
         {

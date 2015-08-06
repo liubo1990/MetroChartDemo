@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="986.269" Width="1255.224"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        xmlns:GAChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart" Background="#FFC1C0C0"
+        xmlns:GAChart="clr-namespace:GravityApps.Mandelkow.MetroCharts;assembly=GravityApps.Mandelkow.MetroCharts"
         
         >
 
