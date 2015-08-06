@@ -7,6 +7,7 @@
     <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Graphs.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="TestAppStyles.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         <vm:ViewModelLocator xmlns:vm="clr-namespace:GAMandelkowMetroChartsTestApplication.ViewModels" x:Key="Locator" />
     </ResourceDictionary>

@@ -1,13 +1,19 @@
 ﻿<Window x:Class="GAMandelkowMetroChartsTestApplication.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="986.269" Width="1255.224"
+        Title="MainWindow" Height="766.269" Width="1255.224"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        xmlns:GAChart="clr-namespace:GravityApps.Mandelkow.MetroCharts;assembly=GravityApps.Mandelkow.MetroCharts"
+        xmlns:GAChart="clr-namespace:GravityApps.Mandelkow.MetroCharts;assembly=GravityApps.Mandelkow.MetroCharts" Background="#FFC7C7C7"
         
         >
-
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >
+    <StackPanel Orientation="Vertical">
+        <TextBlock Style="{StaticResource LargeTitleStyle}" Margin="20,10,0,0">GravityApps-Mandelkow Metro Charts Demo</TextBlock>
+        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+            <TextBlock Style="{StaticResource MediumTitleStyle}" Margin="20,0,0,0" VerticalAlignment="Bottom">Main charts by Torsten Mandlekow</TextBlock>
+            <TextBlock Style="{StaticResource SmallTitleStyle}" VerticalAlignment="Top" Margin="5,5,0,0"> (www.modernuicharts.codeplex.com)</TextBlock>
+            <TextBlock Style="{StaticResource MediumTitleStyle}" VerticalAlignment="Bottom"><Run Text=" "/><Run Text="Line, Scatter and multiple-series charts by GravityApps"/></TextBlock>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" >
         <GAChart:PieChart
             Style="{StaticResource MinimalChartStyle}"
             DataContext="{Binding}"
@@ -103,6 +109,7 @@
                 </GAChart:ChartSeries>
             </GAChart:GALineScatterChart.Series>
         </GAChart:GALineScatterChart>
+    </StackPanel>
     </StackPanel>
 </Window>
 

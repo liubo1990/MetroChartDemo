@@ -1,17 +1,9 @@
-1. change namespace - remember to back up everything really well  beforehand.
-	There is a file called XAMLReplaceTargets which has caused issues when I do a copy and replace
-	I think that is what is causing all the issues with my other version not working
-	Does there need to be information about this file put somewhere?
+
 2. Main Key is some sort of signing key - is it mine now? Can I / should I remove it?
 	Yes, if its not mine
 3. Try puttiing this into another application and write information on how to do it
 
-test this after changing namespaces
-****************************
-** when does xamlReplace.tagets get run? Ide like ot to run each build?
-** looks like it may not be compatible - there are errors
-** or something else. So stick with doing a clean build first
-***********************
+
 
 
 
@@ -57,11 +49,3 @@ Will have two charts - GAScatterLineChart and GAColumnScatterLineChart
 ** ** update the xaml in the code and it will get copied to the library
 ** ** can style the charts in the test app Graohs.xaml
 ** ** put custom bullet and line styles in Graohs.xaml BUT leave the std GA ones alone
-
-
-setup notes
-If using the solution and not the .dll only (not sure if you can do this?) then add
-reference to the wpf one
-
-Alter the Generic.xaml in the MetroChart (with the code) and the other one gets updated
-Always copy link to .WPF folder too
