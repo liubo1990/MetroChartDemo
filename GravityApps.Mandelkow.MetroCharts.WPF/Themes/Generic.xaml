@@ -1,4 +1,4 @@
-<ResourceDictionary
+﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:GravityApps.Mandelkow.MetroCharts" >
@@ -1291,7 +1291,9 @@
                         <Grid x:Name="SeriesText"
                                       Grid.Column="2"      
                                       Grid.Row="2">
-                            <local:FadingListView Style="{StaticResource FadingListViewStyle}" ItemsSource="{Binding Path=DataPointGroups, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                            <local:FadingListView Style="{StaticResource FadingListViewStyle}"
+                                                  ItemsSource="{Binding Path=DataPointGroups, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                                 >
                                 <local:FadingListView.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <local:ColumnSeriesPanel Margin="0 5 0 5" />
@@ -1299,8 +1301,8 @@
                                 </local:FadingListView.ItemsPanel>
                                 <local:FadingListView.ItemTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Vertical" >
-                                            <Grid Margin="0 8 0 8">
+                                        <StackPanel Orientation="Vertical"  Visibility="{Binding Path=ParentChart.ChartLegendVisibility}" >
+                                            <Grid Margin="0 8 0 8" >
                                                 <Path HorizontalAlignment="Center" Style="{Binding Path=GALegendLineStyle}" >
                                                     <Path.Data>
                                                         <PathGeometry>

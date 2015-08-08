@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="766.269" Width="1255.224"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        xmlns:GAChart="clr-namespace:GravityApps.Mandelkow.MetroCharts;assembly=GravityApps.Mandelkow.MetroCharts" Background="#FFC7C7C7"
+        xmlns:GAChart="clr-namespace:GravityApps.Mandelkow.MetroCharts;assembly=GravityApps.Mandelkow.MetroCharts"
         
         >
-    <StackPanel Orientation="Vertical">
+    <StackPanel Orientation="Vertical" Background="#FFE4E4E4">
         <TextBlock Style="{StaticResource LargeTitleStyle}" Margin="20,10,0,0">GravityApps-Mandelkow Metro Charts Demo</TextBlock>
         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
             <TextBlock Style="{StaticResource MediumTitleStyle}" Margin="20,0,0,0" VerticalAlignment="Bottom">Main charts by Torsten Mandlekow</TextBlock>
@@ -14,72 +14,77 @@
             <TextBlock Style="{StaticResource MediumTitleStyle}" VerticalAlignment="Bottom"><Run Text=" "/><Run Text="Line, Scatter and multiple-series charts by GravityApps"/></TextBlock>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" >
-        <GAChart:PieChart
+            <GAChart:PieChart
             Style="{StaticResource MinimalChartStyle}"
             DataContext="{Binding}"
         ChartTitle="Pie Chart"
         ChartSubTitle="Standard Mandelkow Pie Chart"
         >
-            <GAChart:PieChart.Series>
-                <GAChart:ChartSeries
+                <GAChart:PieChart.Series>
+                    <GAChart:ChartSeries
                   SeriesTitle="{Binding scatterData.seriesDisplayName}"
                     DisplayMember="date"
                     ValueMember="amount"
                     ItemsSource="{Binding scatterData.Items}" 
                     />
-            </GAChart:PieChart.Series>
-        </GAChart:PieChart>
+                </GAChart:PieChart.Series>
+            </GAChart:PieChart>
 
 
-        <StackPanel Orientation="Vertical">
-            <GAChart:GALineScatterChart
+
+
+            <StackPanel Orientation="Vertical">
+
+                <GAChart:GALineScatterChart
                Style="{StaticResource MinimalChartStyle}"
                 DataContext="{Binding }"
                 ChartTitle="GA Line/Scatter Chart" 
                 ChartSubTitle="three series - default styles."
+                    IsRowColumnSwitched="True"
                 >
-                <GAChart:GALineScatterChart.Series >
-                    <GAChart:ChartSeries
+                    <GAChart:GALineScatterChart.Series >
+                        <GAChart:ChartSeries
                         SeriesTitle="{Binding scatterData.seriesDisplayName}"
                         DisplayMember="date"
                         ValueMember="amount"
                         ItemsSource="{Binding scatterData.Items}"
                         SeriesType="Both"
                         >
-                    </GAChart:ChartSeries>
-                    <GAChart:ChartSeries
+                        </GAChart:ChartSeries>
+                        <GAChart:ChartSeries
                         SeriesTitle="{Binding scatterData1.seriesDisplayName}"
                         DisplayMember="date"
                         ValueMember="amount"
-                        ItemsSource="{Binding scatterData1.Items}"
                         SeriesType="Bullet"
+                            ItemsSource="{Binding scatterData1.Items}"
+                            
                         >
-                    </GAChart:ChartSeries>
-                    <GAChart:ChartSeries
+                        </GAChart:ChartSeries>
+                        <GAChart:ChartSeries
                     SeriesTitle="{Binding scatterData2.seriesDisplayName}"
                     DisplayMember="date"
                     ValueMember="amount"
                     ItemsSource="{Binding scatterData2.Items}"
                     SeriesType="Line"
                     >
-                    </GAChart:ChartSeries>
-                </GAChart:GALineScatterChart.Series>
-            </GAChart:GALineScatterChart>
+                        </GAChart:ChartSeries>
+                    </GAChart:GALineScatterChart.Series>
+                </GAChart:GALineScatterChart>
 
-            
-            <!--<Expander Header="Show Styling">
+
+                <!--<Expander Header="Show Styling">
                 <TextBlock></TextBlock>
             </Expander>-->
-        </StackPanel>
-        
-        <GAChart:GALineScatterChart
+            </StackPanel>
+
+            <GAChart:GALineScatterChart
            Style="{StaticResource MinimalChartStyle}"
             DataContext="{Binding }"
             ChartTitle="GA Line/Scatter Chart" 
             ChartSubTitle="three series - custom styles, Line and Both types"
             >
-            <GAChart:GALineScatterChart.Series >
-                <GAChart:ChartSeries
+                <GAChart:GALineScatterChart.Series >
+                    <GAChart:ChartSeries
                     SeriesTitle="{Binding scatterData.seriesDisplayName}"
                     DisplayMember="date"
                     ValueMember="amount"
@@ -87,8 +92,8 @@
                     SeriesType="Both"
                     SeriesBulletStyle="{StaticResource NotFilledCircleStyle}"
                     >
-                </GAChart:ChartSeries>
-                <GAChart:ChartSeries
+                    </GAChart:ChartSeries>
+                    <GAChart:ChartSeries
                     SeriesTitle="{Binding scatterData1.seriesDisplayName}"
                     DisplayMember="date"
                     ValueMember="amount"
@@ -97,8 +102,8 @@
                     SeriesBulletStyle="{StaticResource RectangleFilledStyle}"
                     SeriesLineStyle="{StaticResource BlackLineRedFillStyle }"
                     >
-                </GAChart:ChartSeries>
-                <GAChart:ChartSeries
+                    </GAChart:ChartSeries>
+                    <GAChart:ChartSeries
                     SeriesTitle="{Binding scatterData2.seriesDisplayName}"
                     DisplayMember="date"
                     ValueMember="amount"
@@ -106,10 +111,10 @@
                     SeriesType="Both"
                      SeriesBulletStyle="{StaticResource GATransparentScatterBulletStyle}"
                     >
-                </GAChart:ChartSeries>
-            </GAChart:GALineScatterChart.Series>
-        </GAChart:GALineScatterChart>
-    </StackPanel>
+                    </GAChart:ChartSeries>
+                </GAChart:GALineScatterChart.Series>
+            </GAChart:GALineScatterChart>
+        </StackPanel>
     </StackPanel>
 </Window>
 

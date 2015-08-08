@@ -23,12 +23,7 @@
         <Setter Property="StrokeThickness" Value="1"></Setter>
     </Style>
 
-    <Style x:Key="GATransparentScatterBulletStyle" TargetType="Rectangle" >
-        <Setter Property="Height" Value="7"></Setter>
-        <Setter Property="Width" Value="7"></Setter>
-        <Setter Property="RadiusX" Value="3.5"></Setter>
-        <Setter Property="RadiusY" Value="3.5"></Setter>
-        <Setter Property="StrokeThickness" Value="1"></Setter>
+    <Style x:Key="GATransparentScatterBulletStyle" TargetType="Rectangle" BasedOn="{StaticResource GAScatterBulletStyle}" >
         <Setter Property="Fill" Value="Transparent"></Setter>
         <Setter Property="Stroke" Value="Transparent"/>
     </Style>
@@ -40,14 +35,12 @@
 
     </Style>
 
-    <Style x:Key="RectangleFilledStyle" TargetType="Rectangle" >
-        <Setter Property="Height" Value="7"></Setter>
-        <Setter Property="Width" Value="7"></Setter>
+    <Style x:Key="RectangleFilledStyle" TargetType="Rectangle"  BasedOn="{StaticResource GAScatterBulletStyle}" >
         <Setter Property="RadiusX" Value="0"></Setter>
         <Setter Property="RadiusY" Value="0"></Setter>
         <Setter Property="Fill" Value="Red"></Setter>
-        <Setter Property="StrokeThickness" Value="0"></Setter>
-
+        <Setter Property="StrokeThickness" Value="1"></Setter>
+        <Setter Property="Stroke" Value="Black"></Setter>
     </Style>
 
     <Style x:Key="NotFilledCircleStyle" TargetType="Rectangle" >
@@ -57,7 +50,6 @@
         <Setter Property="RadiusY" Value="3.5"></Setter>
         <Setter Property="Fill" Value="Transparent"/>
         <Setter Property="StrokeThickness" Value="1"/>
-
     </Style>
 
 </ResourceDictionary>
