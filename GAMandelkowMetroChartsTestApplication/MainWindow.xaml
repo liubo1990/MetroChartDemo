@@ -34,13 +34,13 @@
 
 
             <StackPanel Orientation="Vertical">
-
+                <Button Command="{Binding SwitchSeries, Mode=OneWay}">Switch Series</Button>
                 <GAChart:GALineScatterChart
                Style="{StaticResource MinimalChartStyle}"
                 DataContext="{Binding }"
                 ChartTitle="GA Line/Scatter Chart" 
                 ChartSubTitle="three series - default styles."
-                    IsRowColumnSwitched="True"
+                    IsRowColumnSwitched="{Binding seriesSwitched}"
                 >
                     <GAChart:GALineScatterChart.Series >
                         <GAChart:ChartSeries

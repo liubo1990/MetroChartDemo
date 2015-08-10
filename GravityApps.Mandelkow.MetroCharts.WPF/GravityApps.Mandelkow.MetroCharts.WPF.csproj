@@ -75,41 +75,111 @@
     <Compile Include="..\GravityApps.Mandelkow.MetroCharts\ChartControls\ResourceDictionaryCollection.cs">
       <Link>ChartControls\ResourceDictionaryCollection.cs</Link>
     </Compile>
-    <Compile Include="Controls\AutoSizeTextBlock.cs" />
-    <Compile Include="Controls\ColumnSeriesPanel.cs" />
-    <Compile Include="Controls\CustomWrapPanel.cs" />
-    <Compile Include="Controls\EvenlyDistributedColumnsGrid.cs" />
-    <Compile Include="Controls\EvenlyDistributedRowGrid.cs" />
-    <Compile Include="Controls\FadingListView.cs" />
-    <Compile Include="Controls\GASingleColumnGrid.cs" />
-    <Compile Include="Controls\MinimalWidthTextBlock.cs" />
-    <Compile Include="Controls\RowSeriesPanel.cs" />
-    <Compile Include="Controls\StackedColumnsPanel.cs" />
-    <Compile Include="Controls\UniformGridPanel.cs" />
-    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\DoubleToGridLengthPercent.cs" />
-    <Compile Include="Core\BarChart\BarPiece.cs" />
-    <Compile Include="Core\BarChart\ClusteredBarChart.cs" />
-    <Compile Include="Core\BarChart\StackedBar100Chart.cs" />
-    <Compile Include="Core\BarChart\StackedBarChart.cs" />
-    <Compile Include="Core\ChartBase.cs" />
-    <Compile Include="Core\ChartSeriesViewModel.cs" />
-    <Compile Include="Core\ColumnChart\ClusteredColumnChart.cs" />
-    <Compile Include="Core\ColumnChart\ColumnPiece.cs" />
-    <Compile Include="Core\ColumnChart\StackedColumn100Chart.cs" />
-    <Compile Include="Core\ColumnChart\StackedColumnChart.cs" />
-    <Compile Include="Core\DataPoint.cs" />
-    <Compile Include="Core\DataPointGroup.cs" />
-    <Compile Include="Core\Doughnut\DoughnutChart.cs" />
-    <Compile Include="Core\Extensions.cs" />
-    <Compile Include="Core\GALineScatterChart\GALineScatterChart.cs" />
-    <Compile Include="Core\GALineScatterChart\GALineScatterStyling.cs" />
-    <Compile Include="Core\GALineScatterChart\GAScatterLinePiece.cs" />
-    <Compile Include="Core\GaugeChart\RadialGaugeChart.cs" />
-    <Compile Include="Core\GaugeChart\RadialGaugePiece.cs" />
-    <Compile Include="Core\PieceBase.cs" />
-    <Compile Include="Core\PieChart\PieChart.cs" />
-    <Compile Include="Core\PieChart\PiePiece.cs" />
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Controls\AutoSizeTextBlock.cs">
+      <Link>Controls\AutoSizeTextBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Controls\ColumnSeriesPanel.cs">
+      <Link>Controls\ColumnSeriesPanel.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Controls\CustomWrapPanel.cs">
+      <Link>Controls\CustomWrapPanel.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Controls\EvenlyDistributedColumnsGrid.cs">
+      <Link>Controls\EvenlyDistributedColumnsGrid.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Controls\EvenlyDistributedRowGrid.cs">
+      <Link>Controls\EvenlyDistributedRowGrid.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Controls\FadingListView.cs">
+      <Link>Controls\FadingListView.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Controls\GASingleColumnGrid.cs">
+      <Link>Controls\GASingleColumnGrid.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Controls\MinimalWidthTextBlock.cs">
+      <Link>Controls\MinimalWidthTextBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Controls\RowSeriesPanel.cs">
+      <Link>Controls\RowSeriesPanel.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Controls\StackedColumnsPanel.cs">
+      <Link>Controls\StackedColumnsPanel.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Controls\UniformGridPanel.cs">
+      <Link>Controls\UniformGridPanel.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Converters\BooleanToVisibilityConverter.cs">
+      <Link>Converters\BooleanToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Converters\DoubleToGridLengthPercent.cs">
+      <Link>Converters\DoubleToGridLengthPercent.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\BarChart\BarPiece.cs">
+      <Link>Core\BarChart\BarPiece.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\BarChart\ClusteredBarChart.cs">
+      <Link>Core\BarChart\ClusteredBarChart.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\BarChart\StackedBar100Chart.cs">
+      <Link>Core\BarChart\StackedBar100Chart.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\BarChart\StackedBarChart.cs">
+      <Link>Core\BarChart\StackedBarChart.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\ChartBase.cs">
+      <Link>ChartBase.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\ChartSeriesViewModel.cs">
+      <Link>ChartSeriesViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\ColumnChart\ClusteredColumnChart.cs">
+      <Link>Core\ColumnChart\ClusteredColumnChart.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\ColumnChart\ColumnPiece.cs">
+      <Link>Core\ColumnChart\ColumnPiece.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\ColumnChart\StackedColumn100Chart.cs">
+      <Link>Core\ColumnChart\StackedColumn100Chart.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\ColumnChart\StackedColumnChart.cs">
+      <Link>Core\ColumnChart\StackedColumnChart.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\DataPoint.cs">
+      <Link>DataPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\DataPointGroup.cs">
+      <Link>DataPointGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\Doughnut\DoughnutChart.cs">
+      <Link>Core\Doughnut\DoughnutChart.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\Extensions.cs">
+      <Link>Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GALineScatterChart\GALineScatterChart.cs">
+      <Link>Core\GALineScatterChart\GALineScatterChart.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GALineScatterChart\GALineScatterStyling.cs">
+      <Link>Core\GALineScatterChart\GALineScatterStyling.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GALineScatterChart\GAScatterLinePiece.cs">
+      <Link>Core\GALineScatterChart\GAScatterLinePiece.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GaugeChart\RadialGaugeChart.cs">
+      <Link>Core\GaugeChart\RadialGaugeChart.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GaugeChart\RadialGaugePiece.cs">
+      <Link>Core\GaugeChart\RadialGaugePiece.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\PieceBase.cs">
+      <Link>PieceBase.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\PieChart\PieChart.cs">
+      <Link>Core\PieChart\PieChart.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\PieChart\PiePiece.cs">
+      <Link>Core\PieChart\PiePiece.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +188,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\XAMLReplace.targets" />
 </Project>

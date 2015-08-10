@@ -1,49 +1,6 @@
-
-2. Main Key is some sort of signing key - is it mine now? Can I / should I remove it?
-	Yes, if its not mine
-3. Try puttiing this into another application and write information on how to do it
-
-
-
-Notes for documentataieon
-
-Only mouse event at the moment is mouse over for tooltips
-mouse over doesnt work byu default for line chart, but can fake it by having a 'both' chart with transparent bullet.
-Done like this so that complex, or many poinmt charts dont have to have tooltips
-No axis markings on horizontal axis for same reason (many points in small space make it messy) May look at max, min values later
+TO DO:
+1. How to deal with -ves?????!!!!
+1. Selection of data point?
+2. Multi-series with column chart
 
 
-
-
-SCATTER CHART TO DO
-
- 1.5 - background of plot area (canvas) could be coloured
- 1.6 - what other values should be coloured that previous version can? ie what binding or testing
-
-
-
-
-this is how the other pieces are bound - do I need to do something similar?
-it gets the data from the datapoint into the scatterPiece
-<local:GAScatterPiece
-                                    Background="{Binding Path=ItemBrush}"  
-                                    SelectedBrush="{Binding Path=SelectedBrush}"  
-                                    Percentage="{Binding Path=PercentageFromMaxDataPointValue}"                                                                                                 
-                                    IsClickedByUser="{Binding Path=IsClickedByUser, Mode=TwoWay}"
-                                    IsSelected="{Binding Path=IsSelected}"
-                                    ClientWidth="{Binding Path=RealWidth, ElementName=itemsControl}"
-                                    ClientHeight="{Binding Path=RealHeight, ElementName=itemsControl}"
-                                    >
-
-
-
-Will have two charts - GAScatterLineChart and GAColumnScatterLineChart
-
-** have a multiTypeSeries where you can set the type to be line, bullet, or both
-** this is how the scatter chart should work instead of the current scatter
-** but this shows I can do IT!
-
-** ** create .cs file in the code, and a link to it in  the librarby
-** ** update the xaml in the code and it will get copied to the library
-** ** can style the charts in the test app Graohs.xaml
-** ** put custom bullet and line styles in Graohs.xaml BUT leave the std GA ones alone

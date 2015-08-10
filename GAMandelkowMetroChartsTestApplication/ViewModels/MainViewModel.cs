@@ -83,7 +83,30 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
                 }
             }
         }
-       
+
+        private bool _seriesSwitched;
+        public bool seriesSwitched
+        {
+            get
+            {
+                return _seriesSwitched;
+            }
+            set
+            {
+                if (_seriesSwitched != value)
+                {
+                    _seriesSwitched = value;
+                    RaisePropertyChanged("seriesSwitched");
+                }
+            }
+        }
+
+        public RelayCommand SwitchSeries
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -98,6 +121,9 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
             {
 
             }
+            SwitchSeries = new RelayCommand(() => switchSeries());
+            seriesSwitched = false;
+
             scatterData = new GraphSeriesInformation();
             scatterData.seriesDisplayName = "Series 1";
             scatterData.Items.Add(new GraphSeriesDataPoint("mon", 7));
@@ -127,6 +153,11 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
             scatterData2.Items.Add(new GraphSeriesDataPoint("fri", 7));
             scatterData2.Items.Add(new GraphSeriesDataPoint("sat", 0));
             scatterData2.Items.Add(new GraphSeriesDataPoint("sun", 10));
+        }
+
+        private void switchSeries()
+        {
+            seriesSwitched = !seriesSwitched;
         }
    
     }

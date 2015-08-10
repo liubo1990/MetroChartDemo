@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{234C2733-4068-470F-96ED-D111EBF9A10E}"
 	ProjectSection(SolutionItems) = preProject
-		Changes to Mandelkow.txt = Changes to Mandelkow.txt
-		Instructions..txt = Instructions..txt
 		MainKey.snk = MainKey.snk
 		TextFile1.txt = TextFile1.txt
 		XAMLReplace.targets = XAMLReplace.targets
@@ -17,6 +15,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApplications", "TestApplications", "{C1E46203-E3D8-47EE-B26F-39013E9F102C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAMandelkowMetroChartsTestApplication", "GAMandelkowMetroChartsTestApplication\GAMandelkowMetroChartsTestApplication.csproj", "{B0DA9C03-3796-4EA6-9189-BB3EE6E3FDD8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4AB4B0DB-780C-48B9-A642-8E527353D957} = {4AB4B0DB-780C-48B9-A642-8E527353D957}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GravityApps.Mandelkow.MetroCharts", "GravityApps.Mandelkow.MetroCharts\GravityApps.Mandelkow.MetroCharts.csproj", "{FA286411-E476-4BD0-ABE9-7AE69226069C}"
 EndProject

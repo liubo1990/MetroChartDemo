@@ -116,6 +116,13 @@
             DependencyProperty.Register("MaxDataPointValue",
             typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointValueChanged));
 
+        /// <summary>
+        /// GA Added this
+        /// </summary>
+        public static readonly DependencyProperty MinDataPointValueProperty =
+           DependencyProperty.Register("MinDataPointValue",
+           typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointValueChanged));
+
         public static readonly DependencyProperty SumOfDataPointGroupProperty =
              DependencyProperty.Register("SumOfDataPointGroup",
              typeof(double), typeof(ChartBase), new PropertyMetadata(0.0));
@@ -289,6 +296,16 @@
         {
             get { return (double)GetValue(MaxDataPointValueProperty); }
             set { SetValue(MaxDataPointValueProperty, value); }
+        }
+
+        //GA Added
+        /// <summary>
+        /// Min value (allow for -ves on chart)
+        /// </summary>
+        public double MinDataPointValue
+        {
+            get { return (double)GetValue(MinDataPointValueProperty); }
+            set { SetValue(MinDataPointValueProperty, value); }
         }
 
         public double MaxDataPointGroupSum
@@ -609,9 +626,13 @@
             get;
         }
 
+        /// <summary>
+        /// set the grid lines
+        /// </summary>
+        /// <remarks>Updated by GA</remarks>
         protected void UpdateGridLines()
         {
-            double distance = CalculateDistance(GridLinesMaxValue);
+            double distance = CalculateDistance(GridLinesMaxValue); // this gets altered in the GALineScatterChart (or other equivalents)
             gridLines.Clear();
             for (var i = distance; i <= GridLinesMaxValue; i += distance)
             {
@@ -1039,6 +1060,7 @@
             }
             MaxDataPointValue = CalculateMaxValue(maxValue);
         }
+
 
         public ObservableCollection<DataPointGroup> DataPointGroups
         {

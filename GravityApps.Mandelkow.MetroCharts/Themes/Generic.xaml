@@ -1321,7 +1321,9 @@
                             </local:FadingListView>
                         </Grid>
                         <Grid x:Name="LeftLines" Grid.Column="0" Grid.Row="0">
-                            <local:FadingListView HorizontalAlignment="Stretch"  Style="{StaticResource FadingListViewStyle}" ItemsSource="{Binding Path=GridLines, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                            <local:FadingListView HorizontalAlignment="Stretch"  
+                                                  Style="{StaticResource FadingListViewStyle}"
+                                                  ItemsSource="{Binding Path=GridLines, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                                 <local:FadingListView.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <local:EvenlyDistributedRowGrid IsReverseOrder="true" Margin="0 10 2 0" />
