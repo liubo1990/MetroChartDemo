@@ -47,6 +47,22 @@ namespace GravityApps.Mandelkow.MetroCharts
             typeof(PlotterArea),
             new PropertyMetadata(null));
 
+        /// <summary>
+        /// the content for the negative values
+        /// </summary>
+        public static readonly DependencyProperty NegativeContentProperty =
+           DependencyProperty.Register("NegativeContent",
+           typeof(object),
+           typeof(ChartArea),
+           new PropertyMetadata(null));
+
+        public Object NegativeContent
+        {
+            get { return (Object)GetValue(NegativeContentProperty); }
+            set { SetValue(NegativeContentProperty, value); }
+        }
+
+
         static PlotterArea()
         {
 #if NETFX_CORE

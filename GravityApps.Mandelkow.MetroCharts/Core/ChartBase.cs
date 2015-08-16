@@ -35,12 +35,15 @@
 
         private bool onApplyTemplateFinished = false;
         private ObservableCollection<string> gridLines = new ObservableCollection<string>();
+        //GA added
+        private ObservableCollection<string> negativeGridLines = new ObservableCollection<string>();
 
         public static readonly DependencyProperty PlotterAreaStyleProperty =
             DependencyProperty.Register("PlotterAreaStyle",
             typeof(Style), typeof(ChartBase), new PropertyMetadata(null));
 
-        public static readonly DependencyProperty ChartAreaStyleProperty =
+        public static readonly DependencyProperty
+            ChartAreaStyleProperty =
             DependencyProperty.Register("ChartAreaStyle",
             typeof(Style),  typeof(ChartBase), new PropertyMetadata(null));
 
@@ -116,12 +119,7 @@
             DependencyProperty.Register("MaxDataPointValue",
             typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointValueChanged));
 
-        /// <summary>
-        /// GA Added this
-        /// </summary>
-        public static readonly DependencyProperty MinDataPointValueProperty =
-           DependencyProperty.Register("MinDataPointValue",
-           typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointValueChanged));
+
 
         public static readonly DependencyProperty SumOfDataPointGroupProperty =
              DependencyProperty.Register("SumOfDataPointGroup",
@@ -130,6 +128,21 @@
         public static readonly DependencyProperty MaxDataPointGroupSumProperty =
              DependencyProperty.Register("MaxDataPointGroupSum",
              typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointGroupSumChanged));
+
+        /// <summary>
+        /// GA Added this
+        /// </summary>
+        public static readonly DependencyProperty MinDataPointValueProperty =
+           DependencyProperty.Register("MinDataPointValue",
+           typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointValueChanged));
+
+         public static readonly DependencyProperty MaxPositiveGridLineValueProperty =
+           DependencyProperty.Register("MaxPositiveGridLineValue",
+           typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointValueChanged));
+
+         public static readonly DependencyProperty MaxNegativeGridLineValueProperty =
+           DependencyProperty.Register("MaxNegativeGridLineValue",
+           typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointValueChanged));
 
         #endregion Fields
 
@@ -308,6 +321,20 @@
             set { SetValue(MinDataPointValueProperty, value); }
         }
 
+        public double MaxPositiveGridLineValue
+        {
+            get { return (double)GetValue(MaxPositiveGridLineValueProperty); }
+            set { SetValue(MaxPositiveGridLineValueProperty, value); }
+        }
+
+
+        public double MaxNegativeGridLineValue
+        {
+            get { return (double)GetValue(MaxNegativeGridLineValueProperty); }
+            set { SetValue(MaxNegativeGridLineValueProperty, value); }
+        }
+
+
         public double MaxDataPointGroupSum
         {
             get { return (double)GetValue(MaxDataPointGroupSumProperty); }
@@ -390,6 +417,78 @@
             get
             {
                 return gridLines;
+            }
+        }
+
+        /// <summary>
+        /// List of -ve value gridlines
+        /// </summary>
+        /// <remarks>Added by GA</remarks>
+        public ObservableCollection<string> NegativeGridLines
+        {
+            get
+            {
+                return negativeGridLines;
+            }
+        }
+
+        /// The grid that all the chart parts sit in
+        /// </summary>
+        public Grid MainChartAreaGrid
+        {
+            get
+            {
+               try
+               {
+                   ChartArea chart = (ChartArea)this.GetTemplateChild("PART_ChartArea");
+                   if (chart!=null)
+                   {
+                       Grid mainChartArea= (Grid) VisualTreeHelper.GetChild(chart, 0);
+                       if (mainChartArea!=null)
+                       {
+                           var element = mainChartArea as FrameworkElement;
+                           if( element.Name=="MainChartAreaGrid")
+                           {
+                               return mainChartArea;
+                           } 
+                       }
+                   }
+               }
+                catch
+               {
+
+               }
+                return null;
+            }
+        }
+
+        /// The grid that all the chart parts sit in
+        /// </summary>
+        public Grid MainChartNegativeAreaGrid
+        {
+            get
+            {
+                try
+                {
+                    Grid mainChartArea = MainChartAreaGrid;
+                    if (mainChartArea!=null)
+                    {
+                        Grid MainChartNegativeAreaGrid = (Grid)VisualTreeHelper.GetChild(mainChartArea, 1);
+                        if (MainChartNegativeAreaGrid != null)
+                        {
+                            var element = MainChartNegativeAreaGrid as FrameworkElement;
+                            if (element.Name == "BackgroundLinesNeg")
+                            {
+                                return MainChartNegativeAreaGrid;
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+
+                }
+                return null;
             }
         }
 
@@ -626,18 +725,86 @@
             get;
         }
 
+        protected abstract double GridLinesMinValue 
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Maximimum value shown on the axis
+        /// This should be used to calculate the location of the bars NOT the MaximumDataPointValue
+        /// as these could be different!
+        /// </summary>
+        protected double maximumPositiveXAxisValue
+        {
+            get;
+            set;
+        }
+
+        protected double maximumNegativeXAxisValue
+        {
+            get;
+            set;
+        }
         /// <summary>
         /// set the grid lines
         /// </summary>
         /// <remarks>Updated by GA</remarks>
         protected void UpdateGridLines()
         {
-            double distance = CalculateDistance(GridLinesMaxValue); // this gets altered in the GALineScatterChart (or other equivalents)
+            updateAllGridLines();
+            return;
+        }
+        /// <summary>
+        /// Calculate both negative and positive grid lines
+        /// </summary>
+        protected void updateAllGridLines()
+        {
+
+            double largestAbsoluteDataPointValue = GridLinesMaxValue > Math.Abs(GridLinesMinValue) ? GridLinesMaxValue : Math.Abs(GridLinesMinValue); 
+
+            double axisTickValueDifference = CalculateDistance(largestAbsoluteDataPointValue);
+            double maxPositiveAxisDivisior = Math.Ceiling(GridLinesMaxValue / axisTickValueDifference);
+            double maxNegativeAxisDivisior = Math.Floor(GridLinesMinValue / axisTickValueDifference);
+
+            maximumPositiveXAxisValue = maxPositiveAxisDivisior * axisTickValueDifference;
+            maximumNegativeXAxisValue = maxNegativeAxisDivisior * axisTickValueDifference;
+
             gridLines.Clear();
-            for (var i = distance; i <= GridLinesMaxValue; i += distance)
+            //positive axis
+            for (var i = axisTickValueDifference; i <= maximumPositiveXAxisValue; i += axisTickValueDifference)
             {
                 gridLines.Add(i.ToString());
             }
+            negativeGridLines.Clear();
+            for (var i = -axisTickValueDifference; i >= maximumNegativeXAxisValue; i -= axisTickValueDifference)
+            {
+                negativeGridLines.Add(i.ToString());
+            }
+
+
+            updateChartGridProportions(maximumPositiveXAxisValue, maximumNegativeXAxisValue);
+
+            MaxPositiveGridLineValue = maximumPositiveXAxisValue;
+            MaxNegativeGridLineValue = maximumNegativeXAxisValue;
+        }
+
+        /// <summary>
+        /// update the proportions of the positive and -ve x axis regions
+        /// </summary>
+        /// <param name="maxPositiveValue"></param>
+        /// <param name="maxNegativeValue"></param>
+        private void updateChartGridProportions(double maxPositiveValue, double maxNegativeValue)
+        {
+            if (MainChartAreaGrid != null && !double.IsNaN(maxPositiveValue) && !double.IsNaN(maxNegativeValue))
+            {
+                RowDefinition positiveValueGrid = MainChartAreaGrid.RowDefinitions[0];
+                RowDefinition negativeValueGrid = MainChartAreaGrid.RowDefinitions[2];
+
+                positiveValueGrid.Height = new GridLength(maxPositiveValue, GridUnitType.Star);
+                negativeValueGrid.Height = new GridLength(Math.Abs(maxNegativeValue), GridUnitType.Star);
+            }
+
         }
 
        public bool HasExceptions
@@ -804,6 +971,7 @@
                 }
 
                 RecalcMaxDataPointValue(); //GA fix issue with max value in second group not being picked up - add this line
+                RecalcMinDataPointValue();
                 UpdateColorsOfDataPoints();
 
                 chartLegendItems.Clear();
@@ -919,7 +1087,7 @@
                 bulletStyle = TryFindResource("GAScatterBulletStyle") as Style;
             }
 
-            if (lineStyle != null && bulletStyle != null)
+            if (lineStyle != null && bulletStyle != null && dataPointGroup.DataPoints.Count>0)
             {
                 
                 GALineScatterStyling styling = new GALineScatterStyling(lineStyle, bulletStyle, dataPointGroup.DataPoints[0]); 
@@ -974,6 +1142,29 @@
             maxDataPointValueBinding.Mode = BindingMode.OneWay;
             maxDataPointValueBinding.Path = new PropertyPath("MaxDataPointValue");
             BindingOperations.SetBinding(datapoint, DataPoint.MaxDataPointValueProperty, maxDataPointValueBinding);
+
+            //GA added minvalue for use if -ves
+            var minDataPointValueBinding = new Binding();
+            minDataPointValueBinding.Source = this;
+            minDataPointValueBinding.Mode = BindingMode.OneWay;
+            minDataPointValueBinding.Path = new PropertyPath("MinDataPointValue");
+            BindingOperations.SetBinding(datapoint, DataPoint.MinDataPointValueProperty, minDataPointValueBinding);
+
+            //GA added these - MaxDatapoint and MaxGridLIne can be differnt
+            // max gridline is needed in calculations
+
+            var MaxPositiveGridLineValueBinding = new Binding();
+            MaxPositiveGridLineValueBinding.Source = this;
+            MaxPositiveGridLineValueBinding.Mode = BindingMode.OneWay;
+            MaxPositiveGridLineValueBinding.Path = new PropertyPath("MaxPositiveGridLineValue");
+            BindingOperations.SetBinding(datapoint, DataPoint.MaxPositiveGridLineValueProperty, MaxPositiveGridLineValueBinding);
+
+            //GA added minvalue for use if -ves
+            var MaxNegativeGridLineValueBinding = new Binding();
+            MaxNegativeGridLineValueBinding.Source = this;
+            MaxNegativeGridLineValueBinding.Mode = BindingMode.OneWay;
+            MaxNegativeGridLineValueBinding.Path = new PropertyPath("MaxNegativeGridLineValue");
+            BindingOperations.SetBinding(datapoint, DataPoint.MaxNegativeGridLineValueProperty, MaxNegativeGridLineValueBinding);
 
             //Sende den Datapoints the höchste Summe einer DataPointGroup mit (wichtig für stacked chart)
             var maxDataPointGroupSumBinding = new Binding();
@@ -1043,6 +1234,27 @@
         void groupdItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             RecalcMaxDataPointValue();
+            RecalcMinDataPointValue();
+        }
+
+        /// <summary>
+        /// calculate the minimumDataPoint (for use with -ve values)
+        /// </summary>
+        private void RecalcMinDataPointValue()
+        {
+            double minValue = 0.0;
+            foreach (var dataPointGroup in DataPointGroups)
+            {
+                foreach (var dataPoint in dataPointGroup.DataPoints)
+                {
+                    if (dataPoint.Value < minValue)
+                    {
+                        minValue = dataPoint.Value;
+                    }
+                }
+            }
+
+            MinDataPointValue = CalculateMaxValue(Math.Abs(minValue))*-1;
         }
 
         private void RecalcMaxDataPointValue()

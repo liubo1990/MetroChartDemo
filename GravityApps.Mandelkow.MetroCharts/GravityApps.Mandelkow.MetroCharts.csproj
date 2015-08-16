@@ -71,6 +71,7 @@
     <Compile Include="Controls\MinimalWidthTextBlock.cs" />
     <Compile Include="Controls\RowSeriesPanel.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\BoolWithValueToVisibilityConverter.cs" />
     <Compile Include="Core\BarChart\StackedBar100Chart.cs" />
     <Compile Include="Core\BarChart\StackedBarChart.cs" />
     <Compile Include="ChartControls\ChartArea.cs" />
@@ -110,7 +111,12 @@
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="testing.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy "$(ProjectDir)Themes\Generic.xaml" "$(SolutionDir)GravityApps.Mandelkow.MetroCharts.WPF\Themes\" /y</PreBuildEvent>

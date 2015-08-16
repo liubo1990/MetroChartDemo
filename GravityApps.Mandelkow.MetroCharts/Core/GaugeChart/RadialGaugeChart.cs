@@ -64,5 +64,13 @@
                 return 0.0;
             }
         }
+
+        protected override double GridLinesMinValue
+        {
+            get
+            {
+                return 0.0;
+            }
+        }
     }
 }

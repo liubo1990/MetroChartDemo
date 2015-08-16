@@ -66,6 +66,13 @@
             }
         }
 
+        protected override double GridLinesMinValue
+        {
+            get
+            {
+                return MinDataPointValue;
+            }
+        }
         protected override void OnMaxDataPointValueChanged(double p)
         {
             UpdateGridLines();

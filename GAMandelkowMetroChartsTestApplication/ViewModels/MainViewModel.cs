@@ -126,13 +126,13 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
 
             scatterData = new GraphSeriesInformation();
             scatterData.seriesDisplayName = "Series 1";
-            scatterData.Items.Add(new GraphSeriesDataPoint("mon", 7));
-            scatterData.Items.Add(new GraphSeriesDataPoint("tue", 3.3));
-            scatterData.Items.Add(new GraphSeriesDataPoint("wed", 4.5));
+            scatterData.Items.Add(new GraphSeriesDataPoint("mon", -12));
+            scatterData.Items.Add(new GraphSeriesDataPoint("tue",-0.5));
+            scatterData.Items.Add(new GraphSeriesDataPoint("wed", 0));
             scatterData.Items.Add(new GraphSeriesDataPoint("thur", 5.2));
             scatterData.Items.Add(new GraphSeriesDataPoint("fri", 3.3));
-            scatterData.Items.Add(new GraphSeriesDataPoint("sat", 1));
-            scatterData.Items.Add(new GraphSeriesDataPoint("sun", 1));
+            scatterData.Items.Add(new GraphSeriesDataPoint("sat", -25));
+            scatterData.Items.Add(new GraphSeriesDataPoint("sun", 0.5));
 
             scatterData1 = new GraphSeriesInformation();
             scatterData1.seriesDisplayName = "Series 2";

@@ -250,6 +250,7 @@ namespace GravityApps.Mandelkow.MetroCharts
                 _GAPlotCanvas.Width =_sizeCanvas.ActualWidth;
                 _GAPlotCanvas.Height = _sizeCanvas.ActualHeight;
 
+                
 
                 GeometryCollection geomCollection = new GeometryCollection();
                 GeometryGroup group = new GeometryGroup();

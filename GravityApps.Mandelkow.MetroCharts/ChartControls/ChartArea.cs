@@ -63,6 +63,8 @@ namespace GravityApps.Mandelkow.MetroCharts
             typeof(ChartArea),
             new PropertyMetadata(null));
 
+       
+
         public ChartBase ParentChart
         {
             get { return (ChartBase)GetValue(ParentChartProperty); }
@@ -76,6 +78,16 @@ namespace GravityApps.Mandelkow.MetroCharts
                 return ParentChart.GridLines;
             }
         }
+
+        //GA Added
+        public ObservableCollection<string> NegativeGridLines
+        {
+            get
+            {
+                return ParentChart.NegativeGridLines;
+            }
+        }
+
 
         public ObservableCollection<DataPointGroup> DataPointGroups
         {

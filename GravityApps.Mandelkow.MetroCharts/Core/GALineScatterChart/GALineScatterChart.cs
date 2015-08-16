@@ -67,7 +67,16 @@
         {
             get
             {
+                
                 return MaxDataPointValue;
+            }
+        }
+
+        protected override double GridLinesMinValue
+        {
+            get
+            {
+                return MinDataPointValue;
             }
         }
 

@@ -38,6 +38,19 @@
         public static readonly DependencyProperty PercentageProperty =
             DependencyProperty.Register("Percentage", typeof(double), typeof(ColumnPiece),
             new PropertyMetadata(0.0, new PropertyChangedCallback(OnPercentageChanged)));
+
+        public static readonly DependencyProperty IsNegativePieceProperty =
+            DependencyProperty.Register("IsNegativePiece", typeof(bool), typeof(ColumnPiece),
+            new PropertyMetadata(false, new PropertyChangedCallback(OnPercentageChanged)));
+
+        /// <summary>
+        /// the negative grid area in the main chart
+        /// allows access 
+        /// </summary>
+        public static readonly DependencyProperty MainChartNegativeAreaProperty =
+          DependencyProperty.Register("MainChartNegativeArea", typeof(Grid), typeof(ColumnPiece),
+          new PropertyMetadata(null, new PropertyChangedCallback(OnPercentageChanged)));
+
         
         public static readonly DependencyProperty ColumnHeightProperty =
             DependencyProperty.Register("ColumnHeight", typeof(double), typeof(ColumnPiece),
@@ -76,10 +89,31 @@
 
         #region Properties
 
+
         public double Percentage
         {
             get { return (double)GetValue(PercentageProperty); }
             set { SetValue(PercentageProperty, value); }
+        }
+        
+        /// <summary>
+        /// the percentage of maximum negative value
+        /// bound to PercentageFromMaxNegativeDataPointValue in datapint via the generic.xaml
+        /// </summary>
+        public bool IsNegativePiece
+        {
+            get { return (bool)GetValue(IsNegativePieceProperty); }
+            set { SetValue(IsNegativePieceProperty, value); }
+        }
+
+        /// <summary>
+        /// the negative grid area in the main chart
+        /// allows access 
+        /// </summary>
+        public Grid MainChartNegativeArea
+        {
+            get { return (Grid)GetValue(MainChartNegativeAreaProperty); }
+            set { SetValue(MainChartNegativeAreaProperty, value); }
         }
 
         public double ColumnHeight
@@ -108,6 +142,31 @@
             DrawGeometry();
         }
 
+        private DependencyObject getNthLevelDirectChild(int level,DependencyObject parent,string name)
+        {
+            if (level <= 0)
+            {
+                return parent;
+            }
+            DependencyObject returnValue = VisualTreeHelper.GetChild(parent, 0);
+            if (level ==1)
+            {
+                if (returnValue!=null)
+                {
+                    var element = returnValue as FrameworkElement;
+                    if (element.Name == name)
+                    {
+                        return returnValue;
+                    }
+                }
+                throw new Exception("Cant find " + name);
+            }
+            else
+            {
+                return (getNthLevelDirectChild(--level, returnValue,name));
+            }
+        }
+
         protected override void DrawGeometry(bool withAnimation = true)
         {    
             try
@@ -121,15 +180,21 @@
                     return;
                 }
 
+                double endHeight = ClientHeight;
+
                 double startHeight = 0;
                 if (slice.Height > 0)
                 {
                     startHeight = slice.Height;
                 }
 
+                endHeight = endHeight * Percentage;
+
+               
                 DoubleAnimation scaleAnimation = new DoubleAnimation();
                 scaleAnimation.From = startHeight;
-                scaleAnimation.To = this.ClientHeight * Percentage;
+                scaleAnimation.To = endHeight;
+
                 scaleAnimation.Duration = TimeSpan.FromMilliseconds(withAnimation ? 500: 0);
                 scaleAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
                 Storyboard storyScaleX = new Storyboard();

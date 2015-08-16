@@ -26,11 +26,33 @@
 
     public class DataPoint : DependencyObject, INotifyPropertyChanged
     {
+        //GA added these - MaxDatapoint and MaxGridLIne can be differnt
+        // max gridline is needed in calculations
+        public static readonly DependencyProperty MaxPositiveGridLineValueProperty =
+   DependencyProperty.Register("MaxPositiveGridLineValue",
+   typeof(double),
+   typeof(DataPoint),
+   new PropertyMetadata(0.0, new PropertyChangedCallback(MaxDataPointValueChanged)));
+
+        public static readonly DependencyProperty MaxNegativeGridLineValueProperty =
+   DependencyProperty.Register("MaxNegativeGridLineValue",
+   typeof(double),
+   typeof(DataPoint),
+   new PropertyMetadata(0.0, new PropertyChangedCallback(MaxDataPointValueChanged)));
+
+
+
         public static readonly DependencyProperty MaxDataPointValueProperty =
            DependencyProperty.Register("MaxDataPointValue",
            typeof(double),
            typeof(DataPoint),
            new PropertyMetadata(0.0, new PropertyChangedCallback(MaxDataPointValueChanged)));
+
+        public static readonly DependencyProperty MinDataPointValueProperty =
+   DependencyProperty.Register("MinDataPointValue",
+   typeof(double),
+   typeof(DataPoint),
+   new PropertyMetadata(0.0, new PropertyChangedCallback(MaxDataPointValueChanged)));
 
         public static readonly DependencyProperty MaxDataPointGroupSumProperty =
            DependencyProperty.Register("MaxDataPointGroupSum",
@@ -189,6 +211,7 @@
         private void MaxDataPointValueChanged(double p)
         {
             RaisePropertyChangeEvent("PercentageFromMaxDataPointValue");
+            RaisePropertyChangeEvent("PercentageFromMaxNegativeDataPointValue");
         }
 
         public double PercentageFromSumOfDataPointGroup
@@ -207,9 +230,29 @@
         {
             get
             {
-                if (MaxDataPointValue > 0)
+               // if (MaxDataPointValue > 0)
+                if (MaxPositiveGridLineValue > 0)
                 {
-                    return Value / MaxDataPointValue;
+                    
+                   // return Value / MaxDataPointValue;
+                    return Value / MaxPositiveGridLineValue;
+                }
+                return 0.0;
+            }
+        }
+
+        /// <summary>
+        /// Percentage from the largest negativeDataPOint (this should be % from the max Grid line)
+        /// </summary>
+        public double PercentageFromMaxNegativeDataPointValue
+        {
+            get
+            {
+                //if (MinDataPointValue < 0)
+                if (MaxNegativeGridLineValue < 0)
+                {
+                   // return Value / MinDataPointValue;
+                    return Value / MaxNegativeGridLineValue;
                 }
                 return 0.0;
             }
@@ -230,6 +273,7 @@
             RaisePropertyChangeEvent("PercentageFromMaxDataPointGroupSum");
             RaisePropertyChangeEvent("PercentageFromMaxDataPointValue");
             RaisePropertyChangeEvent("PercentageFromSumOfDataPointGroup");
+            RaisePropertyChangeEvent("PercentageFromMaxNegativeDataPointValue");
         }
 
         public double PercentageFromMaxDataPointGroupSum
@@ -253,6 +297,21 @@
             set { SetValue(SumOfDataPointGroupProperty, value); }
         }
 
+        //GA added these - MaxDatapoint and MaxGridLIne can be differnt
+        // max gridline is needed in calculations
+        public double MaxPositiveGridLineValue
+        {
+            get { return (double)GetValue(MaxPositiveGridLineValueProperty); }
+            set { SetValue(MaxPositiveGridLineValueProperty, value); }
+        }
+
+        public double MaxNegativeGridLineValue
+        {
+            get { return (double)GetValue(MaxNegativeGridLineValueProperty); }
+            set { SetValue(MaxNegativeGridLineValueProperty, value); }
+        }
+
+
         /// <summary>
         /// Von außen wird dieser Wert gefüllt
         /// </summary>
@@ -260,6 +319,12 @@
         {
             get { return (double)GetValue(MaxDataPointValueProperty); }
             set { SetValue(MaxDataPointValueProperty, value); }
+        }
+
+        public double MinDataPointValue
+        {
+            get { return (double)GetValue(MinDataPointValueProperty); }
+            set { SetValue(MinDataPointValueProperty, value); }
         }
 
         public double MaxDataPointGroupSum

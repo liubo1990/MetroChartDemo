@@ -111,6 +111,9 @@
     <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Converters\BooleanToVisibilityConverter.cs">
       <Link>Converters\BooleanToVisibilityConverter.cs</Link>
     </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Converters\BoolWithValueToVisibilityConverter.cs">
+      <Link>Converters\BoolWithValueToVisibilityConverter.cs</Link>
+    </Compile>
     <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Converters\DoubleToGridLengthPercent.cs">
       <Link>Converters\DoubleToGridLengthPercent.cs</Link>
     </Compile>

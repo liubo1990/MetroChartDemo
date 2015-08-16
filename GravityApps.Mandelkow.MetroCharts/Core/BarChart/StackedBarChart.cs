@@ -62,6 +62,14 @@
             }
         }
 
+        protected override double GridLinesMinValue
+        {
+            get
+            {
+                return 0.0;
+            }
+        }
+
         protected override void OnMaxDataPointGroupSumChanged(double p)
         {
             UpdateGridLines();
