@@ -458,6 +458,47 @@
         <Setter Property="Background" Value="#FFFFAA00" />
     </Style>
 
+    <Style x:Key="NegativeValueFadingList" TargetType="local:FadingListView" BasedOn="{StaticResource FadingListViewStyle}">
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <local:EvenlyDistributedColumnsGrid Margin="0,0,0,10" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <local:FadingListView Style="{StaticResource FadingListViewStyle}" 
+                                                              x:Name="itemsControl2" ItemsSource="{Binding Path=DataPoints}" Margin="5 0 5 0" >
+                        <local:FadingListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <local:EvenlyDistributedColumnsGrid />
+                            </ItemsPanelTemplate>
+                        </local:FadingListView.ItemsPanel>
+                        <local:FadingListView.ItemTemplate>
+                            <DataTemplate>
+                                <local:ColumnPiece
+                                                         Style="{StaticResource NegativeColumnPiece}"
+                                    Background="{Binding Path=ItemBrush}"  
+                                    SelectedBrush="{Binding Path=SelectedBrush}"  
+                                    Percentage="{Binding Path=PercentageFromMaxNegativeDataPointValue}"
+                                    IsNegativePiece="True"
+                                    IsClickedByUser="{Binding Path=IsClickedByUser, Mode=TwoWay}"
+                                    IsSelected="{Binding Path=IsSelected}"
+                                    ClientWidth="{Binding Path=RealWidth, ElementName=itemsControl2}"
+                                    ClientHeight="{Binding Path=RealHeight, ElementName=itemsControl2}"
+                                                        >
+                                </local:ColumnPiece>
+                            </DataTemplate>
+                        </local:FadingListView.ItemTemplate>
+                    </local:FadingListView>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
     <Style x:Key="ColumnChartChartAreaStyle" TargetType="local:ChartArea">
         <Setter Property="Template">
             <Setter.Value>
@@ -473,16 +514,20 @@
                             <!-- +ve values-->
                             <RowDefinition Height="Auto" />
                             <!-- x axis-->
-                            <RowDefinition Height="*" /> <!-- this is -ve values-->
-                            <RowDefinition Height="auto" /> <!-- series text-->
-                            <RowDefinition Height="Auto" /> <!--legend-->
+                            <RowDefinition Height="*" />
+                            <!-- this is -ve values-->
+                            <RowDefinition Height="auto" />
+                            <!-- series text-->
+                            <RowDefinition Height="Auto" />
+                            <!--legend-->
                         </Grid.RowDefinitions>
-                        <Border Grid.Column="1" Grid.Row="0" Width="1" Background="DarkGray" Opacity="0.5" VerticalAlignment="Stretch" />
+                        <Border Grid.Column="1" Grid.Row="0" Width="1.5" Background="DarkGray" Opacity="1" VerticalAlignment="Stretch" />
                         <!-- yaxis-->
-                        <Border Grid.Column="2" Grid.Row="1" Height="1" Background="DarkGray" Opacity="0.5" HorizontalAlignment="Stretch" />
-                        <Border Grid.Column="1" Grid.Row="1" Height="1" Width="1" Background="DarkGray" Opacity="0.5" />
-                        <!-- what is this?-->
-                        <Border Grid.Column="1" Grid.Row="2" Width="1" Background="DarkGray" Opacity="0.5" VerticalAlignment="Stretch" />
+                        <Border Grid.Column="2" Grid.Row="1" Height="1.5" Background="DarkGray" Opacity="1" HorizontalAlignment="Stretch" />
+                        <!--x axis-->
+                        <Border Grid.Column="1" Grid.Row="1" Height="1.5" Width="1" Background="DarkGray" Opacity="1" />
+                        <!-- fill in the gap between x and y axis-->
+                        <Border Grid.Column="1" Grid.Row="2" Width="1.5" Background="DarkGray" Opacity="1" VerticalAlignment="Stretch" />
                         <!-- yaxis (-ve) -->
 
                         <Grid x:Name="BackgroundLines" Grid.Column="2" Grid.Row="0" Canvas.ZIndex="-1" >
@@ -525,52 +570,19 @@
                             </Grid.RenderTransform>
                         </Grid>
 
-                        <Border Grid.Column="2" Grid.Row="0" > <!-- +ve values-->
+                        <Border Grid.Column="2" Grid.Row="0" >
+                            <!-- +ve values-->
                             <ContentControl
                                 VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"    
                                 Content="{TemplateBinding Content}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
                         </Border>
-                        <Border Grid.Column="2" Grid.Row="2"> <!-- -ve value pieces-->
+                        <Border Grid.Column="2" Grid.Row="2">
+                            <!-- -ve value pieces-->
                             <local:FadingListView   
                         x:Name="itemsPanel1" 
-                        Style="{StaticResource FadingListViewStyle}"
+                        Style="{StaticResource NegativeValueFadingList}"
                         ItemsSource="{Binding Path=ParentChart.DataPointGroups, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                        >
-                                <local:FadingListView.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <local:EvenlyDistributedColumnsGrid Margin="0,0,0,10" />
-                                    </ItemsPanelTemplate>
-                                </local:FadingListView.ItemsPanel>
-                                <local:FadingListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <local:FadingListView Style="{StaticResource FadingListViewStyle}" 
-                                                              x:Name="itemsControl2" ItemsSource="{Binding Path=DataPoints}" Margin="5 0 5 0" >
-                                            <local:FadingListView.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <local:EvenlyDistributedColumnsGrid />
-                                                </ItemsPanelTemplate>
-                                            </local:FadingListView.ItemsPanel>
-                                            <local:FadingListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <local:ColumnPiece
-                                                         Style="{StaticResource NegativeColumnPiece}"
-                                    Background="{Binding Path=ItemBrush}"  
-                                    SelectedBrush="{Binding Path=SelectedBrush}"  
-                                    Percentage="{Binding Path=PercentageFromMaxNegativeDataPointValue}"
-                                    IsNegativePiece="True"
-                                    MainChartNegativeArea ="{Binding Path=ParentChart.MainChartNegativeAreaGrid}"
-                                    IsClickedByUser="{Binding Path=IsClickedByUser, Mode=TwoWay}"
-                                    IsSelected="{Binding Path=IsSelected}"
-                                    ClientWidth="{Binding Path=RealWidth, ElementName=itemsControl2}"
-                                    ClientHeight="{Binding Path=RealHeight, ElementName=itemsControl2}"
-                                                        >
-                                                    </local:ColumnPiece>
-                                                </DataTemplate>
-                                            </local:FadingListView.ItemTemplate>
-                                        </local:FadingListView>
-                                    </DataTemplate>
-                                </local:FadingListView.ItemTemplate>
-                            </local:FadingListView>
+                        />
                         </Border>
 
 
@@ -590,7 +602,8 @@
                                 </local:FadingListView.ItemTemplate>
                             </local:FadingListView>
                         </Grid>
-                        <Grid x:Name="LeftLines" Grid.Column="0" Grid.Row="0"> <!-- this is actually the number on the y axis-->
+                        <Grid x:Name="LeftLines" Grid.Column="0" Grid.Row="0">
+                            <!-- this is actually the number on the y axis-->
                             <local:FadingListView HorizontalAlignment="Stretch"  Style="{StaticResource FadingListViewStyle}"
                                                   ItemsSource="{Binding Path=GridLines, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                                 <local:FadingListView.ItemsPanel>
@@ -630,7 +643,8 @@
                                 </local:FadingListView.ItemTemplate>
                             </local:FadingListView>
                             <Grid.RenderTransform>
-                                <TranslateTransform X="0" Y="-4" /> <!-- center on the line-->
+                                <TranslateTransform X="0" Y="-4" />
+                                <!-- center on the line-->
                             </Grid.RenderTransform>
                         </Grid>
                         <Border x:Name="PART_LegendArea" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" Visibility="{Binding Path=ParentChart.ChartLegendVisibility, RelativeSource={RelativeSource Mode=TemplatedParent}}">
@@ -642,6 +656,7 @@
         </Setter>
     </Style>
 
+    
     <Style x:Key="ColumnChartPlotterAreaStyle" TargetType="local:PlotterArea" BasedOn="{StaticResource BasePlotterAreaStyle}">
         <Setter Property="Template">
             <Setter.Value>
@@ -679,7 +694,7 @@
                                     SelectedBrush="{Binding Path=SelectedBrush}"  
                                     Percentage="{Binding Path=PercentageFromMaxDataPointValue}"
                                     IsNegativePiece="False"
-                                    MainChartNegativeArea ="{Binding Path=ParentChart.MainChartNegativeAreaGrid}"
+                                   
                                     IsClickedByUser="{Binding Path=IsClickedByUser, Mode=TwoWay}"
                                     IsSelected="{Binding Path=IsSelected}"
                                     ClientWidth="{Binding Path=RealWidth, ElementName=itemsControl}"
@@ -1463,10 +1478,10 @@
                             <RowDefinition Height="Auto" />
                             <!--legend-->
                         </Grid.RowDefinitions>
-                        <Border Grid.Column="1" Grid.Row="0" Width="1" Background="DarkGray" Opacity="0.5" VerticalAlignment="Stretch" />
-                        <Border Grid.Column="2" Grid.Row="1" Height="1" Background="DarkGray" Opacity="0.5" HorizontalAlignment="Stretch" />
-                        <Border Grid.Column="1" Grid.Row="1" Height="1" Width="1" Background="DarkGray" Opacity="0.5" />
-                        <Border Grid.Column="1" Grid.Row="2" Width="1" Background="DarkGray" Opacity="0.5" VerticalAlignment="Stretch" />
+                        <Border Grid.Column="1" Grid.Row="0" Width="1.5" Background="DarkGray" Opacity="1" VerticalAlignment="Stretch" />
+                        <Border Grid.Column="2" Grid.Row="1" Height="1.5" Background="DarkGray" Opacity="1" HorizontalAlignment="Stretch" /> <!-- xaxis-->
+                        <Border Grid.Column="1" Grid.Row="1" Height="1.5" Width="1.5" Background="DarkGray" Opacity="1" />
+                        <Border Grid.Column="1" Grid.Row="2" Width="1.5" Background="DarkGray" Opacity="1" VerticalAlignment="Stretch" />
                         <!-- yaxis (-ve) -->
                         <Grid x:Name="BackgroundLines" Grid.Column="2" Grid.Row="0" Canvas.ZIndex="-1">
                             <local:FadingListView Style="{StaticResource FadingListViewStyle}" ItemsSource="{Binding Path=GridLines, RelativeSource={RelativeSource Mode=TemplatedParent}}">
@@ -1754,7 +1769,7 @@
                         DataPoints="{Binding Path=DataPoints}"
                         GASeriesType="{Binding Path=GASeriesType}"
                         GAScatterBulletStyle="{Binding Path=GALegendScatterBulletStyle}"
-                        GALineStyle="{Binding Path=GALegendLineStyle}"
+                        GALineStyle="{Binding Path=GALegendLineStyle}" 
                         ></local:GAScatterLinePiece>
 
 

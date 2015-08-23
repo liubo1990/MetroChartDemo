@@ -43,14 +43,6 @@
             DependencyProperty.Register("IsNegativePiece", typeof(bool), typeof(ColumnPiece),
             new PropertyMetadata(false, new PropertyChangedCallback(OnPercentageChanged)));
 
-        /// <summary>
-        /// the negative grid area in the main chart
-        /// allows access 
-        /// </summary>
-        public static readonly DependencyProperty MainChartNegativeAreaProperty =
-          DependencyProperty.Register("MainChartNegativeArea", typeof(Grid), typeof(ColumnPiece),
-          new PropertyMetadata(null, new PropertyChangedCallback(OnPercentageChanged)));
-
         
         public static readonly DependencyProperty ColumnHeightProperty =
             DependencyProperty.Register("ColumnHeight", typeof(double), typeof(ColumnPiece),
@@ -104,16 +96,6 @@
         {
             get { return (bool)GetValue(IsNegativePieceProperty); }
             set { SetValue(IsNegativePieceProperty, value); }
-        }
-
-        /// <summary>
-        /// the negative grid area in the main chart
-        /// allows access 
-        /// </summary>
-        public Grid MainChartNegativeArea
-        {
-            get { return (Grid)GetValue(MainChartNegativeAreaProperty); }
-            set { SetValue(MainChartNegativeAreaProperty, value); }
         }
 
         public double ColumnHeight
@@ -181,6 +163,7 @@
                 }
 
                 double endHeight = ClientHeight;
+                double percentToUse = Percentage;
 
                 double startHeight = 0;
                 if (slice.Height > 0)
@@ -188,7 +171,8 @@
                     startHeight = slice.Height;
                 }
 
-                endHeight = endHeight * Percentage;
+                if (percentToUse < 0) percentToUse = 0;
+                endHeight = endHeight * percentToUse;
 
                
                 DoubleAnimation scaleAnimation = new DoubleAnimation();

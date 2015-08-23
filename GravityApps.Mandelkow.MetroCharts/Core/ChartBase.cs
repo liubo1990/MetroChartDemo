@@ -998,12 +998,6 @@
                     }
                 }
                 RecalcSumOfDataPointGroup();
-
-                //TODO: alter this confition?
-                //if (_isGAMultipleSeriesChart)
-                //{
-                   // GACopyPointsForLineGraph(groupedSeries);
-               // }
             }
         }
 
@@ -1208,6 +1202,7 @@
             groupBinding.Mode = BindingMode.TwoWay;
             groupBinding.Path = new PropertyPath("SelectedItem");
             BindingOperations.SetBinding(dataPointGroup, DataPointGroup.SelectedItemProperty, groupBinding);
+
         }
 
         void dataPointGroup_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -1318,7 +1313,7 @@
             return view;
         }
 
-        private void UpdateSeries()
+        protected void UpdateSeries()
         {
             if (!onApplyTemplateFinished)
             {

@@ -246,6 +246,7 @@
             }
             SumOfDataPointGroup = sum;
             RaisePropertyChangeEvent("SumOfDataPointGroup");
+
         }
 
         public string Caption { get; private set; }

@@ -38,6 +38,7 @@ namespace GravityApps.Mandelkow.MetroCharts
         private Path _GALine = null;
         private Canvas _GAPlotCanvas = null;
         private Canvas _sizeCanvas = null;
+        private int _animationTime = 500;
 
         GALineScatterStyling _lineScatterStyle;
 
@@ -73,11 +74,8 @@ namespace GravityApps.Mandelkow.MetroCharts
         public static readonly DependencyProperty DataPointsProperty =
            DependencyProperty.Register("DataPoints", typeof(ObservableCollection<DataPoint>), typeof(GAScatterLinePiece),
            new PropertyMetadata(new ObservableCollection<DataPoint>(), new PropertyChangedCallback(OnPercentageChanged)));
-
-        public static readonly DependencyProperty PercentageProperty =
-            DependencyProperty.Register("Percentage", typeof(double), typeof(GAScatterLinePiece),
-            new PropertyMetadata(0.0, new PropertyChangedCallback(OnPercentageChanged)));
         
+       
         public static readonly DependencyProperty ColumnHeightProperty =
             DependencyProperty.Register("ColumnHeight", typeof(double), typeof(GAScatterLinePiece),
             new PropertyMetadata(0.0));
@@ -169,11 +167,7 @@ namespace GravityApps.Mandelkow.MetroCharts
             set { SetValue(DataPointsProperty, value); }
         }
 
-        public double Percentage
-        {
-            get { return (double)GetValue(PercentageProperty); }
-            set { SetValue(PercentageProperty, value); }
-        }
+
 
         public double ColumnHeight
         {
@@ -191,8 +185,15 @@ namespace GravityApps.Mandelkow.MetroCharts
             (d as GAScatterLinePiece).DrawGeometry();
         }
 
+        private static void OnMaxValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (d as GAScatterLinePiece).DrawGeometry();
+        }
+        
+
         protected override void InternalOnApplyTemplate()
         {
+            
 
             setUpStyles();
             _GAPlotCanvas = VisualTreeHelper.GetChild(this, 0) as Canvas; //the canvas the GALine is attached to
@@ -201,9 +202,19 @@ namespace GravityApps.Mandelkow.MetroCharts
             ContentPresenter obj1 =  this.TemplatedParent as ContentPresenter;
             _sizeCanvas = VisualTreeHelper.GetParent(obj1) as Canvas; // used to size the plot canvas
 
+         
            // RegisterMouseEvents(bullet); -- do I want to do this on some things?
         }
 
+       
+        void DataPointGroup_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Value")
+            {
+                //DrawGeometry(true,true,(DataPoint)sender);
+                moveDataPoint((DataPoint)sender);
+            }
+        }
         /// <summary>
         /// Get styles for the lines and bullets
         /// The Line and Scatter style properties a 1st priority
@@ -234,11 +245,112 @@ namespace GravityApps.Mandelkow.MetroCharts
             DrawGeometry();
         }
 
+        protected override void DrawGeometry(bool withAnimation = true)
+        {
+           DrawGeometry();
+        }
+
+        /// <summary>
+        /// move a data point whose value has been changed
+        /// </summary>
+        /// <param name="newPoint"></param>
+        protected void moveDataPoint(DataPoint newPoint)
+        {
+            try
+            {
+                newPoint.PropertyChanged -= DataPointGroup_PropertyChanged;
+                double barWidth = (_GAPlotCanvas.Width) / DataPoints.Count;
+                double CenterX = (newPoint.locationInDataset * barWidth) + (barWidth / 2);
+                double CenterY = _GAPlotCanvas.Height - (_GAPlotCanvas.Height * newPoint.PercentageFromMaxDataPointValue);
+                Rectangle newRect = getRecatangle(CenterX, CenterY, newPoint);
+                newRect.Style = this.GAScatterBulletStyle;
+
+                int rectangleCounter = 0;
+                int index = 0;
+                foreach (UIElement ell in _GAPlotCanvas.Children)
+                {
+                    if (ell.GetType() == typeof(Path))
+                    {
+                        Path lines = (Path)ell;
+                        GeometryGroup linesGeom = (GeometryGroup) lines.Data;
+
+                        moveLinePoints(newPoint, CenterX, CenterY, linesGeom);
+
+                    }
+                    if (ell.GetType() == typeof(Rectangle))
+                    {
+                        Rectangle rect = (Rectangle)ell;
+                        if (rectangleCounter == newPoint.locationInDataset)
+                        {
+                            Thickness newMargin = new Thickness(newRect.Margin.Left, newRect.Margin.Top, 0, 0);
+
+                            ThicknessAnimation moveAnimation = new ThicknessAnimation(newMargin, TimeSpan.FromMilliseconds(_animationTime));
+                            moveAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
+                            rect.ToolTip = newPoint.FormattedValue;
+                            rect.BeginAnimation(Rectangle.MarginProperty,moveAnimation);
+                            break;
+                        }
+                        rectangleCounter++;
+                    }
+                    index++;
+                }
+                newPoint.PropertyChanged += DataPointGroup_PropertyChanged;
+                newPoint.OldValue = newPoint.Value;
+            }
+            catch
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// Move the existing line points
+        /// This may include moving multiple or single lines
+        /// </summary>
+        /// <param name="newPoint"></param>
+        /// <param name="CenterX"></param>
+        /// <param name="CenterY"></param>
+        /// <param name="linesGeom"></param>
+        private void moveLinePoints(DataPoint newPoint, double CenterX, double CenterY, GeometryGroup linesGeom)
+        {
+
+            if (newPoint.locationInDataset == 0)
+            {
+                animateLine(CenterX, CenterY, linesGeom, LineGeometry.StartPointProperty, 0);
+                return;
+            }
+            if (newPoint.locationInDataset == linesGeom.Children.Count)
+            {
+                animateLine(CenterX, CenterY, linesGeom, LineGeometry.EndPointProperty, linesGeom.Children.Count - 1);
+            }
+            else
+            {
+                animateLine(CenterX, CenterY, linesGeom, LineGeometry.EndPointProperty, newPoint.locationInDataset - 1);
+                animateLine(CenterX, CenterY, linesGeom, LineGeometry.StartPointProperty, newPoint.locationInDataset);
+            }
+        }
+
+        /// <summary>
+        /// move and animate a single line in the group of datapoints
+        /// </summary>
+        /// <param name="CenterX"></param>
+        /// <param name="CenterY"></param>
+        /// <param name="linesGeom"></param>
+        /// <param name="dp"></param>
+        /// <param name="location"></param>
+        private void animateLine(double CenterX, double CenterY, GeometryGroup linesGeom,DependencyProperty dp,int location)
+        {
+            LineGeometry thisLine = (LineGeometry)linesGeom.Children[location];
+            PointAnimation movePointAnimation = new PointAnimation(new Point(CenterX, CenterY), TimeSpan.FromMilliseconds(_animationTime));
+            movePointAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
+            thisLine.BeginAnimation(dp, movePointAnimation);
+        }
+
         /// <summary>
         /// draw the lines and bullets
         /// </summary>
         /// <param name="withAnimation"></param>
-        protected override void DrawGeometry(bool withAnimation = true)
+        protected  void DrawGeometry()
         {    
             try
             { 
@@ -250,7 +362,7 @@ namespace GravityApps.Mandelkow.MetroCharts
                 _GAPlotCanvas.Width =_sizeCanvas.ActualWidth;
                 _GAPlotCanvas.Height = _sizeCanvas.ActualHeight;
 
-                
+               
 
                 GeometryCollection geomCollection = new GeometryCollection();
                 GeometryGroup group = new GeometryGroup();
@@ -263,6 +375,8 @@ namespace GravityApps.Mandelkow.MetroCharts
                 double barWidth = (_GAPlotCanvas.Width) / DataPoints.Count;
                 foreach (DataPoint p in DataPoints)
                 {
+                    p.PropertyChanged -= DataPointGroup_PropertyChanged; // ensure that the event wont fire while we are changing things!
+                    
 
                     if (count==0) // first point doesnt get a line
                     {
@@ -272,11 +386,12 @@ namespace GravityApps.Mandelkow.MetroCharts
 
                         if (GASeriesType == "Both" || GASeriesType == "Bullet")
                         {
+                            
                             Rectangle rect = getRecatangle(CenterX, CenterY, p);
                             rect.Style = this.GAScatterBulletStyle;
-                            _GAPlotCanvas.Children.Add(rect);
+                             _GAPlotCanvas.Children.Add(rect);
+                            
                         }
-                       
 
                     }
                     else
@@ -310,6 +425,10 @@ namespace GravityApps.Mandelkow.MetroCharts
                         }
                         
                     }
+
+                    p.OldValue = p.Value;
+                    p.locationInDataset = count;
+                    p.PropertyChanged += DataPointGroup_PropertyChanged; // and now let thigs be changed again
                     count++;
                 }
    

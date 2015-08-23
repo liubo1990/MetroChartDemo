@@ -311,6 +311,22 @@
             set { SetValue(MaxNegativeGridLineValueProperty, value); }
         }
 
+        /// <summary>
+        /// The last value the datapoint held (used to help redraw some charts)
+        /// </summary>
+        public double OldValue
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        /// The location of the datapoint in the dataItem list  (used to help redraw some charts)
+        /// </summary>
+        public int locationInDataset
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Von außen wird dieser Wert gefüllt

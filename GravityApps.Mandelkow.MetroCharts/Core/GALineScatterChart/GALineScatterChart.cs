@@ -83,6 +83,7 @@
         protected override void OnMaxDataPointValueChanged(double p)
         {
             UpdateGridLines();
+            UpdateSeries();
         }
 
         public override bool IsUseNextBiggestMaxValue
