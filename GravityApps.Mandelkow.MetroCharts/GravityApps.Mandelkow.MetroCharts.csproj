@@ -81,6 +81,7 @@
     <Compile Include="Core\GALineScatterChart\GALineScatterChart.cs" />
     <Compile Include="Core\GALineScatterChart\GALineScatterStyling.cs" />
     <Compile Include="Core\GALineScatterChart\GAScatterLinePiece.cs" />
+    <Compile Include="Core\GAMultiSeries\GAMultipleTypeSeriesChart.cs" />
     <Compile Include="Core\GaugeChart\RadialGaugeChart.cs" />
     <Compile Include="Core\GaugeChart\RadialGaugePiece.cs" />
     <Compile Include="ChartControls\Legend.cs" />

@@ -164,9 +164,6 @@
             }
         }
 
-        /// <summary>
-        /// Contains the absolute StartValue of the item depending on the values of the previous items values
-        /// </summary>
         public bool IsSelected
         {
             get

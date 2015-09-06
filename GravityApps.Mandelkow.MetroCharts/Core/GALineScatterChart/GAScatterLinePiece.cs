@@ -69,6 +69,9 @@ namespace GravityApps.Mandelkow.MetroCharts
           DependencyProperty.Register("GALineStyle", typeof(Style), typeof(GAScatterLinePiece),
           new PropertyMetadata(null));
 
+        public static readonly DependencyProperty IsNegativePieceProperty =
+          DependencyProperty.Register("IsNegativePiece", typeof(bool), typeof(GAScatterLinePiece),
+          new PropertyMetadata(false, new PropertyChangedCallback(OnPercentageChanged)));
 
 
         public static readonly DependencyProperty DataPointsProperty =
@@ -79,7 +82,10 @@ namespace GravityApps.Mandelkow.MetroCharts
         public static readonly DependencyProperty ColumnHeightProperty =
             DependencyProperty.Register("ColumnHeight", typeof(double), typeof(GAScatterLinePiece),
             new PropertyMetadata(0.0));
-        
+
+
+        List<DependencyObject> hitTestResults = new List<DependencyObject>();
+
         #endregion Fields
 
         #region Constructors
@@ -161,6 +167,15 @@ namespace GravityApps.Mandelkow.MetroCharts
             set { SetValue(GALineStyleProperty, value); }
         }
 
+        /// <summary>
+        /// is the area the piece is drawn in a negaitive or positive one?
+        /// </summary>
+        public bool IsNegativePiece
+        {
+            get { return (bool)GetValue(IsNegativePieceProperty); }
+            set { SetValue(IsNegativePieceProperty, value); }
+        }
+
         public ObservableCollection<DataPoint>  DataPoints
         {
             get { return (ObservableCollection<DataPoint>)GetValue(DataPointsProperty); }
@@ -189,7 +204,96 @@ namespace GravityApps.Mandelkow.MetroCharts
         {
             (d as GAScatterLinePiece).DrawGeometry();
         }
-        
+
+        /// <summary>
+        /// get parent of spefified type and name if one exists
+        /// </summary>
+        /// <param name="current"></param>
+        /// <param name="matchinmgName"></param>
+        /// <param name="typeToTestFor"></param>
+        /// <returns></returns>
+        private DependencyObject getSpecifiedParent(DependencyObject current, string matchinmgName,Type typeToTestFor)
+        {
+            DependencyObject returnValue = null;
+
+            while (VisualTreeHelper.GetParent(current) != null)
+            {
+                current = VisualTreeHelper.GetParent(current);
+                if (current.GetType() == typeToTestFor)
+                {
+                    if (string.IsNullOrEmpty(matchinmgName))
+                    {
+                        returnValue = (DependencyObject)current;
+                    }
+                    else
+                    {
+                        var element = current as FrameworkElement;
+                        if (element.Name == matchinmgName)
+                        {
+                            returnValue = (DependencyObject)current;
+                            break;
+                        }
+                    }
+                   
+
+                }
+            }
+            return returnValue;
+        }
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            //this gets fired only in the postive part, and only if a bullet is not found
+            // check to see if a column piece has been touched
+
+            // get common ancestor
+            Grid plotterAreaGrid = null;
+            object a = e.MouseDevice.DirectlyOver;
+            if (a.GetType() == typeof(Canvas))
+            {
+                plotterAreaGrid = (Grid) getSpecifiedParent((DependencyObject)a, "plotterAreaGrid", typeof(Grid));
+
+                if (plotterAreaGrid==null)
+                {
+                    e.Handled = false;
+                    return;
+                }
+
+                hitTestResults.Clear();
+                Point pt = e.GetPosition((UIElement)plotterAreaGrid);
+                VisualTreeHelper.HitTest(plotterAreaGrid, null,
+         new HitTestResultCallback(MyHitTestResult),
+         new PointHitTestParameters(pt));
+
+                bool finishedHandling = false;
+                foreach (DependencyObject o in hitTestResults)
+                {
+                    var fe = o as FrameworkElement;
+                    if (fe.Name=="SelectionHighlight")
+                    {
+                       DependencyObject columnPiece= getSpecifiedParent(o, null, typeof(ColumnPiece));
+                       if (columnPiece!=null)
+                       {
+                           ((ColumnPiece)columnPiece).IsClickedByUser = true;
+                          // ((ColumnPiece)columnPiece).IsSelected = true;
+                           finishedHandling = true;
+                       }
+                        
+                    }
+                }
+                e.Handled = finishedHandling;
+            }
+        }
+
+        private HitTestResultBehavior MyHitTestResult(HitTestResult result)
+        {
+            if (result.VisualHit.GetType() == typeof(Border))
+            {
+                hitTestResults.Add(result.VisualHit);
+            }
+            
+            return HitTestResultBehavior.Continue;
+        }
 
         protected override void InternalOnApplyTemplate()
         {
@@ -375,6 +479,7 @@ namespace GravityApps.Mandelkow.MetroCharts
                 double barWidth = (_GAPlotCanvas.Width) / DataPoints.Count;
                 foreach (DataPoint p in DataPoints)
                 {
+                    p.locationInDataset = count;
                     p.PropertyChanged -= DataPointGroup_PropertyChanged; // ensure that the event wont fire while we are changing things!
                     
 
@@ -382,6 +487,8 @@ namespace GravityApps.Mandelkow.MetroCharts
                     {
                         double CenterX = (count * barWidth) + (barWidth / 2);
                         double CenterY = _GAPlotCanvas.Height - (_GAPlotCanvas.Height * p.PercentageFromMaxDataPointValue);
+
+
                         lineStartPoint = new Point(CenterX,CenterY) ;
 
                         if (GASeriesType == "Both" || GASeriesType == "Bullet")
@@ -427,7 +534,7 @@ namespace GravityApps.Mandelkow.MetroCharts
                     }
 
                     p.OldValue = p.Value;
-                    p.locationInDataset = count;
+                   // p.locationInDataset = count;
                     p.PropertyChanged += DataPointGroup_PropertyChanged; // and now let thigs be changed again
                     count++;
                 }
@@ -451,8 +558,27 @@ namespace GravityApps.Mandelkow.MetroCharts
             Rectangle rect = new Rectangle();
             rect.Margin = new Thickness(CenterX - (_lineScatterStyle.scatterSize.Width/2), CenterY - (_lineScatterStyle.scatterSize.Height/2), 0, 0);
             rect.ToolTip = p.FormattedValue;
+            rect.Tag = p.locationInDataset;
+            rect.MouseDown += rect_MouseDown;
             
             return rect;
+        }
+
+        void rect_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Rectangle rect = (Rectangle)sender;
+            int locationInDataset = (int)rect.Tag;
+            this.IsClickedByUser = true;
+            ParentChart.SelectedItem = DataPoints[locationInDataset];
+            DataPoints[locationInDataset].IsSelected = true;
+            // this will handle the rectangle hits find a rectangle and then highlight it etc
+            // OR do I add a preview mouse down to the rectangle in the positive values only?
+            // if I do it that way will it get the hit of the rectangle (bullet) or the rectangle?
+            
+           // throw new NotImplementedException();
+
+            // ensure any column pieces dont get selected as well
+            e.Handled = true;
         }
             
       

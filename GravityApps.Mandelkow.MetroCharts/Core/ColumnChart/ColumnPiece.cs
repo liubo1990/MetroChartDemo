@@ -89,8 +89,7 @@
         }
         
         /// <summary>
-        /// the percentage of maximum negative value
-        /// bound to PercentageFromMaxNegativeDataPointValue in datapint via the generic.xaml
+        /// is thew area the piece is drawn in a negative or positive one
         /// </summary>
         public bool IsNegativePiece
         {

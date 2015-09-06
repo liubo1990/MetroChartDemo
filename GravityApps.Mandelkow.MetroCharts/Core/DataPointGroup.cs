@@ -74,6 +74,15 @@
            new PropertyMetadata(null));
 
         /// <summary>
+        /// Hide series that arent columns when drawing a mixed type chart
+        /// </summary>
+        public static readonly DependencyProperty showColumnsProperty =
+           DependencyProperty.Register("showColumns",
+           typeof(bool),
+           typeof(DataPointGroup),
+           new PropertyMetadata(true));
+
+        /// <summary>
         /// Name of style for the bullets.
         /// This should be Path styles, or leave empty to use default
         /// </summary>
@@ -135,6 +144,11 @@
             set { SetValue(SeriesTypeProperty, value); }
         }
 
+        public bool showColumns
+        {
+            get { return (bool)GetValue(showColumnsProperty); }
+            set { SetValue(showColumnsProperty, value); }
+        }
 
         /// <summary>
         /// Name of style for the bullets.

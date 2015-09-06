@@ -30,5 +30,10 @@
         <Setter Property="Opacity" Value="0.5"/>
     </Style>
 
+    <Style x:Key="BlackLineStyle" TargetType="Path" >
+        <Setter Property="StrokeThickness" Value="1"></Setter>
+        <Setter Property="Stroke" Value="Black"></Setter>
+
+    </Style>
 
 </ResourceDictionary>

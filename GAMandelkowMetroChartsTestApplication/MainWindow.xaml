@@ -1,42 +1,128 @@
 ﻿<Window x:Class="GAMandelkowMetroChartsTestApplication.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="912.537" Width="1361.194"
+        Title="MainWindow" Height="1037.91" Width="1479.104"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        xmlns:GAChart="clr-namespace:GravityApps.Mandelkow.MetroCharts;assembly=GravityApps.Mandelkow.MetroCharts" WindowStartupLocation="CenterScreen"
+        xmlns:GAChart="clr-namespace:GravityApps.Mandelkow.MetroCharts;assembly=GravityApps.Mandelkow.MetroCharts" WindowStartupLocation="CenterScreen" ScrollViewer.CanContentScroll="True"
         
         >
-    <Grid>
+    <Grid Margin="0" ScrollViewer.CanContentScroll="True" Height="1004" Width="1471">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="160" MinWidth="160"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Orientation="Vertical" Background="#FFE4E4E4" Margin="0">
-            <TextBlock Style="{StaticResource LargeTitleStyle}" Margin="20,10,0,0"><Run Text="GravityApps-Mandelkow Metro Charts Demo"/></TextBlock>
+        <ScrollViewer Grid.Column="0" Margin="0" >
+            <StackPanel Orientation="Vertical" Background="#FFE4E4E4" ScrollViewer.VerticalScrollBarVisibility="Auto" CanVerticallyScroll="True" ScrollViewer.CanContentScroll="True">
+                <TextBlock Style="{StaticResource LargeTitleStyle}" Margin="20,10,0,0"><Run Text="GravityApps-Mandelkow Metro Charts Demo"/></TextBlock>
 
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <TextBlock Style="{StaticResource MediumTitleStyle}" Margin="20,0,0,0" VerticalAlignment="Bottom"><Run Text="Main charts by Torsten Mandlekow"/></TextBlock>
-                <TextBlock Style="{StaticResource SmallTitleStyle}" VerticalAlignment="Top" Margin="5,5,0,0"><Run Text="(www.modernuicharts.codeplex.com)"/></TextBlock>
-                <TextBlock Style="{StaticResource MediumTitleStyle}" VerticalAlignment="Bottom"><Run Text=" "/><Run Text="Line, Scatter and multiple-series charts by GravityApps"/></TextBlock>
-            </StackPanel>
-            <WrapPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,5,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock Style="{StaticResource MediumTitleStyle}" Margin="20,0,0,0" VerticalAlignment="Bottom"><Run Text="Main charts by Torsten Mandlekow"/></TextBlock>
+                    <TextBlock Style="{StaticResource SmallTitleStyle}" VerticalAlignment="Top" Margin="5,5,0,0"><Run Text="(www.modernuicharts.codeplex.com)"/></TextBlock>
+                    <TextBlock Style="{StaticResource MediumTitleStyle}" VerticalAlignment="Bottom"><Run Text=" "/><Run Text="Line, Scatter and multiple-series charts by GravityApps"/></TextBlock>
+                </StackPanel>
+                <WrapPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,5,0,0">
 
-                <GAChart:ClusteredColumnChart Style="{StaticResource MinimalChartStyle}" DataContext="{Binding}" 
-                                              ChartTitle="Clustered Column Chart"
-                                              ChartSubTitle="Now supports negative numbers"
+                    <GAChart:ClusteredColumnChart Style="{StaticResource MinimalChartStyle}" DataContext="{Binding}" 
+    					ChartTitle="Clustered Column Chart"
+    					ChartSubTitle="Now supports negative numbers"
+                        SelectedItem="{Binding selectedItem, Mode=TwoWay}"
                                              
                                           >
-                    <GAChart:ClusteredColumnChart.Series>
-                        <GAChart:ChartSeries
-							SeriesTitle="{Binding scatterData.seriesDisplayName}"
-							DisplayMember="date"
-							ValueMember="amount"
-							ItemsSource="{Binding scatterData.Items}" 
+                        <GAChart:ClusteredColumnChart.Series>
+                            <GAChart:ChartSeries
+    							SeriesTitle="{Binding scatterData.seriesDisplayName}"
+    							DisplayMember="date"
+    							ValueMember="amount"
+    							ItemsSource="{Binding scatterData.Items}" 
+                                
                     />
 
-                    </GAChart:ClusteredColumnChart.Series>
-                </GAChart:ClusteredColumnChart>
+                        </GAChart:ClusteredColumnChart.Series>
+                    </GAChart:ClusteredColumnChart>
+                    <GAChart:ClusteredColumnChart  Style="{StaticResource MinimalChartStyle}"
+    					Width="400"
+    					DataContext="{Binding ''}"
+    					ChartTitle="std clustered column" 
+    					ChartSubTitle="three series - default styles."
+    					IsRowColumnSwitched="{Binding seriesSwitched}" HorizontalAlignment="Left" VerticalAlignment="Top"
+                         SelectedItem="{Binding selectedItem, Mode=TwoWay}"
+                >
+                        <GAChart:ClusteredColumnChart.Series >
+                            <GAChart:ChartSeries
+                        		SeriesTitle="{Binding scatterData.seriesDisplayName}"
+                        		DisplayMember="date"
+                        		ValueMember="amount"
+                        		ItemsSource="{Binding scatterData.Items}"
+                        		SeriesType="Column"
+                        />
+                        </GAChart:ClusteredColumnChart.Series>
+                    </GAChart:ClusteredColumnChart>
+                    <GAChart:GAMultipleTypeSeriesChart  Style="{StaticResource MinimalChartStyle}"
+    					Width="400"
+    					DataContext="{Binding ''}"
+    					ChartTitle="GA Multipe Series Type Chart" 
+    					ChartSubTitle="three series - default styles."
+    					IsRowColumnSwitched="{Binding seriesSwitched}" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        SelectedItem="{Binding selectedItem, Mode=TwoWay}"
+                >
+                        <GAChart:GAMultipleTypeSeriesChart.Series >
+                            <GAChart:ChartSeries
+                        		SeriesTitle="Target Line"
+                        		DisplayMember="date"
+                        		ValueMember="amount"
+                        		SeriesType="Both"
+                        		SeriesLineStyle="{StaticResource BlackLineStyle}"
+                        		ItemsSource="{Binding scatterData.Items}"
+                            
+                        />
+                            <GAChart:ChartSeries
+                        		SeriesTitle="{Binding scatterData1.seriesDisplayName}"
+                        		DisplayMember="date"
+                        		ValueMember="amount"
+                        		ItemsSource="{Binding scatterData1.Items}"
+                        		SeriesType="Column"
+                        />
 
+
+                        </GAChart:GAMultipleTypeSeriesChart.Series>
+                    </GAChart:GAMultipleTypeSeriesChart>
+
+
+                    <GAChart:PieChart
+					Style="{StaticResource MinimalChartStyle}"
+					DataContext="{Binding}"
+					ChartTitle="Pie Chart"
+					ChartSubTitle="Standard Mandelkow Pie Chart"
+                        SelectedItem="{Binding selectedItem, Mode=TwoWay}"
+        >
+                        <GAChart:PieChart.Series>
+                            <GAChart:ChartSeries
+							SeriesTitle="{Binding scatterData2.seriesDisplayName}"
+							DisplayMember="date"
+							ValueMember="amount"
+							ItemsSource="{Binding scatterData2.Items}" 
+                    />
+                        </GAChart:PieChart.Series>
+                    </GAChart:PieChart>
+
+                    <!--<GAChart:RadialGaugeChart
+					Style="{StaticResource MinimalChartStyle}"
+					DataContext="{Binding}"
+					ChartTitle="Guage Chart"
+					ChartSubTitle="Standard Mandelkow Guage Chart"
+        >
+                    <GAChart:RadialGaugeChart.Series>
+                        <GAChart:ChartSeries
+							SeriesTitle="{Binding radialSeries.seriesDisplayName}"
+							DisplayMember="date"
+							ValueMember="amount"
+							ItemsSource="{Binding radialSeries.Items}" 
+                    />
+                    </GAChart:RadialGaugeChart.Series>
+                </GAChart:RadialGaugeChart>-->
+
+                    <!--
                 <GAChart:StackedColumnChart Style="{StaticResource MinimalChartStyle}"  DataContext="{Binding}"
                                             ChartTitle="Stacked Column Chart" ChartSubTitle="Doesnt support negative numbers"
                                            >
@@ -50,21 +136,7 @@
                     </GAChart:StackedColumnChart.Series>
                 </GAChart:StackedColumnChart>
 
-                <GAChart:PieChart
-					Style="{StaticResource MinimalChartStyle}"
-					DataContext="{Binding}"
-					ChartTitle="Pie Chart"
-					ChartSubTitle="Standard Mandelkow Pie Chart"
-        >
-                    <GAChart:PieChart.Series>
-                        <GAChart:ChartSeries
-							SeriesTitle="{Binding scatterData2.seriesDisplayName}"
-							DisplayMember="date"
-							ValueMember="amount"
-							ItemsSource="{Binding scatterData2.Items}" 
-                    />
-                    </GAChart:PieChart.Series>
-                </GAChart:PieChart>
+                
 
 
 
@@ -105,67 +177,77 @@
                     >
                         </GAChart:ChartSeries>
                     </GAChart:GALineScatterChart.Series>
-                </GAChart:GALineScatterChart>
-                
-               
-                
-                   
+                </GAChart:GALineScatterChart>-->
+
+
+
+
+                    <GAChart:GAMultipleTypeSeriesChart  Style="{StaticResource MinimalChartStyle}"
+    					Width="900"
+    					DataContext="{Binding ''}"
+    					ChartTitle="GA Multipe Series Type Chart" 
+    					ChartSubTitle="three series - default styles."
+    					SelectedItem="{Binding selectedItem, Mode=TwoWay}"
+    					IsRowColumnSwitched="{Binding seriesSwitched}"
+    					HorizontalAlignment="Left" VerticalAlignment="Top"
+                                        
+                >
+                        <GAChart:GAMultipleTypeSeriesChart.Series >
+                            <GAChart:ChartSeries
+    							SeriesTitle="{Binding scatterData.seriesDisplayName}"
+    							DisplayMember="date"
+    							ValueMember="amount"
+    							ItemsSource="{Binding scatterData.Items}"
+    							SeriesType="Column"
+                        />
+
+                            <GAChart:ChartSeries
+    							SeriesTitle="Target Line"
+    							DisplayMember="date"
+    							ValueMember="amount"
+    							SeriesType="Both"
+    							ItemsSource="{Binding scatterData1.Items}"
+                            
+                        />
+                        </GAChart:GAMultipleTypeSeriesChart.Series>
+
+                    </GAChart:GAMultipleTypeSeriesChart>
+
+
                     <GAChart:GALineScatterChart  Style="{StaticResource MinimalChartStyle}"
-              
-						DataContext="{Binding ''}"
-						ChartTitle="GA Line/Scatter Chart" 
-						ChartSubTitle="three series - default styles."
-						IsRowColumnSwitched="{Binding seriesSwitched}" HorizontalAlignment="Left" VerticalAlignment="Top"
+    					Width="400"
+    					DataContext="{Binding ''}"
+    					ChartTitle="std ga line scatter" 
+    					ChartSubTitle="three series - default styles."
+    					IsRowColumnSwitched="{Binding seriesSwitched}" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        SelectedItem="{Binding selectedItem, Mode=TwoWay}"
                 >
                         <GAChart:GALineScatterChart.Series >
                             <GAChart:ChartSeries
-								SeriesTitle="{Binding scatterData.seriesDisplayName}"
-								DisplayMember="date"
-								ValueMember="amount"
-								ItemsSource="{Binding scatterData.Items}"
-								SeriesType="Both"
+    							SeriesTitle="{Binding scatterData.seriesDisplayName}"
+    							DisplayMember="date"
+    							ValueMember="amount"
+    							ItemsSource="{Binding scatterData.Items}"
+    							SeriesType="Both"
                         />
                             <GAChart:ChartSeries
-								SeriesTitle="{Binding scatterData1.seriesDisplayName}"
-								DisplayMember="date"
-								ValueMember="amount"
-								SeriesType="Bullet"
-								ItemsSource="{Binding scatterData1.Items}"
-                            
+    							SeriesTitle="{Binding scatterData1.seriesDisplayName}"
+    							DisplayMember="date"
+    							ValueMember="amount"
+    							ItemsSource="{Binding scatterData1.Items}"
+    							SeriesType="Line"
                         />
-                            <GAChart:ChartSeries
-								SeriesTitle="{Binding scatterData2.seriesDisplayName}"
-								DisplayMember="date"
-								ValueMember="amount"
-								ItemsSource="{Binding scatterData2.Items}"
-								SeriesType="Line"
-                    />
                         </GAChart:GALineScatterChart.Series>
                     </GAChart:GALineScatterChart>
 
-                <GAChart:RadialGaugeChart
-					Style="{StaticResource MinimalChartStyle}"
-					DataContext="{Binding}"
-					ChartTitle="Guage Chart"
-					ChartSubTitle="Standard Mandelkow Guage Chart"
-        >
-                    <GAChart:RadialGaugeChart.Series>
-                        <GAChart:ChartSeries
-							SeriesTitle="{Binding radialSeries.seriesDisplayName}"
-							DisplayMember="date"
-							ValueMember="amount"
-							ItemsSource="{Binding radialSeries.Items}" 
-                    />
-                    </GAChart:RadialGaugeChart.Series>
-                </GAChart:RadialGaugeChart>
 
 
 
-
-            </WrapPanel>
-            <Button Command="{Binding SwitchSeries, Mode=OneWay}" Content="Switch Series" Margin="201,0,577,0"/>
-        </StackPanel>
-        <StackPanel Grid.Column="1" Orientation="Vertical"  Background="#FFC9C9C9" Margin="0,0,0,0" >
+                </WrapPanel>
+                <Button Command="{Binding SwitchSeries, Mode=OneWay}" Content="Switch Series" Margin="201,0,577,0"/>
+            </StackPanel>
+        </ScrollViewer>
+        <StackPanel Grid.Column="2" Orientation="Vertical"  Background="#FFC9C9C9" Margin="0,0,5,0" >
             <TextBlock Style="{StaticResource MediumTitleStyle}" HorizontalAlignment="Center"><Run Text="Setting"/></TextBlock>
             <ListView ItemsSource="{Binding scatterData.Items}" Height="243">
                 <ListView.ItemsPanel>
@@ -175,10 +257,10 @@
                 </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid DataContext="{Binding}">
+                        <Grid DataContext="{Binding}" Margin="0,0,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="75      "/>
-                                <ColumnDefinition Width="75 "/>
+                                <ColumnDefinition Width="45"/>
+                                <ColumnDefinition Width="45 "/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Content="{Binding date}"/>
                             <TextBox Grid.Column="1" Text="{Binding amount}" HorizontalContentAlignment="Right"/>
@@ -197,8 +279,8 @@
                     <DataTemplate>
                         <Grid DataContext="{Binding}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="75      "/>
-                                <ColumnDefinition Width="75 "/>
+                                <ColumnDefinition Width="45 "/>
+                                <ColumnDefinition Width="45"/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Content="{Binding date}"/>
                             <TextBox Grid.Column="1" Text="{Binding amount}" HorizontalContentAlignment="Right"/>
@@ -206,26 +288,31 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <ListView ItemsSource="{Binding scatterData2.Items}" Height="243">
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid DataContext="{Binding}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="75      "/>
-                                    <ColumnDefinition Width="75 "/>
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="{Binding date}"/>
-                                <TextBox Grid.Column="1" Text="{Binding amount}" HorizontalContentAlignment="Right"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
+            <ListView ItemsSource="{Binding scatterData1.Items}" Height="243">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid DataContext="{Binding}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="45"/>
+                                <ColumnDefinition Width="45"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="{Binding date}"/>
+                            <Label Grid.Column="1" Content="{Binding amount}" HorizontalContentAlignment="Right"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
 
-                </ListView>
+            </ListView>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Margin="0">
+            <Label Content="Selected Point"/>
+            <Label Grid.Column="0" Content="{Binding date}" Height="22" DataContext="{Binding selectedItem}"/>
+            <TextBox Grid.Column="1" Text="{Binding amount}"  DataContext="{Binding selectedItem}" HorizontalContentAlignment="Right"/>
         </StackPanel>
 
 

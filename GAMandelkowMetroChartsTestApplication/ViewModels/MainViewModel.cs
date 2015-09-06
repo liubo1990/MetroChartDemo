@@ -100,6 +100,23 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
             }
         }
 
+        private GraphSeriesDataPoint _selectedItem;
+        public GraphSeriesDataPoint selectedItem
+        {
+            get
+            {
+                return _selectedItem;
+            }
+            set
+            {
+                if (_selectedItem != value)
+                {
+                    _selectedItem = value;
+                    RaisePropertyChanged("selectedItem");
+                }
+            }
+        }
+
         private bool _seriesSwitched;
         public bool seriesSwitched
         {
@@ -142,21 +159,21 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
 
             scatterData = new GraphSeriesInformation();
             scatterData.seriesDisplayName = "Series 1";
-            scatterData.Items.Add(new GraphSeriesDataPoint("mon", -12));
-            scatterData.Items.Add(new GraphSeriesDataPoint("tue", -0.5));
+            scatterData.Items.Add(new GraphSeriesDataPoint("mon", 10));
+            scatterData.Items.Add(new GraphSeriesDataPoint("tue", -15));
             scatterData.Items.Add(new GraphSeriesDataPoint("wed", 0));
             scatterData.Items.Add(new GraphSeriesDataPoint("thur", 5.2));
             scatterData.Items.Add(new GraphSeriesDataPoint("fri", 3.3));
-            scatterData.Items.Add(new GraphSeriesDataPoint("sat", -11.5));
+            scatterData.Items.Add(new GraphSeriesDataPoint("sat", -7));
             scatterData.Items.Add(new GraphSeriesDataPoint("sun", 0.5));
            
 
             scatterData1 = new GraphSeriesInformation();
             scatterData1.seriesDisplayName = "Series 2";
             scatterData1.Items.Add(new GraphSeriesDataPoint("mon", 1));
-            scatterData1.Items.Add(new GraphSeriesDataPoint("tue", 2));
+            scatterData1.Items.Add(new GraphSeriesDataPoint("tue", -2));
             scatterData1.Items.Add(new GraphSeriesDataPoint("wed", 4.0));
-            scatterData1.Items.Add(new GraphSeriesDataPoint("thur", 9));
+            scatterData1.Items.Add(new GraphSeriesDataPoint("thur",- 9));
             scatterData1.Items.Add(new GraphSeriesDataPoint("fri", 2.8));
             scatterData1.Items.Add(new GraphSeriesDataPoint("sat", 3));
             scatterData1.Items.Add(new GraphSeriesDataPoint("sun", 5));

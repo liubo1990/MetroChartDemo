@@ -66,7 +66,7 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
 
         public static void Cleanup()
         {
-            // TODO Clear the ViewModels
+           
         }
     }
 }

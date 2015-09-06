@@ -168,6 +168,9 @@
     <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GALineScatterChart\GAScatterLinePiece.cs">
       <Link>Core\GALineScatterChart\GAScatterLinePiece.cs</Link>
     </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GAMultiSeries\GAMultipleTypeSeriesChart.cs">
+      <Link>Core\GAMultiSeries\GAMultipleTypeSeriesChart.cs</Link>
+    </Compile>
     <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GaugeChart\RadialGaugeChart.cs">
       <Link>Core\GaugeChart\RadialGaugeChart.cs</Link>
     </Compile>

@@ -760,6 +760,7 @@
         /// </summary>
         protected void updateAllGridLines()
         {
+            if (!isGAAlteredChart()) return;
 
             double largestAbsoluteDataPointValue = GridLinesMaxValue > Math.Abs(GridLinesMinValue) ? GridLinesMaxValue : Math.Abs(GridLinesMinValue); 
 
@@ -790,16 +791,28 @@
         }
 
         /// <summary>
+        /// IS this a GA altered chart that has different grid axis and chart area settings to standard
+        /// </summary>
+        /// <returns></returns>
+        private bool isGAAlteredChart()
+        {
+            Type chartType = this.GetType();
+
+            return (chartType== typeof(ClusteredColumnChart) || chartType == typeof(GAMultipleTypeSeriesChart) || chartType==typeof(GALineScatterChart));
+        }
+
+        /// <summary>
         /// update the proportions of the positive and -ve x axis regions
         /// </summary>
         /// <param name="maxPositiveValue"></param>
         /// <param name="maxNegativeValue"></param>
         private void updateChartGridProportions(double maxPositiveValue, double maxNegativeValue)
         {
+            
             if (MainChartAreaGrid != null && !double.IsNaN(maxPositiveValue) && !double.IsNaN(maxNegativeValue))
             {
-                RowDefinition positiveValueGrid = MainChartAreaGrid.RowDefinitions[0];
-                RowDefinition negativeValueGrid = MainChartAreaGrid.RowDefinitions[2];
+                RowDefinition positiveValueGrid = MainChartAreaGrid.RowDefinitions[1];
+                RowDefinition negativeValueGrid = MainChartAreaGrid.RowDefinitions[3];
 
                 positiveValueGrid.Height = new GridLength(maxPositiveValue, GridUnitType.Star);
                 negativeValueGrid.Height = new GridLength(Math.Abs(maxNegativeValue), GridUnitType.Star);
@@ -858,7 +871,7 @@
                                     dataPointGroup.GASeriesType = initialSeries.SeriesType;
                                     dataPointGroup.GALineStyle = initialSeries.SeriesLineStyle;
                                     dataPointGroup.GABulletStyle = initialSeries.SeriesBulletStyle;
-                                    
+                                    dataPointGroup.showColumns = initialSeries.SeriesType == "Column";
                                     result.Add(dataPointGroup);
 
                                     CreateDataPointGroupBindings(dataPointGroup);
@@ -911,6 +924,8 @@
                             dataPointGroup.GASeriesType = initialSeries.SeriesType;
                             dataPointGroup.GALineStyle = initialSeries.SeriesLineStyle;
                             dataPointGroup.GABulletStyle = initialSeries.SeriesBulletStyle;
+                            dataPointGroup.showColumns = initialSeries.SeriesType == "Column";
+                           
 
                             result.Add(dataPointGroup);
 
@@ -1032,7 +1047,7 @@
             foreach(var dataPointGroup in groupedSeries)
             {
                 bool isGALineOrScatter = (dataPointGroup.GASeriesType == "Bullet"
-                    || dataPointGroup.GASeriesType == "Line" || dataPointGroup.GASeriesType == "Both");
+                    || dataPointGroup.GASeriesType == "Line" || dataPointGroup.GASeriesType == "Both" || dataPointGroup.GASeriesType == "Column");
                
                 if (!isGALineOrScatter)
                 {
