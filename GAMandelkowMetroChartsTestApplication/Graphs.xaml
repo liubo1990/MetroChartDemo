@@ -23,6 +23,14 @@
         <Setter Property="StrokeThickness" Value="1"></Setter>
     </Style>
 
+    <Style x:Key="GAScatterBulletSelectedStyle" TargetType="Rectangle" >
+        <Setter Property="Height" Value="8"></Setter>
+        <Setter Property="Width" Value="8"></Setter>
+        <Setter Property="RadiusX" Value="4"></Setter>
+        <Setter Property="RadiusY" Value="4"></Setter>
+        <Setter Property="Fill" Value="Red"></Setter>
+    </Style>
+
     <Style x:Key="GATransparentScatterBulletStyle" TargetType="Rectangle" BasedOn="{StaticResource GAScatterBulletStyle}" >
         <Setter Property="Fill" Value="Transparent"></Setter>
         <Setter Property="Stroke" Value="Transparent"/>

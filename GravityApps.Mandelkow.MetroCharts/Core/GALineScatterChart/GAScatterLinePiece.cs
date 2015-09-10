@@ -140,8 +140,6 @@ namespace GravityApps.Mandelkow.MetroCharts
         /// Name of style for the bullets.
         /// Set using the dependency property
         /// Used : Height, Width, radiusX, RadiusY, Fill
-        /// The Fill is used like a boolean. If a value is given it is filled with the series value
-        /// If a value isnt given it is left as a stroke only.
         /// </summary>
         /// 
         public Style GAScatterBulletStyle

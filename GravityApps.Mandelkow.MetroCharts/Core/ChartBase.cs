@@ -871,6 +871,7 @@
                                     dataPointGroup.GASeriesType = initialSeries.SeriesType;
                                     dataPointGroup.GALineStyle = initialSeries.SeriesLineStyle;
                                     dataPointGroup.GABulletStyle = initialSeries.SeriesBulletStyle;
+                                    dataPointGroup.GAScatterSelectedBulletStyle = initialSeries.SeriesSelectedBulletStyle;
                                     dataPointGroup.showColumns = initialSeries.SeriesType == "Column";
                                     result.Add(dataPointGroup);
 
@@ -924,6 +925,7 @@
                             dataPointGroup.GASeriesType = initialSeries.SeriesType;
                             dataPointGroup.GALineStyle = initialSeries.SeriesLineStyle;
                             dataPointGroup.GABulletStyle = initialSeries.SeriesBulletStyle;
+                            dataPointGroup.GAScatterSelectedBulletStyle = initialSeries.SeriesSelectedBulletStyle;
                             dataPointGroup.showColumns = initialSeries.SeriesType == "Column";
                            
 
@@ -1083,9 +1085,89 @@
         /// <param name="dataPointGroup"></param>
         private void updateDataPointGroupLegendStyles(DataPointGroup dataPointGroup)
         {
+
             Style lineStyle = dataPointGroup.GALineStyle;
             Style bulletStyle = dataPointGroup.GABulletStyle;
+            Style selectedBulletStyle = dataPointGroup.GAScatterSelectedBulletStyle;
 
+            updateStylesWithDefaultsIfNeeded(ref lineStyle, ref bulletStyle, ref selectedBulletStyle);
+
+            if (lineStyle != null && bulletStyle != null && selectedBulletStyle!=null && dataPointGroup.DataPoints.Count>0)
+            {
+
+                Style newBulletStyle;
+                Style newLineStyle;
+
+                updateStylesForPalettes(dataPointGroup, lineStyle, bulletStyle, out newBulletStyle, out newLineStyle);
+
+                dataPointGroup.GALegendLineStyle = newLineStyle;
+               
+                foreach (DataPoint point in dataPointGroup.DataPoints)
+                {
+                    point.GADataPointStyle = newBulletStyle;
+                    point.GASelectedDataPointStyle = selectedBulletStyle;
+                }
+                createLegendLines(dataPointGroup, bulletStyle);
+            }
+                    
+        }
+
+        /// <summary>
+        /// create the line start and end point for the legend
+        /// </summary>
+        /// <param name="dataPointGroup"></param>
+        /// <param name="bulletStyle"></param>
+        private static void createLegendLines(DataPointGroup dataPointGroup, Style bulletStyle)
+        {
+            //get the start and end positions for the line in the Legend
+            Point start = new Point(0, 0);
+            Point end = new Point(0, 0);
+            var bulletHeight = bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Height");
+            var bulletWidth = bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Width");
+            if (bulletHeight != null)
+            {
+                start.Y = ((double)bulletHeight.Value) / 2;
+                end.Y = start.Y;
+            }
+
+            if (bulletWidth != null)
+            {
+                end.X = ((double)bulletWidth.Value) * 3;
+            }
+
+            dataPointGroup.GALegendLinePointEnd = end;
+            dataPointGroup.GALegendLinePointStart = start;
+        }
+
+        /// <summary>
+        /// update the styles with pallette information
+        /// </summary>
+        /// <param name="dataPointGroup"></param>
+        /// <param name="lineStyle"></param>
+        /// <param name="bulletStyle"></param>
+        /// <param name="newBulletStyle">A style based on bulletStyle but with new fill and stroke colours</param>
+        /// <param name="newLineStyle">A style based on lineStyle but with new stroke colour from palette if required</param>
+        private void updateStylesForPalettes(DataPointGroup dataPointGroup, Style lineStyle, Style bulletStyle, 
+            out Style newBulletStyle, out Style newLineStyle)
+        {
+            GALineScatterStyling styling = new GALineScatterStyling(lineStyle, bulletStyle, dataPointGroup.DataPoints[0]);
+
+            //bullet styles = style 'based on existing' but with brush's overridden to account for any pallette colours
+            newBulletStyle = new Style(typeof(Rectangle), bulletStyle);
+            newBulletStyle.Setters.Add(new Setter(Rectangle.FillProperty, styling.fillBrush));
+            newBulletStyle.Setters.Add(new Setter(Rectangle.StrokeProperty, styling.bulletLineBrush));
+
+            newLineStyle = new Style(typeof(Path), lineStyle);
+            newLineStyle.Setters.Add(new Setter(Path.StrokeProperty, styling.lineBrush));
+        }
+
+        /// <summary>
+        /// Use the default GALine and GAScatterBullet styles if none supplied
+        /// </summary>
+        /// <param name="lineStyle"></param>
+        /// <param name="bulletStyle"></param>
+        private void updateStylesWithDefaultsIfNeeded(ref Style lineStyle, ref Style bulletStyle, ref Style selectedBulletStyle)
+        {
             if (lineStyle == null)
             {
                 lineStyle = TryFindResource("GALineStyle") as Style;
@@ -1096,50 +1178,10 @@
                 bulletStyle = TryFindResource("GAScatterBulletStyle") as Style;
             }
 
-            if (lineStyle != null && bulletStyle != null && dataPointGroup.DataPoints.Count>0)
+            if (selectedBulletStyle == null)
             {
-                
-                GALineScatterStyling styling = new GALineScatterStyling(lineStyle, bulletStyle, dataPointGroup.DataPoints[0]); 
-
-                //bullet styles = style 'based on esxiting' but with brush's overridden to account for any pallette colours
-                Style newBulletStyle = new Style(typeof(Rectangle), bulletStyle);
-                newBulletStyle.Setters.Add(new Setter(Rectangle.FillProperty, styling.fillBrush));
-                newBulletStyle.Setters.Add(new Setter(Rectangle.StrokeProperty, styling.bulletLineBrush));
-                
-                Style newLineStyle = new Style(typeof(Path), lineStyle);
-                newLineStyle.Setters.Add(new Setter(Path.StrokeProperty, styling.lineBrush));
-
-                // set the styles in the datapoint group, which is then bound to the GALineScatterPiece via xaml
-                if (dataPointGroup.GASeriesType=="Both" || dataPointGroup.GASeriesType=="Bullet")
-                {
-                    dataPointGroup.GALegendScatterBulletStyle = newBulletStyle;
-                }
-
-                if (dataPointGroup.GASeriesType == "Both" || dataPointGroup.GASeriesType == "Line")
-                {
-                    dataPointGroup.GALegendLineStyle = newLineStyle;
-                }
-
-                //get the start and end positions for the line in the Legend
-                Point start = new Point(0, 0);
-                Point end = new Point(0, 0);
-                var bulletHeight = bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Height");
-                var bulletWidth = bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Width");
-                if (bulletHeight!=null)
-                {
-                    start.Y = ((double)bulletHeight.Value)/2;
-                    end.Y = start.Y;
-                }
-
-                if(bulletWidth!=null)
-                {
-                    end.X = ((double)bulletWidth.Value) * 3;
-                }
-
-                dataPointGroup.GALegendLinePointEnd = end;
-                dataPointGroup.GALegendLinePointStart = start;
+                selectedBulletStyle = TryFindResource("GAScatterBulletSelectedStyle") as Style;
             }
-                    
         }
 
 
@@ -1174,6 +1216,20 @@
             MaxNegativeGridLineValueBinding.Mode = BindingMode.OneWay;
             MaxNegativeGridLineValueBinding.Path = new PropertyPath("MaxNegativeGridLineValue");
             BindingOperations.SetBinding(datapoint, DataPoint.MaxNegativeGridLineValueProperty, MaxNegativeGridLineValueBinding);
+
+            //var GASelectedDataPointStyleBinding = new Binding();
+            //GASelectedDataPointStyleBinding.Source = this;
+            //GASelectedDataPointStyleBinding.Mode = BindingMode.OneWay;
+            //GASelectedDataPointStyleBinding.Path = new PropertyPath("GASelectedDataPointStyle");
+            //BindingOperations.SetBinding(datapoint, DataPoint.GASelectedDataPointStyleProperty, GASelectedDataPointStyleBinding);
+
+            //var GADataPointStyleBinding = new Binding();
+            //GADataPointStyleBinding.Source = this;
+            //GADataPointStyleBinding.Mode = BindingMode.OneWay;
+            //GADataPointStyleBinding.Path = new PropertyPath("GADataPointStyle");
+            //BindingOperations.SetBinding(datapoint, DataPoint.GADataPointStyleProperty, GADataPointStyleBinding);
+
+
 
             //Sende den Datapoints the höchste Summe einer DataPointGroup mit (wichtig für stacked chart)
             var maxDataPointGroupSumBinding = new Binding();

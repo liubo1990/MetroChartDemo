@@ -78,6 +78,7 @@
     <Compile Include="Core\BarChart\ClusteredBarChart.cs" />
     <Compile Include="Core\BarChart\BarPiece.cs" />
     <Compile Include="Core\Doughnut\DoughnutChart.cs" />
+    <Compile Include="Core\GALineScatterChart\GAScatterPiece.cs" />
     <Compile Include="Core\GALineScatterChart\GALineScatterChart.cs" />
     <Compile Include="Core\GALineScatterChart\GALineScatterStyling.cs" />
     <Compile Include="Core\GALineScatterChart\GAScatterLinePiece.cs" />

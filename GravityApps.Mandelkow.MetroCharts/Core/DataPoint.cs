@@ -27,7 +27,6 @@
     public class DataPoint : DependencyObject, INotifyPropertyChanged
     {
         //GA added these - MaxDatapoint and MaxGridLIne can be differnt
-        // max gridline is needed in calculations
         public static readonly DependencyProperty MaxPositiveGridLineValueProperty =
    DependencyProperty.Register("MaxPositiveGridLineValue",
    typeof(double),
@@ -39,6 +38,19 @@
    typeof(double),
    typeof(DataPoint),
    new PropertyMetadata(0.0, new PropertyChangedCallback(MaxDataPointValueChanged)));
+
+        // A style for the given datapoint - can allow for more variation that the item brush below
+        public static readonly DependencyProperty GADataPointStyleProperty =
+   DependencyProperty.Register("GADataPointStyle",
+   typeof(Style),
+   typeof(DataPoint),
+   null);
+
+        public static readonly DependencyProperty GASelectedDataPointStyleProperty =
+DependencyProperty.Register("GASelectedDataPointStyle",
+typeof(Style),
+typeof(DataPoint),
+null);
 
 
 
@@ -101,6 +113,8 @@
           typeof(string),
           typeof(DataPoint),
           new PropertyMetadata("", OnToolTipFormatChanged));
+
+
 
         private static void OnIsClickedByUserChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -307,6 +321,21 @@
             get { return (double)GetValue(MaxNegativeGridLineValueProperty); }
             set { SetValue(MaxNegativeGridLineValueProperty, value); }
         }
+
+        //GA added these - MaxDatapoint and MaxGridLIne can be differnt
+        // max gridline is needed in calculations
+        public Style GADataPointStyle
+        {
+            get { return (Style)GetValue(GADataPointStyleProperty); }
+            set { SetValue(GADataPointStyleProperty, value); }
+        }
+
+        public Style GASelectedDataPointStyle
+        {
+            get { return (Style)GetValue(GASelectedDataPointStyleProperty); }
+            set { SetValue(GASelectedDataPointStyleProperty, value); }
+        }
+
 
         /// <summary>
         /// The last value the datapoint held (used to help redraw some charts)

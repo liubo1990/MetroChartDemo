@@ -83,16 +83,25 @@
            new PropertyMetadata(true));
 
         /// <summary>
-        /// Name of style for the bullets.
-        /// This should be Path styles, or leave empty to use default
+        /// The style to use for the bullets or null to use defaults
+        /// set by the user
         /// </summary>
         public static readonly DependencyProperty GAScatterBulletStyleProperty =
           DependencyProperty.Register("GAScatterBulletStyle", typeof(Style), typeof(DataPointGroup),
           new PropertyMetadata(null));
 
+
         /// <summary>
-        /// the style used to stlye the legend - can be differemt from GSCatterBulletStyl as it gets altered
-        /// to take into account the automatic pallette if needed
+        /// The style to use for the selected bullets or null to use defaults
+        /// set by the user
+        /// </summary>
+        public static readonly DependencyProperty GAScatterSelectedBulletStyleProperty =
+          DependencyProperty.Register("GAScatterSelectedBulletStyle", typeof(Style), typeof(DataPointGroup),
+          new PropertyMetadata(null));
+
+        /// <summary>
+        /// the style that will be used for the legend AND the bullets - can be differemt from GSCatterBulletStyle as it gets altered
+        /// to take into account the automatic pallette as required
         /// </summary>
         public static readonly DependencyProperty GALegendScatterBulletStyleProperty =
         DependencyProperty.Register("GALegendScatterBulletStyle", typeof(Style), typeof(DataPointGroup),
@@ -108,8 +117,8 @@
           new PropertyMetadata(null));
 
         /// <summary>
-        /// the style used to stlye the legend - can be differemt from GSCatterBulletStyl as it gets altered
-        /// to take into account the automatic pallette if needed
+        /// the style that will be used for the legend AND the lines - can be different from GSCatterBulletStyle as it gets altered
+        /// to take into account the automatic pallette as required
         /// </summary>
         public static readonly DependencyProperty GALegendLineStyleProperty =
          DependencyProperty.Register("GALegendLineStyle", typeof(Style), typeof(DataPointGroup),
@@ -151,7 +160,7 @@
         }
 
         /// <summary>
-        /// Name of style for the bullets.
+        /// Style for the bullets.
         /// Set in the graph xaml
         /// if values not supplied those in base styles are used
         /// or from the pallette
@@ -163,6 +172,18 @@
         }
 
         /// <summary>
+        /// Style for the selected bullets.
+        /// Set in the graph xaml
+        /// if values not supplied those in base styles are used
+        /// or from the pallette
+        /// </summary>
+        public Style GAScatterSelectedBulletStyle
+        {
+            get { return (Style)GetValue(GAScatterSelectedBulletStyleProperty); }
+            set { SetValue(GAScatterSelectedBulletStyleProperty, value); }
+        }
+
+        /// <summary>
         /// the 'calculated' style, based on the GABulletStyle
         /// that contains updated colours if pallette used
         /// </summary>
@@ -171,6 +192,7 @@
             get { return (Style)GetValue(GALegendScatterBulletStyleProperty); }
             set { SetValue(GALegendScatterBulletStyleProperty, value); }
         }
+
 
         /// <summary>
         /// start point for the lines in the legened

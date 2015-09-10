@@ -54,8 +54,8 @@ namespace GravityApps.Mandelkow.MetroCharts
            new PropertyMetadata(null));
 
         /// <summary>
-        /// The type of the series
-        /// Bullet, Line, Both, Other
+        /// The style for the bullets
+        /// empty will default to GAScatterBulletStyle
         /// </summary>
         public static readonly DependencyProperty SeriesBulletStyleProperty =
            DependencyProperty.Register("SeriesBulletStyle",
@@ -64,8 +64,18 @@ namespace GravityApps.Mandelkow.MetroCharts
            new PropertyMetadata(null));
 
         /// <summary>
-        /// The type of the series
-        /// Bullet, Line, Both, Other
+        /// The style for the selected bullets
+        /// empty will default to GAScatterBulletSelectedStyle
+        /// </summary>
+        public static readonly DependencyProperty SeriesSelectedBulletStyleProperty =
+           DependencyProperty.Register("SeriesSelectedBulletStyle",
+           typeof(Style),
+           typeof(ChartSeries),
+           new PropertyMetadata(null));
+
+        /// <summary>
+        /// The style for the lines
+        /// empty will default to GALineStyle
         /// </summary>
         public static readonly DependencyProperty SeriesLineStyleProperty =
            DependencyProperty.Register("SeriesLineStyle",
@@ -142,6 +152,23 @@ namespace GravityApps.Mandelkow.MetroCharts
             set
             {
                 SetValue(SeriesBulletStyleProperty, value);
+            }
+        }
+
+
+        /// <summary>
+        /// The style for the bullets
+        /// can be left blank for default
+        /// </summary>
+        public Style SeriesSelectedBulletStyle
+        {
+            get
+            {
+                return (Style)GetValue(SeriesSelectedBulletStyleProperty);
+            }
+            set
+            {
+                SetValue(SeriesSelectedBulletStyleProperty, value);
             }
         }
 

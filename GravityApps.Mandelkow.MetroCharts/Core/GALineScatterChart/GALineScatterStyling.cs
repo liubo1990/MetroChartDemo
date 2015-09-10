@@ -36,14 +36,28 @@ namespace GravityApps.Mandelkow.MetroCharts
             var butlletFillSetter = getCalculatedSetter(bulletStyle, "Fill",false);
             var butlletLineSetter = getCalculatedSetter(bulletStyle, "Stroke", false);
             bool bulletLineColourProvided = !(butlletLineSetter == null || butlletLineSetter.Value == null);
+            if (lineStyle!=null)
+            {
+                var lineFillSetter = getCalculatedSetter(lineStyle, "Fill", false);
+                var lineStrokeSetter = getCalculatedSetter(lineStyle, "Stroke", false);
+                var lineStrokeThicknessSetter = getCalculatedSetter(lineStyle, "StrokeThickness");
+                bool lineColourProvided = !(lineStrokeSetter == null || lineStrokeSetter.Value == null);
+                // line stroke - if not set then from the pallette, else from the style
+                if (!lineColourProvided)
+                {
+                    lineBrush = firstDataPoint.ItemBrush;
+                }
+                else
+                {
+                    lineBrush = (Brush)lineStrokeSetter.Value;
+                }
 
-            var lineFillSetter = getCalculatedSetter(lineStyle, "Fill",false);
-            var lineStrokeSetter = getCalculatedSetter(lineStyle, "Stroke",false);
-            var lineStrokeThicknessSetter = getCalculatedSetter(lineStyle, "StrokeThickness");
+            }
+            
 
             scatterSize = new Size((double)bulletWidthSetter.Value, (double)bulletHeightSetter.Value);
             bool scatterColourProvided = !(butlletFillSetter == null || butlletFillSetter.Value == null );
-            bool lineColourProvided = !(lineStrokeSetter == null || lineStrokeSetter.Value == null);
+            
 
             // fill brush - if none provided use the ones from the pallette
             if (!scatterColourProvided)
@@ -55,15 +69,7 @@ namespace GravityApps.Mandelkow.MetroCharts
                 fillBrush = (Brush)butlletFillSetter.Value;
             }
 
-            // line stroke - if not set then from the pallette, else from the style
-            if (!lineColourProvided)
-            {
-                lineBrush = firstDataPoint.ItemBrush;
-            }
-            else
-            {
-                lineBrush = (Brush)lineStrokeSetter.Value;
-            }
+           
 
             // bullet line stroke - if not set then from the pallette, else from the style
             if (!bulletLineColourProvided)

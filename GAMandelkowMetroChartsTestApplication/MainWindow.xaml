@@ -31,16 +31,34 @@
                                           >
                         <GAChart:ClusteredColumnChart.Series>
                             <GAChart:ChartSeries
-    							SeriesTitle="{Binding scatterData.seriesDisplayName}"
-    							DisplayMember="date"
+                                SeriesTitle="{Binding scatterData.seriesDisplayName}"
+                                DisplayMember="date"
+                                ItemsSource="{Binding scatterData.Items}" 
     							ValueMember="amount"
-    							ItemsSource="{Binding scatterData.Items}" 
-                                
+          
                     />
 
                         </GAChart:ClusteredColumnChart.Series>
                     </GAChart:ClusteredColumnChart>
-                    <GAChart:ClusteredColumnChart  Style="{StaticResource MinimalChartStyle}"
+                    <GAChart:ClusteredColumnChart Height="300" Width="500" DataContext="{Binding}" 
+    					ChartTitle="Clustered Column Chart"
+    					ChartSubTitle="Now supports negative numbers"
+                        SelectedItem="{Binding selectedItem, Mode=TwoWay}"
+                                             
+                                          >
+                        <GAChart:ClusteredColumnChart.Series>
+                            <GAChart:ChartSeries
+                                SeriesTitle="{Binding scatterData.seriesDisplayName}"
+                                DisplayMember="date"
+                                ItemsSource="{Binding scatterData.Items}" 
+    							ValueMember="amount"
+          
+                    />
+
+                        </GAChart:ClusteredColumnChart.Series>
+                    </GAChart:ClusteredColumnChart>
+
+                    <!--<GAChart:ClusteredColumnChart  Style="{StaticResource MinimalChartStyle}"
     					Width="400"
     					DataContext="{Binding ''}"
     					ChartTitle="std clustered column" 
@@ -57,7 +75,7 @@
                         		SeriesType="Column"
                         />
                         </GAChart:ClusteredColumnChart.Series>
-                    </GAChart:ClusteredColumnChart>
+                    </GAChart:ClusteredColumnChart>-->
                     <GAChart:GAMultipleTypeSeriesChart  Style="{StaticResource MinimalChartStyle}"
     					Width="400"
     					DataContext="{Binding ''}"
@@ -74,15 +92,16 @@
                         		SeriesType="Both"
                         		SeriesLineStyle="{StaticResource BlackLineStyle}"
                         		ItemsSource="{Binding scatterData.Items}"
+                                SeriesSelectedBulletStyle="{StaticResource RectangleFilledStyle}"
                             
                         />
-                            <GAChart:ChartSeries
+                            <!--<GAChart:ChartSeries
                         		SeriesTitle="{Binding scatterData1.seriesDisplayName}"
                         		DisplayMember="date"
                         		ValueMember="amount"
                         		ItemsSource="{Binding scatterData1.Items}"
                         		SeriesType="Column"
-                        />
+                        />-->
 
 
                         </GAChart:GAMultipleTypeSeriesChart.Series>
@@ -182,7 +201,7 @@
 
 
 
-                    <GAChart:GAMultipleTypeSeriesChart  Style="{StaticResource MinimalChartStyle}"
+                    <!--<GAChart:GAMultipleTypeSeriesChart  Style="{StaticResource MinimalChartStyle}"
     					Width="900"
     					DataContext="{Binding ''}"
     					ChartTitle="GA Multipe Series Type Chart" 
@@ -211,10 +230,10 @@
                         />
                         </GAChart:GAMultipleTypeSeriesChart.Series>
 
-                    </GAChart:GAMultipleTypeSeriesChart>
+                    </GAChart:GAMultipleTypeSeriesChart>-->
 
 
-                    <GAChart:GALineScatterChart  Style="{StaticResource MinimalChartStyle}"
+                    <!--<GAChart:GALineScatterChart  Style="{StaticResource MinimalChartStyle}"
     					Width="400"
     					DataContext="{Binding ''}"
     					ChartTitle="std ga line scatter" 
@@ -238,7 +257,7 @@
     							SeriesType="Line"
                         />
                         </GAChart:GALineScatterChart.Series>
-                    </GAChart:GALineScatterChart>
+                    </GAChart:GALineScatterChart>-->
 
 
 
