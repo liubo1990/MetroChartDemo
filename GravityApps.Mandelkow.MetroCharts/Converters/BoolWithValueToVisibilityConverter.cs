@@ -50,25 +50,37 @@
 
         private object InternalConvert(object [] information, Type targetType, object dataPointValue)
         {
-            //information[0] should be the value
-            // information[1] should be isHEightExceeded
-            //information[2] should be "positive" or "negative" depending on which series it is ??
             try
             {
-                var flag = true;
+                bool captionOK = true;
+                if (information.Count() >= 4 && string.IsNullOrEmpty((string)information[3])) return Visibility.Collapsed; 
 
-                if ((string)information[2] == "Negative")
-                {
-                    if ((double)information[0] >= 0) flag = false;
-                    if ((double)information[0] < 0 && (bool)information[1] == false) flag = false;
-                }
-                else if ((string)information[2] == "Positive")
-                {
-                    if ((double)information[0] < 0) flag = false;
-                    if ((double)information[0] > 0 && (bool)information[1] == false) flag = false;
-                }
-                     
-                if (flag)
+            double value = (double)information[0];
+            bool isHeightExceeded = (bool)information[1];
+            bool topNumberLocation = (string)information[2] == "Top";
+
+            // if percent<0 then the piece is already off so this isnt a problem
+            //if value<0 then its a negative piece
+
+            bool isNegative = value < 0;
+
+
+            //for negative piece, never want to show top text
+            // for positive piece, never want to show bottom text
+            if (topNumberLocation && isNegative) return Visibility.Collapsed;
+            if (!topNumberLocation && !isNegative) return Visibility.Collapsed;
+
+
+            
+
+                var visible = true;
+
+                if (topNumberLocation && !isHeightExceeded && !isNegative) visible = false;
+                if (!topNumberLocation && !isHeightExceeded && isNegative) visible = false;
+                if (!topNumberLocation && value == 0) visible = false;
+               
+
+                if (visible)
                 {
                     return Visibility.Visible;
                 }
@@ -76,6 +88,7 @@
                 {
                     return Visibility.Collapsed;
                 }
+                
             }
             catch (Exception ex)
             {

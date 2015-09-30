@@ -29,37 +29,12 @@
     
 #endif
 
-    public class GAScatterPiece : PieceBase
+    public class GAScatterPiece : GAMultiPiece
     {
-        #region Fields
 
         private Rectangle slice = null;
         private Rectangle selectedSlice = null;
-        GALineScatterStyling _adjustedStyle;
 
-        public static readonly DependencyProperty PercentageProperty =
-            DependencyProperty.Register("Percentage", typeof(double), typeof(GAScatterPiece),
-            new PropertyMetadata(0.0, new PropertyChangedCallback(OnPercentageChanged)));
-
-        public static readonly DependencyProperty IsNegativePieceProperty =
-            DependencyProperty.Register("IsNegativePiece", typeof(bool), typeof(GAScatterPiece),
-            new PropertyMetadata(false, new PropertyChangedCallback(OnPercentageChanged)));
-
-        
-        public static readonly DependencyProperty ColumnHeightProperty =
-            DependencyProperty.Register("ColumnHeight", typeof(double), typeof(GAScatterPiece),
-            new PropertyMetadata(0.0));
-
-        public static readonly DependencyProperty GAScatterBulletStyleProperty =
-         DependencyProperty.Register("GAScatterBulletStyle", typeof(Style), typeof(GAScatterPiece),
-         new PropertyMetadata(null));
-
-        public static readonly DependencyProperty GASelectedScatterBulletStyleProperty =
-        DependencyProperty.Register("GASelectedScatterBulletStyle", typeof(Style), typeof(GAScatterPiece),
-        new PropertyMetadata(null));
-
-        
-        #endregion Fields
 
         #region Constructors
 
@@ -90,57 +65,29 @@
 
         #endregion Constructors
 
-        #region Properties
 
-        public Style GAScatterBulletStyle
-        {
-            get
-            {
-                return (Style)GetValue(GAScatterBulletStyleProperty);
-            }
-            set
-            {
-                SetValue(GAScatterBulletStyleProperty, value);
-            }
-        }
-
-        public Style GASelectedScatterBulletStyle
-        {
-            get
-            {
-                return (Style)GetValue(GASelectedScatterBulletStyleProperty);
-            }
-            set
-            {
-                SetValue(GASelectedScatterBulletStyleProperty, value);
-            }
-        }
-
-        public double Percentage
-        {
-            get { return (double)GetValue(PercentageProperty); }
-            set { SetValue(PercentageProperty, value); }
-        }
-        
-        /// <summary>
-        /// is thew area the piece is drawn in a negative or positive one
-        /// </summary>
-        public bool IsNegativePiece
-        {
-            get { return (bool)GetValue(IsNegativePieceProperty); }
-            set { SetValue(IsNegativePieceProperty, value); }
-        }
-
-        public double ColumnHeight
-        {
-            get { return (double)GetValue(ColumnHeightProperty); }
-            set { SetValue(ColumnHeightProperty, value); }
-        }
- 
-        #endregion Properties
 
         #region Methods
 
+        public override Style GetDefaultStyle()
+        {
+            object o = TryFindResource("GAScatterBulletStyle");
+            return (Style)o;
+        }
+
+        public override Style GetDefaultSelectedStyle()
+        {
+            object o = TryFindResource("GAScatterBulletSelectedStyle");
+            return (Style)o;
+        }
+
+        public override Style GetDefaultLegendStyle()
+        {
+            object o = TryFindResource("GAScatterPieceLegendStyle");
+            return (Style)o;
+        }
+
+        
         private static void OnPercentageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             (d as GAScatterPiece).DrawGeometry();
@@ -171,6 +118,7 @@
                     return;
                 }
 
+                if (slice == null) return;
                 double endHeight = ClientHeight;
 
                 if (endHeight <= 0.0)
@@ -178,24 +126,20 @@
                     endHeight=0;
                 }
                 double percentToUse = Percentage;
-
-                if (GAScatterBulletStyle!=null)
-                {
-                    this.Style = GAScatterBulletStyle;
-                }
+                double axisThickness = ParentChart.xAxisThickness;
                 double startHeight = 0;
-                TranslateTransform t = new TranslateTransform(0, 0);
+                double horizontalTranslate = (this.ActualWidth / 2)- getHalfBulletHeight();
+                TranslateTransform sliceTransform = new TranslateTransform(horizontalTranslate, 0);
 
                 if (slice.RenderTransform!=null && slice.RenderTransform.GetType()== typeof(TranslateTransform))
                 {
-                    t=(slice.RenderTransform as TranslateTransform);
-                    startHeight = t.Y;
-                    
+                    sliceTransform=(slice.RenderTransform as TranslateTransform);
+                    startHeight = sliceTransform.Y;
                 }
                 else
                 {
-                    t = new TranslateTransform(0, 0);
-                    slice.RenderTransform = t;
+                    sliceTransform = new TranslateTransform(horizontalTranslate, 0);
+                    slice.RenderTransform = sliceTransform;
 
                 }
 
@@ -213,20 +157,18 @@
                 if (percentToUse < 0) percentToUse = 0;
                 if (!IsNegativePiece)
                 {
-                    endHeight = (endHeight * percentToUse) - getHalfBulletHeight();
-                    
+                    endHeight = (endHeight * percentToUse)+ getHalfBulletHeight();    
                 }
                 else
-                {  
-                    endHeight = (endHeight * (1 - percentToUse))- getHalfBulletHeight()+1.5;
-
+                {
+                    endHeight = -1 * ((endHeight * percentToUse)) + getHalfBulletHeight() + axisThickness;
                 }
 
                 DoubleAnimation moveAnimation = new DoubleAnimation(-endHeight, TimeSpan.FromMilliseconds(500));
                 moveAnimation.From = startHeight;
                 moveAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
-                t.BeginAnimation(TranslateTransform.YProperty, moveAnimation);
-                selectedSlice.RenderTransform = new TranslateTransform(0, -endHeight);
+                sliceTransform.BeginAnimation(TranslateTransform.YProperty, moveAnimation);
+                selectedSlice.RenderTransform = new TranslateTransform(horizontalTranslate, -endHeight);
                 
             }
             catch (Exception ex)
@@ -234,11 +176,18 @@
             }
         }
 
+        //TODO rewrite these - doesnt need to be so complex now!
         private double getHalfBulletHeight()
         {
-            
-             GALineScatterStyling lineScatterStyle = new GALineScatterStyling(null, GAScatterBulletStyle, this.DataContext as DataPoint);
-             return lineScatterStyle.scatterSize.Height / 2;
+             Setter heightSetter= Helpers.getCalculatedSetter(GAChartPieceStyle, "Height", true);
+             return (double)heightSetter.Value / 2;
+        }
+
+        private double getHalfBulletWidth()
+        {
+
+            Setter widthSetter = Helpers.getCalculatedSetter(GAChartPieceStyle, "Width", true);
+            return (double)widthSetter.Value / 2;
         }
 
         #endregion Methods

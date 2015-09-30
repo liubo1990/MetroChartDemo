@@ -27,7 +27,9 @@ namespace GravityApps.Mandelkow.MetroCharts
 #endif
 
     public class ChartSeries : ItemsControl
-    { 
+    {
+        public enum relativeSeriesColour { Previous, Next, Default };
+
         public static readonly DependencyProperty DisplayMemberProperty =
             DependencyProperty.Register("DisplayMember",
             typeof(string),
@@ -43,22 +45,29 @@ namespace GravityApps.Mandelkow.MetroCharts
             typeof(string),
             typeof(ChartSeries),
             new PropertyMetadata(null));
+
+        public static readonly DependencyProperty RelativeSeriesColourProperty =
+            DependencyProperty.Register("RelativeSeriesColour",
+            typeof(relativeSeriesColour),
+            typeof(ChartSeries),
+            new PropertyMetadata(relativeSeriesColour.Default));
+        
+ 
         /// <summary>
-        /// The type of the series
-        /// Bullet, Line, Both, Other
+        /// The Type used to draw the dataPoint (must have GAMultiPiece as a base)
         /// </summary>
-        public static readonly DependencyProperty SeriesTypeProperty =
-           DependencyProperty.Register("SeriesType",
-           typeof(string),
+        public static readonly DependencyProperty DataPointTypeProperty =
+           DependencyProperty.Register("DataPointType",
+           typeof(Type),
            typeof(ChartSeries),
            new PropertyMetadata(null));
 
+
         /// <summary>
-        /// The style for the bullets
-        /// empty will default to GAScatterBulletStyle
+        /// The style for the datapoint piece (ie GAScatterStyle)
         /// </summary>
-        public static readonly DependencyProperty SeriesBulletStyleProperty =
-           DependencyProperty.Register("SeriesBulletStyle",
+        public static readonly DependencyProperty DataPointStyleProperty =
+           DependencyProperty.Register("DataPointStyle",
            typeof(Style),
            typeof(ChartSeries),
            new PropertyMetadata(null));
@@ -67,21 +76,30 @@ namespace GravityApps.Mandelkow.MetroCharts
         /// The style for the selected bullets
         /// empty will default to GAScatterBulletSelectedStyle
         /// </summary>
-        public static readonly DependencyProperty SeriesSelectedBulletStyleProperty =
-           DependencyProperty.Register("SeriesSelectedBulletStyle",
+        public static readonly DependencyProperty DataPointSelectedStyleProperty =
+           DependencyProperty.Register("DataPointSelectedStyle",
            typeof(Style),
            typeof(ChartSeries),
            new PropertyMetadata(null));
 
         /// <summary>
-        /// The style for the lines
-        /// empty will default to GALineStyle
+        /// The style for the legend piece 
         /// </summary>
-        public static readonly DependencyProperty SeriesLineStyleProperty =
-           DependencyProperty.Register("SeriesLineStyle",
+        public static readonly DependencyProperty SeriesLegendStyleProperty =
+           DependencyProperty.Register("SeriesLegendStyle",
            typeof(Style),
            typeof(ChartSeries),
            new PropertyMetadata(null));
+
+        /// <summary>
+        /// Show or hide the legend for this series 
+        /// </summary>
+        public static readonly DependencyProperty SeriesLegendVisibiltyProperty =
+           DependencyProperty.Register("SeriesLegendVisibilty",
+           typeof(Visibility),
+           typeof(ChartSeries),
+           new PropertyMetadata(Visibility.Visible));
+
         
         public ChartSeries()
         {   
@@ -124,18 +142,18 @@ namespace GravityApps.Mandelkow.MetroCharts
         }
 
         /// <summary>
-        /// The type of the series
-        /// Bullet, Line, Both, Other
+        /// The style for the bullets
+        /// can be left blank for default
         /// </summary>
-        public string SeriesType
+        public Style DataPointStyle
         {
             get
             {
-                return (string)GetValue(SeriesTypeProperty);
+                return (Style)GetValue(DataPointStyleProperty);
             }
             set
             {
-                SetValue(SeriesTypeProperty, value);
+                SetValue(DataPointStyleProperty, value);
             }
         }
 
@@ -143,49 +161,75 @@ namespace GravityApps.Mandelkow.MetroCharts
         /// The style for the bullets
         /// can be left blank for default
         /// </summary>
-        public Style SeriesBulletStyle
+        public Type DataPointType
         {
             get
             {
-                return (Style)GetValue(SeriesBulletStyleProperty);
+                return (Type)GetValue(DataPointTypeProperty);
             }
             set
             {
-                SetValue(SeriesBulletStyleProperty, value);
+                SetValue(DataPointTypeProperty, value);
             }
         }
 
 
         /// <summary>
-        /// The style for the bullets
+        /// The style for the bullets, lines etc
         /// can be left blank for default
         /// </summary>
-        public Style SeriesSelectedBulletStyle
+        public Style DataPointSelectedStyle
         {
             get
             {
-                return (Style)GetValue(SeriesSelectedBulletStyleProperty);
+                return (Style)GetValue(DataPointSelectedStyleProperty);
             }
             set
             {
-                SetValue(SeriesSelectedBulletStyleProperty, value);
+                SetValue(DataPointSelectedStyleProperty, value);
             }
         }
 
+
         /// <summary>
-        /// The style of the series lines
-        /// Can be left blank
+        /// The style for the legendItem
         /// </summary>
-        public Style SeriesLineStyle
+        public Style SeriesLegendStyle
         {
             get
             {
-                return (Style)GetValue(SeriesLineStyleProperty);
+                return (Style)GetValue(SeriesLegendStyleProperty);
             }
             set
             {
-                SetValue(SeriesLineStyleProperty, value);
+                SetValue(SeriesLegendStyleProperty, value);
             }
         }
+
+
+        public relativeSeriesColour RelativeSeriesColour
+        {
+            get
+            {
+                return (relativeSeriesColour)GetValue(RelativeSeriesColourProperty);
+            }
+            set
+            {
+                SetValue(RelativeSeriesColourProperty, value);
+            }
+        }
+
+        public Visibility SeriesLegendVisibilty
+        {
+            get
+            {
+                return (Visibility)GetValue(SeriesLegendVisibiltyProperty);
+            }
+            set
+            {
+                SetValue(SeriesLegendVisibiltyProperty, value);
+            }
+        }
+
     }
 }

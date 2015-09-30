@@ -83,6 +83,24 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
                 }
             }
         }
+
+        private GraphSeriesInformation _scatterData3;
+        public GraphSeriesInformation scatterData3
+        {
+            get
+            {
+                return _scatterData3;
+            }
+            set
+            {
+                if (_scatterData3 != value)
+                {
+                    _scatterData3 = value;
+                    RaisePropertyChanged("scatterData3");
+                }
+            }
+        }
+
         private GraphSeriesInformation _radialSeries;
         public GraphSeriesInformation radialSeries
         {
@@ -165,18 +183,20 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
             scatterData.Items.Add(new GraphSeriesDataPoint("thur", -2));
             scatterData.Items.Add(new GraphSeriesDataPoint("fri", 3));
             scatterData.Items.Add(new GraphSeriesDataPoint("sat", -3));
-            scatterData.Items.Add(new GraphSeriesDataPoint("sun", -4));
+            scatterData.Items.Add(new GraphSeriesDataPoint("sun", 4));
+            
            
 
             scatterData1 = new GraphSeriesInformation();
             scatterData1.seriesDisplayName = "Series 2";
-            scatterData1.Items.Add(new GraphSeriesDataPoint("mon", 1));
+            scatterData1.Items.Add(new GraphSeriesDataPoint("mon", -1));
             scatterData1.Items.Add(new GraphSeriesDataPoint("tue", -2));
-            scatterData1.Items.Add(new GraphSeriesDataPoint("wed", 4.0));
+            scatterData1.Items.Add(new GraphSeriesDataPoint("wed", -4.0));
             scatterData1.Items.Add(new GraphSeriesDataPoint("thur",- 9));
-            scatterData1.Items.Add(new GraphSeriesDataPoint("fri", 2.8));
-            scatterData1.Items.Add(new GraphSeriesDataPoint("sat", 3));
-            scatterData1.Items.Add(new GraphSeriesDataPoint("sun", 5));
+            scatterData1.Items.Add(new GraphSeriesDataPoint("fri", -2.8));
+            scatterData1.Items.Add(new GraphSeriesDataPoint("sat", -3));
+            scatterData1.Items.Add(new GraphSeriesDataPoint("sun", -5));
+
 
             scatterData2 = new GraphSeriesInformation();
             scatterData2.seriesDisplayName = "Series 3";
@@ -187,6 +207,17 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
             scatterData2.Items.Add(new GraphSeriesDataPoint("fri", 7));
             scatterData2.Items.Add(new GraphSeriesDataPoint("sat", 5));
             scatterData2.Items.Add(new GraphSeriesDataPoint("sun", 10));
+
+            scatterData3 = new GraphSeriesInformation();
+            scatterData3.seriesDisplayName = "Series 4";
+            scatterData3.Items.Add(new GraphSeriesDataPoint("mon", 1));
+            scatterData3.Items.Add(new GraphSeriesDataPoint("tue", -6));
+            scatterData3.Items.Add(new GraphSeriesDataPoint("wed", 20));
+            scatterData3.Items.Add(new GraphSeriesDataPoint("thur", -4));
+            scatterData3.Items.Add(new GraphSeriesDataPoint("fri", 7));
+            scatterData3.Items.Add(new GraphSeriesDataPoint("sat", 5));
+            scatterData3.Items.Add(new GraphSeriesDataPoint("sun", 0));
+            
 
             radialSeries = new GraphSeriesInformation();
             radialSeries.seriesDisplayName = "Value";

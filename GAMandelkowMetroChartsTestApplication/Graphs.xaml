@@ -13,13 +13,14 @@
     
     <Style x:Key="GALineStyle" TargetType="Path" >
         <Setter Property="StrokeThickness" Value="1"></Setter>
+        <Setter Property="Stroke" Value="Black"></Setter>
     </Style>
 
     <Style x:Key="GAScatterBulletStyle" TargetType="Rectangle" >
-        <Setter Property="Height" Value="7"></Setter>
-        <Setter Property="Width" Value="7"></Setter>
-        <Setter Property="RadiusX" Value="3.5"></Setter>
-        <Setter Property="RadiusY" Value="3.5"></Setter>
+        <Setter Property="Height" Value="8"></Setter>
+        <Setter Property="Width" Value="8"></Setter>
+        <Setter Property="RadiusX" Value="4"></Setter>
+        <Setter Property="RadiusY" Value="4"></Setter>
         <Setter Property="StrokeThickness" Value="1"></Setter>
     </Style>
 
@@ -36,11 +37,17 @@
         <Setter Property="Stroke" Value="Transparent"/>
     </Style>
 
+    <Style x:Key="GAColumnPieceStyle" TargetType="Rectangle" >
+        <!--<Setter Property="Background" Value="Black"></Setter>-->
+    </Style>
 
-    <Style x:Key="BlackLineRedFillStyle" TargetType="Path" >
+    <Style x:Key="GAColumnPieceSelectedStyle" TargetType="Rectangle" >
+        <Setter Property="Fill" Value="Orange"></Setter>
+    </Style>
+
+    <Style x:Key="BlackLineStyle" TargetType="Path" >
         <Setter Property="StrokeThickness" Value="1"></Setter>
         <Setter Property="Stroke" Value="Black"></Setter>
-
     </Style>
 
     <Style x:Key="RectangleFilledStyle" TargetType="Rectangle"  BasedOn="{StaticResource GAScatterBulletStyle}" >
@@ -59,5 +66,66 @@
         <Setter Property="Fill" Value="Transparent"/>
         <Setter Property="StrokeThickness" Value="1"/>
     </Style>
+
+    <Style x:Key="GALinePieceLegendStyle" TargetType="GAGraph:ChartLegendItem">
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GAGraph:ChartLegendItem">
+                    <StackPanel Orientation="Horizontal" Margin="0 0 10 5">
+                        <Path Style="{Binding DataPointStyle}" Margin="0 0 5 0">
+                            <Path.Data>
+                                <LineGeometry>
+                                    <LineGeometry.StartPoint>
+                                        <Point X="0" Y="8"></Point>
+                                    </LineGeometry.StartPoint>
+                                    <LineGeometry.EndPoint>
+                                        <Point X="20" Y="8"></Point>
+                                    </LineGeometry.EndPoint>
+
+                                </LineGeometry>
+                            </Path.Data>
+                        </Path>
+                        <TextBlock FontSize="{TemplateBinding FontSize}" VerticalAlignment="Center" Text="{TemplateBinding Caption}"></TextBlock>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="GAScatterPieceLegendStyle" TargetType="GAGraph:ChartLegendItem">
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GAGraph:ChartLegendItem">
+                    <StackPanel Orientation="Horizontal" Margin="0 0 10 5">
+                        <Rectangle Style="{Binding DataPointStyle}"  Margin="0 0 5 0" />
+                        <TextBlock FontSize="{TemplateBinding FontSize}" VerticalAlignment="Center" Text="{TemplateBinding Caption}"></TextBlock>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="GAColumnPieceLegendStyle" TargetType="GAGraph:ChartLegendItem">
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GAGraph:ChartLegendItem">
+                    <StackPanel Orientation="Horizontal" Margin="0 0 10 5">
+                        <Rectangle Width="10" Height="20" Style="{Binding DataPointStyle}"  Margin="0 0 5 0" />
+                        <TextBlock FontSize="{TemplateBinding FontSize}" VerticalAlignment="Center" Text="{TemplateBinding Caption}"></TextBlock>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 
 </ResourceDictionary>

@@ -117,6 +117,15 @@
     <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Converters\DoubleToGridLengthPercent.cs">
       <Link>Converters\DoubleToGridLengthPercent.cs</Link>
     </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Converters\DoubleToVisibilityConverter.cs">
+      <Link>Converters\DoubleToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Converters\IsNegativeToVerticalAlignment.cs">
+      <Link>Converters\IsNegativeToVerticalAlignment.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Converters\nullStringToVisibilityConverter.cs">
+      <Link>Converters\nullStringToVisibilityConverter.cs</Link>
+    </Compile>
     <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\BarChart\BarPiece.cs">
       <Link>Core\BarChart\BarPiece.cs</Link>
     </Compile>
@@ -168,11 +177,20 @@
     <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GALineScatterChart\GAScatterLinePiece.cs">
       <Link>Core\GALineScatterChart\GAScatterLinePiece.cs</Link>
     </Compile>
-    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GALineScatterChart\GAScatterPiece.cs">
-      <Link>Core\GALineScatterChart\GAScatterPiece.cs</Link>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GAMultiSeries\GAColumnPiece.cs">
+      <Link>Core\GAMultiSeries\GAColumnPiece.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GAMultiSeries\GALinePiece.cs">
+      <Link>Core\GAMultiSeries\GALinePiece.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GAMultiSeries\GAMultiPiece.cs">
+      <Link>Core\GAMultiSeries\GAMultiPiece.cs</Link>
     </Compile>
     <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GAMultiSeries\GAMultipleTypeSeriesChart.cs">
       <Link>Core\GAMultiSeries\GAMultipleTypeSeriesChart.cs</Link>
+    </Compile>
+    <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GAMultiSeries\GAScatterPiece.cs">
+      <Link>Core\GAMultiSeries\GAScatterPiece.cs</Link>
     </Compile>
     <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\GaugeChart\RadialGaugeChart.cs">
       <Link>Core\GaugeChart\RadialGaugeChart.cs</Link>
@@ -189,6 +207,7 @@
     <Compile Include="..\GravityApps.Mandelkow.MetroCharts\Core\PieChart\PiePiece.cs">
       <Link>Core\PieChart\PiePiece.cs</Link>
     </Compile>
+    <Compile Include="Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

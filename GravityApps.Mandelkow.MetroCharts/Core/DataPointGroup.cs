@@ -63,24 +63,6 @@
         #endregion
 
         #region GAProperties
-        /// <summary>
-        /// The type of the series
-        /// Bullet, Line, Both, Other
-        /// </summary>
-        public static readonly DependencyProperty SeriesTypeProperty =
-           DependencyProperty.Register("GASeriesType",
-           typeof(string),
-           typeof(DataPointGroup),
-           new PropertyMetadata(null));
-
-        /// <summary>
-        /// Hide series that arent columns when drawing a mixed type chart
-        /// </summary>
-        public static readonly DependencyProperty showColumnsProperty =
-           DependencyProperty.Register("showColumns",
-           typeof(bool),
-           typeof(DataPointGroup),
-           new PropertyMetadata(true));
 
         /// <summary>
         /// The style to use for the bullets or null to use defaults
@@ -142,22 +124,6 @@
            typeof(Point),
            typeof(DataPointGroup),
            new PropertyMetadata(new Point(0, 0)));
-
-        // <summary>
-        /// The type of the series
-        /// Bullet, Line, Both, Other
-        /// </summary>
-        public string GASeriesType
-        {
-            get {  return (string)GetValue(SeriesTypeProperty); }
-            set { SetValue(SeriesTypeProperty, value); }
-        }
-
-        public bool showColumns
-        {
-            get { return (bool)GetValue(showColumnsProperty); }
-            set { SetValue(showColumnsProperty, value); }
-        }
 
         /// <summary>
         /// Style for the bullets.

@@ -35,7 +35,14 @@ namespace GravityApps.Mandelkow.MetroCharts
         public static readonly DependencyProperty ItemBrushProperty =
             DependencyProperty.Register("ItemBrush", typeof(Brush), typeof(ChartLegendItem),
             new PropertyMetadata(null));
-     
+
+        /// <summary>
+        /// The style for the legend piece 
+        /// </summary>
+        public static readonly DependencyProperty SeriesLegendStyleProperty =
+           DependencyProperty.Register("SeriesLegendStyle", typeof(Style), typeof(ChartLegendItem),
+           new PropertyMetadata(null));
+
         static ChartLegendItem()
         {
 #if NETFX_CORE
@@ -80,6 +87,22 @@ namespace GravityApps.Mandelkow.MetroCharts
         {
             get { return (Brush)GetValue(ItemBrushProperty); }
             set { SetValue(ItemBrushProperty, value); }
+        }
+
+        /// <summary>
+        /// The style for the legendItem
+        /// can be left blank for default
+        /// </summary>
+        public Style SeriesLegendStyle
+        {
+            get
+            {
+                return (Style)GetValue(SeriesLegendStyleProperty);
+            }
+            set
+            {
+                SetValue(SeriesLegendStyleProperty, value);
+            }
         }
     }
 }

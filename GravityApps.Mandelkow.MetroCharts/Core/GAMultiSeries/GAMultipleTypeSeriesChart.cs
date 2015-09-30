@@ -54,10 +54,10 @@
         public GAMultipleTypeSeriesChart()
         {
 #if NETFX_CORE
-            this.DefaultStyleKey = typeof(GALineScatterChart);
+            this.DefaultStyleKey = typeof(GAMultipleTypeSeriesChart);
 #endif
 #if SILVERLIGHT
-            this.DefaultStyleKey = typeof(GALineScatterChart);
+            this.DefaultStyleKey = typeof(GAMultipleTypeSeriesChart);
 #endif
         }
 

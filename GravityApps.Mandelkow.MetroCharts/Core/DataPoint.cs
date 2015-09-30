@@ -52,6 +52,11 @@ typeof(Style),
 typeof(DataPoint),
 null);
 
+        public static readonly DependencyProperty GADataPointTypeProperty =
+DependencyProperty.Register("GADataPointType",
+typeof(Type),
+typeof(DataPoint),
+null);
 
 
         public static readonly DependencyProperty MaxDataPointValueProperty =
@@ -114,8 +119,26 @@ null);
           typeof(DataPoint),
           new PropertyMetadata("", OnToolTipFormatChanged));
 
+        public static readonly DependencyProperty SelectedItemProperty =
+        DependencyProperty.Register("SelectedItem",
+        typeof(object),
+        typeof(DataPoint),
+        new PropertyMetadata(null, new PropertyChangedCallback(OnSelectedItemChanged)));
 
+        public static readonly DependencyProperty DataPointGroupIndexProperty =
+        DependencyProperty.Register("DataPointGroupIndex",
+        typeof(int),
+        typeof(DataPoint),
+        new PropertyMetadata(-1, new PropertyChangedCallback(OnSelectedItemChanged)));
 
+        public static readonly DependencyProperty DataPointIndexProperty =
+        DependencyProperty.Register("DataPointIndex",
+        typeof(int),
+        typeof(DataPoint),
+        new PropertyMetadata(-1, new PropertyChangedCallback(OnSelectedItemChanged)));
+
+        
+        
         private static void OnIsClickedByUserChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (((bool)e.NewValue) == true)
@@ -134,11 +157,7 @@ null);
             SetValue(SelectedItemProperty, ReferencedObject);
         }
 
-        public static readonly DependencyProperty SelectedItemProperty =
-          DependencyProperty.Register("SelectedItem",
-          typeof(object),
-          typeof(DataPoint),
-          new PropertyMetadata(null, new PropertyChangedCallback(OnSelectedItemChanged)));
+
 
         private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -336,6 +355,13 @@ null);
             set { SetValue(GASelectedDataPointStyleProperty, value); }
         }
 
+        public Type GADataPointType
+        {
+            get { return (Type)GetValue(GADataPointTypeProperty); }
+            set { SetValue(GADataPointTypeProperty, value); }
+        }
+
+        
 
         /// <summary>
         /// The last value the datapoint held (used to help redraw some charts)
@@ -345,14 +371,27 @@ null);
             get;
             set;
         }
+
+
         /// <summary>
         /// The location of the datapoint in the dataItem list  (used to help redraw some charts)
         /// </summary>
-        public int locationInDataset
+        public int DataPointIndex
         {
-            get;
-            set;
+            get { return (int)GetValue(DataPointIndexProperty); }
+            set { SetValue(DataPointIndexProperty, value); }
         }
+
+
+        /// <summary>
+        /// The location of the datapoint in the dataItem list  (used to help redraw some charts)
+        /// </summary>
+        public int DataPointGroupIndex
+        {
+            get { return (int)GetValue(DataPointGroupIndexProperty); }
+            set { SetValue(DataPointGroupIndexProperty, value); }
+        }
+
 
         /// <summary>
         /// Von außen wird dieser Wert gefüllt
@@ -505,12 +544,44 @@ null);
             return null;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private List<PropertyChangedEventHandler> addedHandlers = new List<PropertyChangedEventHandler>();
+
+        private PropertyChangedEventHandler propChanged;
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add
+            {
+                
+                if (!addedHandlers.Contains(value))
+                {
+                    addedHandlers.Add(value);
+                    propChanged += value; 
+                }
+                
+            }
+            remove
+            {
+                if (addedHandlers.Contains(value))
+                {
+                    addedHandlers.Remove(value);
+                }
+                propChanged -= value;
+            }
+        }
+
+        
+
+
+
+        public void clearAllPropertyChangedEvents()
+        {
+            this.propChanged = null;
+        }
 
         private void RaisePropertyChangeEvent(String propertyName)
         {
-            if (PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            if (propChanged != null)
+                this.propChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
     }

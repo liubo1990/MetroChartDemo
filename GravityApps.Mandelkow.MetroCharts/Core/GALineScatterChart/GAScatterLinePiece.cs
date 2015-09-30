@@ -42,17 +42,6 @@ namespace GravityApps.Mandelkow.MetroCharts
 
         GALineScatterStyling _lineScatterStyle;
 
-
-        /// <summary>
-        /// The type of the series
-        /// Bullet, Line, Both, Other
-        /// </summary>
-        public static readonly DependencyProperty GASeriesTypeProperty =
-           DependencyProperty.Register("GASeriesType",
-           typeof(string),
-           typeof(GAScatterLinePiece),
-           new PropertyMetadata(null));
-
         /// <summary>
         /// Name of style for the bullets.
         /// This should be Path styles, or leave empty to use default
@@ -118,23 +107,6 @@ namespace GravityApps.Mandelkow.MetroCharts
         #endregion Constructors
 
         #region Properties
-
-        // <summary>
-        /// The type of the series
-        /// Bullet, Line, Both, Other
-        /// </summary>
-        public string GASeriesType
-        {
-            get
-            {
-                return (string)GetValue(GASeriesTypeProperty);
-            }
-            set
-            {
-                SetValue(GASeriesTypeProperty, value);
-            }
-        }
-
 
         /// <summary>
         /// Name of style for the bullets.
@@ -335,6 +307,8 @@ namespace GravityApps.Mandelkow.MetroCharts
                 GAScatterBulletStyle = TryFindResource("GAScatterBulletStyle") as Style;
             }
 
+            if (DataPoints.Count == 0) return;
+
             _lineScatterStyle = new GALineScatterStyling(GALineStyle, GAScatterBulletStyle, DataPoints[0]);
 
             
@@ -362,7 +336,7 @@ namespace GravityApps.Mandelkow.MetroCharts
             {
                 newPoint.PropertyChanged -= DataPointGroup_PropertyChanged;
                 double barWidth = (_GAPlotCanvas.Width) / DataPoints.Count;
-                double CenterX = (newPoint.locationInDataset * barWidth) + (barWidth / 2);
+                double CenterX = (newPoint.DataPointIndex * barWidth) + (barWidth / 2);
                 double CenterY = _GAPlotCanvas.Height - (_GAPlotCanvas.Height * newPoint.PercentageFromMaxDataPointValue);
                 Rectangle newRect = getRecatangle(CenterX, CenterY, newPoint);
                 newRect.Style = this.GAScatterBulletStyle;
@@ -382,7 +356,7 @@ namespace GravityApps.Mandelkow.MetroCharts
                     if (ell.GetType() == typeof(Rectangle))
                     {
                         Rectangle rect = (Rectangle)ell;
-                        if (rectangleCounter == newPoint.locationInDataset)
+                        if (rectangleCounter == newPoint.DataPointIndex)
                         {
                             Thickness newMargin = new Thickness(newRect.Margin.Left, newRect.Margin.Top, 0, 0);
 
@@ -416,19 +390,19 @@ namespace GravityApps.Mandelkow.MetroCharts
         private void moveLinePoints(DataPoint newPoint, double CenterX, double CenterY, GeometryGroup linesGeom)
         {
 
-            if (newPoint.locationInDataset == 0)
+            if (newPoint.DataPointIndex == 0)
             {
                 animateLine(CenterX, CenterY, linesGeom, LineGeometry.StartPointProperty, 0);
                 return;
             }
-            if (newPoint.locationInDataset == linesGeom.Children.Count)
+            if (newPoint.DataPointIndex == linesGeom.Children.Count)
             {
                 animateLine(CenterX, CenterY, linesGeom, LineGeometry.EndPointProperty, linesGeom.Children.Count - 1);
             }
             else
             {
-                animateLine(CenterX, CenterY, linesGeom, LineGeometry.EndPointProperty, newPoint.locationInDataset - 1);
-                animateLine(CenterX, CenterY, linesGeom, LineGeometry.StartPointProperty, newPoint.locationInDataset);
+                animateLine(CenterX, CenterY, linesGeom, LineGeometry.EndPointProperty, newPoint.DataPointIndex - 1);
+                animateLine(CenterX, CenterY, linesGeom, LineGeometry.StartPointProperty, newPoint.DataPointIndex);
             }
         }
 
@@ -473,42 +447,44 @@ namespace GravityApps.Mandelkow.MetroCharts
 
                 Point lineStartPoint = new Point(0, 0);
                 Point lineEndPoint = new Point(0, 0);
+                
                 int count=0;
                 double barWidth = (_GAPlotCanvas.Width) / DataPoints.Count;
                 foreach (DataPoint p in DataPoints)
                 {
-                    p.locationInDataset = count;
+                    p.DataPointIndex = count; // NO!!! im going to do this before here now!
                     p.PropertyChanged -= DataPointGroup_PropertyChanged; // ensure that the event wont fire while we are changing things!
-                    
+
+                    double offset = p.PercentageFromMaxDataPointValue<0 ? 0 : 0.75; // allow for the x axis thickness
 
                     if (count==0) // first point doesnt get a line
                     {
                         double CenterX = (count * barWidth) + (barWidth / 2);
-                        double CenterY = _GAPlotCanvas.Height - (_GAPlotCanvas.Height * p.PercentageFromMaxDataPointValue);
+                        double CenterY = _GAPlotCanvas.Height - (_GAPlotCanvas.Height * p.PercentageFromMaxDataPointValue) - offset;
 
 
                         lineStartPoint = new Point(CenterX,CenterY) ;
 
-                        if (GASeriesType == "Both" || GASeriesType == "Bullet")
-                        {
+                        //if (GASeriesType == "Both" || GASeriesType == "Bullet")
+                        //{
                             
-                            Rectangle rect = getRecatangle(CenterX, CenterY, p);
-                            rect.Style = this.GAScatterBulletStyle;
-                             _GAPlotCanvas.Children.Add(rect);
+                        //    Rectangle rect = getRecatangle(CenterX, CenterY, p);
+                        //    rect.Style = this.GAScatterBulletStyle;
+                        //     _GAPlotCanvas.Children.Add(rect);
                             
-                        }
+                        //}
 
                     }
                     else
                     {
 
                         double CenterX = (count * barWidth) + (barWidth / 2);
-                        double CenterY = _GAPlotCanvas.Height - (_GAPlotCanvas.Height * p.PercentageFromMaxDataPointValue);
+                        double CenterY = _GAPlotCanvas.Height - (_GAPlotCanvas.Height * p.PercentageFromMaxDataPointValue)-offset;
 
                         lineEndPoint.X = CenterX;
                         lineEndPoint.Y = CenterY;
 
-                        if (GASeriesType=="Both" || GASeriesType=="Line")
+                        //if (GASeriesType=="Both" || GASeriesType=="Line")
                         {
                             LineGeometry l = new LineGeometry();
                             l.StartPoint = lineStartPoint;
@@ -521,19 +497,19 @@ namespace GravityApps.Mandelkow.MetroCharts
                         lineStartPoint.X = CenterX;
                         lineStartPoint.Y = CenterY;
 
-                        if (GASeriesType=="Both" || GASeriesType=="Bullet")
-                        {
-                            Rectangle rect = getRecatangle(CenterX, CenterY, p);
-                            rect.Style = this.GAScatterBulletStyle;
-                            _GAPlotCanvas.Children.Add(rect);
+                        //if (GASeriesType=="Both" || GASeriesType=="Bullet")
+                        //{
+                        //    Rectangle rect = getRecatangle(CenterX, CenterY, p);
+                        //    rect.Style = this.GAScatterBulletStyle;
+                        //  //  _GAPlotCanvas.Children.Add(rect);
                            
-                        }
+                        //}
                         
                     }
 
                     p.OldValue = p.Value;
                    // p.locationInDataset = count;
-                    p.PropertyChanged += DataPointGroup_PropertyChanged; // and now let thigs be changed again
+                  //  p.PropertyChanged += DataPointGroup_PropertyChanged; // and now let thigs be changed again
                     count++;
                 }
    
@@ -556,7 +532,7 @@ namespace GravityApps.Mandelkow.MetroCharts
             Rectangle rect = new Rectangle();
             rect.Margin = new Thickness(CenterX - (_lineScatterStyle.scatterSize.Width/2), CenterY - (_lineScatterStyle.scatterSize.Height/2), 0, 0);
             rect.ToolTip = p.FormattedValue;
-            rect.Tag = p.locationInDataset;
+            rect.Tag = p.DataPointIndex;
             rect.MouseDown += rect_MouseDown;
             
             return rect;

@@ -43,7 +43,7 @@
             DependencyProperty.Register("IsNegativePiece", typeof(bool), typeof(ColumnPiece),
             new PropertyMetadata(false, new PropertyChangedCallback(OnPercentageChanged)));
 
-        
+
         public static readonly DependencyProperty ColumnHeightProperty =
             DependencyProperty.Register("ColumnHeight", typeof(double), typeof(ColumnPiece),
             new PropertyMetadata(0.0));
@@ -87,9 +87,9 @@
             get { return (double)GetValue(PercentageProperty); }
             set { SetValue(PercentageProperty, value); }
         }
-        
+
         /// <summary>
-        /// is thew area the piece is drawn in a negative or positive one
+        /// is the area the piece is drawn in a negative or positive one
         /// </summary>
         public bool IsNegativePiece
         {
@@ -123,33 +123,10 @@
             DrawGeometry();
         }
 
-        private DependencyObject getNthLevelDirectChild(int level,DependencyObject parent,string name)
-        {
-            if (level <= 0)
-            {
-                return parent;
-            }
-            DependencyObject returnValue = VisualTreeHelper.GetChild(parent, 0);
-            if (level ==1)
-            {
-                if (returnValue!=null)
-                {
-                    var element = returnValue as FrameworkElement;
-                    if (element.Name == name)
-                    {
-                        return returnValue;
-                    }
-                }
-                throw new Exception("Cant find " + name);
-            }
-            else
-            {
-                return (getNthLevelDirectChild(--level, returnValue,name));
-            }
-        }
 
         protected override void DrawGeometry(bool withAnimation = true)
-        {    
+        {
+            if (slice == null) return;
             try
             {
                 if (this.ClientWidth <= 0.0)

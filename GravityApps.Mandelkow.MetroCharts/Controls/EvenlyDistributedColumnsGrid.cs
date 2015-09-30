@@ -23,6 +23,27 @@
 
     public class EvenlyDistributedColumnsGrid : Panel
     {
+        /// <summary>
+        /// support for overlapping groups of columns
+        /// </summary>
+        public static readonly DependencyProperty NumberOfPointsPerGroupProperty =
+               DependencyProperty.Register("NumberOfPointsPerGroup", typeof(int), typeof(EvenlyDistributedColumnsGrid),
+               new PropertyMetadata(0));
+
+        public int NumberOfPointsPerGroup
+        {
+            get { return (int)GetValue(NumberOfPointsPerGroupProperty); }
+            set { SetValue(NumberOfPointsPerGroupProperty, value); }
+        }
+
+        private double numberOfChildren
+        {
+            get
+            {
+                return NumberOfPointsPerGroup == 0 ? Children.Count : NumberOfPointsPerGroup;
+            }
+        }
+
         public EvenlyDistributedColumnsGrid()
         {
             // this.Background = new SolidColorBrush(Colors.Green);
@@ -45,6 +66,7 @@
                 //gleichmäßige Verteilung, deshalb suchen wir die breiteste Column und multiplizieren mit Anzahl der Spalten
                 double maxColumnWidth = 0.0;
                 double minColumnHeight = 0.0;
+                
                 foreach (UIElement child in Children)
                 {
                     if (Children.Count > 1)
@@ -60,7 +82,8 @@
                         minColumnHeight = child.DesiredSize.Height;
                     }
                 }
-                availableSize.Width = maxColumnWidth * Children.Count;
+
+                availableSize.Width = maxColumnWidth * numberOfChildren; 
                 availableSize.Height = minColumnHeight;
                 
 
@@ -100,7 +123,7 @@
 
         private Size GetCellSize(Size availableSize)
         {
-            return new Size(availableSize.Width / Children.Count, availableSize.Height);
+            return new Size(availableSize.Width /numberOfChildren, availableSize.Height);
         }
 
         protected override Size ArrangeOverride(Size finalSize)
@@ -111,11 +134,18 @@
             double cellHeight = cellSize.Height;
 
             int col = 0;
+            int counter = 0;
             foreach (UIElement child in Children)
             {
                 double middlePointX = cellSize.Width * col + cellSize.Width / 2.0;
                 child.Arrange(new Rect(new Point(middlePointX - cellWidth / 2.0, 0.0), new Size(cellWidth, cellHeight)));
                 col++;
+                counter++;
+                if (NumberOfPointsPerGroup > 0)
+                {
+                    int divisor = (int)Math.Floor((double)counter / (double)NumberOfPointsPerGroup);
+                    col = counter - divisor * NumberOfPointsPerGroup;
+                }
             }
             return finalSize;
         }

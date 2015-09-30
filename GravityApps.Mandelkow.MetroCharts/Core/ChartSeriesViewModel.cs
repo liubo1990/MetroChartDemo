@@ -33,6 +33,28 @@
             typeof(ChartLegendItemViewModel),
             new PropertyMetadata(null));
 
+        /// <summary>
+        /// The style for the legend piece 
+        /// </summary>
+        public static readonly DependencyProperty SeriesLegendStyleProperty =
+           DependencyProperty.Register("SeriesLegendStyle", typeof(Style), typeof(ChartLegendItemViewModel),
+           new PropertyMetadata(null));
+
+        public static readonly DependencyProperty DataPointStyleProperty =
+   DependencyProperty.Register("DataPointStyle",
+   typeof(Style),
+   typeof(ChartLegendItemViewModel),
+   new PropertyMetadata(null));
+
+        /// <summary>
+        /// Show or hide the legend for this series 
+        /// </summary>
+        public static readonly DependencyProperty SeriesLegendVisibiltyProperty =
+           DependencyProperty.Register("SeriesLegendVisibilty",
+           typeof(Visibility),
+           typeof(ChartLegendItemViewModel),
+           new PropertyMetadata(Visibility.Visible));
+
         public string Caption
         {
             get { return (string)GetValue(CaptionProperty); }
@@ -43,6 +65,45 @@
         {
             get { return (Brush)GetValue(ItemBrushProperty); }
             set { SetValue(ItemBrushProperty, value); }
+        }
+
+        /// <summary>
+        /// The style for the legendItem
+        /// </summary>
+        public Style SeriesLegendStyle
+        {
+            get
+            {
+                return (Style)GetValue(SeriesLegendStyleProperty);
+            }
+            set
+            {
+                SetValue(SeriesLegendStyleProperty, value);
+            }
+        }
+
+        public Style DataPointStyle
+        {
+            get
+            {
+                return (Style)GetValue(DataPointStyleProperty);
+            }
+            set
+            {
+                SetValue(DataPointStyleProperty, value);
+            }
+        }
+
+        public Visibility SeriesLegendVisibilty
+        {
+            get
+            {
+                return (Visibility)GetValue(SeriesLegendVisibiltyProperty);
+            }
+            set
+            {
+                SetValue(SeriesLegendVisibiltyProperty, value);
+            }
         }
     }
 }
