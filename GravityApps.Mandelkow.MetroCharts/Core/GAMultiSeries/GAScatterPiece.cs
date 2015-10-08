@@ -119,18 +119,36 @@
                 }
 
                 if (slice == null) return;
+
                 double endHeight = ClientHeight;
 
                 if (endHeight <= 0.0)
                 {
                     endHeight=0;
                 }
-                double percentToUse = Percentage;
+
+                this.Visibility = Visibility.Visible;
+                if ((!IsNegativePiece && Percentage < 0))
+                {
+                    this.Visibility = Visibility.Hidden;
+                }
+
+                if ((IsNegativePiece && Percentage <= 0))
+                {
+                    this.Visibility = Visibility.Hidden;
+                }
+
+                // I draw the scatter at a zero location and then apply a translation
+                // this gets around an issue when drawing the scatter point at the maximum grid location
+                // and half of it gets cut off
+
+                double percentToUse = Percentage < 0 ? 0 : Percentage;
                 double axisThickness = ParentChart.xAxisThickness;
                 double startHeight = 0;
-                double horizontalTranslate = (this.ActualWidth / 2)- getHalfBulletHeight();
+                double horizontalTranslate = (this.ActualWidth / 2)- getHalfBulletWidth();
                 TranslateTransform sliceTransform = new TranslateTransform(horizontalTranslate, 0);
 
+                // if there is an existing translation then use this, dont add a new one
                 if (slice.RenderTransform!=null && slice.RenderTransform.GetType()== typeof(TranslateTransform))
                 {
                     sliceTransform=(slice.RenderTransform as TranslateTransform);
@@ -143,18 +161,6 @@
 
                 }
 
-                this.Visibility = Visibility.Visible;
-                if ( (!IsNegativePiece && percentToUse<0))
-                {
-                    this.Visibility = Visibility.Hidden;
-                }
-
-                if ((IsNegativePiece && percentToUse <= 0))
-                {
-                    this.Visibility = Visibility.Hidden;
-                }
-
-                if (percentToUse < 0) percentToUse = 0;
                 if (!IsNegativePiece)
                 {
                     endHeight = (endHeight * percentToUse)+ getHalfBulletHeight();    
@@ -176,7 +182,7 @@
             }
         }
 
-        //TODO rewrite these - doesnt need to be so complex now!
+        
         private double getHalfBulletHeight()
         {
              Setter heightSetter= Helpers.getCalculatedSetter(GAChartPieceStyle, "Height", true);

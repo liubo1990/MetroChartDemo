@@ -241,16 +241,10 @@ new PropertyMetadata(null));
         {
             try
             {
-                if (this.ClientWidth <= 0.0)
+                if (!shouldRender())
                 {
                     return;
                 }
-                if (this.ClientHeight <= 0.0)
-                {
-                    return;
-                }
-
-                if (slice == null) return;
 
                 if (slice.Children.Count==0)
                 {
@@ -287,7 +281,19 @@ new PropertyMetadata(null));
             BindingOperations.SetBinding(target, property, thisBinding);
         }
 
- 
+        /// <summary>
+        /// should the rendering of this continue?
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool shouldRender()
+        {
+
+            if (this.ClientWidth <= 0.0 || this.ClientHeight <= 0.0 || slice == null)
+            {
+                return false;
+            }
+            return true; 
+        }
 
         #endregion Methods
     }

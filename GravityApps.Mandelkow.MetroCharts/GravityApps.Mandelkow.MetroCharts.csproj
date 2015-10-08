@@ -74,7 +74,6 @@
     <Compile Include="Converters\BoolWithValueToVisibilityConverter.cs" />
     <Compile Include="Converters\nullStringToVisibilityConverter.cs" />
     <Compile Include="Converters\IsNegativeToVerticalAlignment.cs" />
-    <Compile Include="Converters\DoubleToVisibilityConverter.cs" />
     <Compile Include="Core\BarChart\StackedBar100Chart.cs" />
     <Compile Include="Core\BarChart\StackedBarChart.cs" />
     <Compile Include="ChartControls\ChartArea.cs" />
@@ -84,9 +83,6 @@
     <Compile Include="Core\GAMultiSeries\GAColumnPiece.cs" />
     <Compile Include="Core\GAMultiSeries\GALinePiece.cs" />
     <Compile Include="Core\GAMultiSeries\GAScatterPiece.cs" />
-    <Compile Include="Core\GALineScatterChart\GALineScatterChart.cs" />
-    <Compile Include="Core\GALineScatterChart\GALineScatterStyling.cs" />
-    <Compile Include="Core\GALineScatterChart\GAScatterLinePiece.cs" />
     <Compile Include="Core\GAMultiSeries\GAMultipleTypeSeriesChart.cs" />
     <Compile Include="Core\GAMultiSeries\GAMultiPiece.cs" />
     <Compile Include="Core\GaugeChart\RadialGaugeChart.cs" />

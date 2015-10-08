@@ -27,6 +27,7 @@
             typeof(string),
             typeof(ChartLegendItemViewModel),
             new PropertyMetadata(null));
+
         public static readonly DependencyProperty ItemBrushProperty =
             DependencyProperty.Register("ItemBrush",
             typeof(Brush),
@@ -40,11 +41,14 @@
            DependencyProperty.Register("SeriesLegendStyle", typeof(Style), typeof(ChartLegendItemViewModel),
            new PropertyMetadata(null));
 
+        /// <summary>
+        /// The stye for each datapoint
+        /// </summary>
         public static readonly DependencyProperty DataPointStyleProperty =
-   DependencyProperty.Register("DataPointStyle",
-   typeof(Style),
-   typeof(ChartLegendItemViewModel),
-   new PropertyMetadata(null));
+            DependencyProperty.Register("DataPointStyle",
+            typeof(Style),
+            typeof(ChartLegendItemViewModel),
+            new PropertyMetadata(null));
 
         /// <summary>
         /// Show or hide the legend for this series 

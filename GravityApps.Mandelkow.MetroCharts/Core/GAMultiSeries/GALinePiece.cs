@@ -111,22 +111,20 @@
            
             parentGrid = this.Parent as Grid;
            
-            bindDataPoints();
+            loadDataPoints();
             //selectedSlice = this.GetTemplateChild("SelectionHighlight") as Path;
           //  RegisterMouseEvents(slice);
         }
 
-        private void bindDataPoints()
+        private void loadDataPoints()
         {
             if (ParentChart!=null)
             {
                 DataPoints = ParentChart.AllDataPoints;
             }
-            
-
         }
 
-        // I dont think this is going to be correct
+       
         void DataPointGroup_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Value")
@@ -146,11 +144,7 @@
             {
 
             double width = parentGrid.RenderSize.Width;
-            //int pointCounter = 0;
-            //Point lineStartPoint = new Point(0, 0);
-            //Point lineEndPoint = new Point(0, 0);
             double positiveHeight = ParentChart.positiveChartAreaHeight;
-            double negativeHeight = ParentChart.negativeChartAreaHeight;
             double halfAxisThickness = ParentChart.xAxisThickness / 2;
 
             GeometryGroup linesGeom = (GeometryGroup)slice.Data;
@@ -244,12 +238,9 @@
                 GeometryGroup group = new GeometryGroup();
                 group.Children = geomCollection;
                 slice.Data = group;
-                
-               // slice.Stroke = new SolidColorBrush(Color.FromRgb(20,20,20));
-                //slice.StrokeThickness = 1;
+
 
                 double positiveHeight = ParentChart.positiveChartAreaHeight;
-                double negativeHeight = ParentChart.negativeChartAreaHeight;
                 double halfAxisThickness = ParentChart.xAxisThickness/2;
 
                 foreach (DataPoint point in DataPoints)
@@ -266,11 +257,9 @@
                     double offset = point.PercentageFromMaxDataPointValue < 0 ? -halfAxisThickness : halfAxisThickness; // allow for the x axis thickness
                     
                     double CenterX = (pointCounter * width) + (width / 2);
-                    double CenterY = 0;
-                    CenterY = (-1 * point.PercentageFromMaxDataPointValue * positiveHeight) + offset;
+                    double CenterY = (-1 * point.PercentageFromMaxDataPointValue * positiveHeight) + offset;
 
-                    //-ve is above and +ve below
-                    if (pointCounter == 0)
+                    if (pointCounter == 0) // 1st point on line graph is a line start only
                     {
                         lineStartPoint = new Point(CenterX, CenterY);
                     }

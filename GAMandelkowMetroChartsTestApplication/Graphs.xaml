@@ -13,7 +13,6 @@
     
     <Style x:Key="GALineStyle" TargetType="Path" >
         <Setter Property="StrokeThickness" Value="1"></Setter>
-        <Setter Property="Stroke" Value="Black"></Setter>
     </Style>
 
     <Style x:Key="GAScatterBulletStyle" TargetType="Rectangle" >
@@ -21,7 +20,7 @@
         <Setter Property="Width" Value="8"></Setter>
         <Setter Property="RadiusX" Value="4"></Setter>
         <Setter Property="RadiusY" Value="4"></Setter>
-        <Setter Property="StrokeThickness" Value="1"></Setter>
+        <Setter Property="StrokeThickness" Value="0"/>
     </Style>
 
     <Style x:Key="GAScatterBulletSelectedStyle" TargetType="Rectangle" >
@@ -30,42 +29,19 @@
         <Setter Property="RadiusX" Value="4"></Setter>
         <Setter Property="RadiusY" Value="4"></Setter>
         <Setter Property="Fill" Value="Red"></Setter>
-    </Style>
-
-    <Style x:Key="GATransparentScatterBulletStyle" TargetType="Rectangle" BasedOn="{StaticResource GAScatterBulletStyle}" >
-        <Setter Property="Fill" Value="Transparent"></Setter>
-        <Setter Property="Stroke" Value="Transparent"/>
+        <Setter Property="StrokeThickness" Value="0"/>
     </Style>
 
     <Style x:Key="GAColumnPieceStyle" TargetType="Rectangle" >
-        <!--<Setter Property="Background" Value="Black"></Setter>-->
+        <Setter Property="StrokeThickness" Value="0"/>
     </Style>
 
     <Style x:Key="GAColumnPieceSelectedStyle" TargetType="Rectangle" >
         <Setter Property="Fill" Value="Orange"></Setter>
+        <Setter Property="StrokeThickness" Value="0"/>
     </Style>
 
-    <Style x:Key="BlackLineStyle" TargetType="Path" >
-        <Setter Property="StrokeThickness" Value="1"></Setter>
-        <Setter Property="Stroke" Value="Black"></Setter>
-    </Style>
 
-    <Style x:Key="RectangleFilledStyle" TargetType="Rectangle"  BasedOn="{StaticResource GAScatterBulletStyle}" >
-        <Setter Property="RadiusX" Value="0"></Setter>
-        <Setter Property="RadiusY" Value="0"></Setter>
-        <Setter Property="Fill" Value="Red"></Setter>
-        <Setter Property="StrokeThickness" Value="1"></Setter>
-        <Setter Property="Stroke" Value="Black"></Setter>
-    </Style>
-
-    <Style x:Key="NotFilledCircleStyle" TargetType="Rectangle" >
-        <Setter Property="Height" Value="7"></Setter>
-        <Setter Property="Width" Value="7"></Setter>
-        <Setter Property="RadiusX" Value="3.5"></Setter>
-        <Setter Property="RadiusY" Value="3.5"></Setter>
-        <Setter Property="Fill" Value="Transparent"/>
-        <Setter Property="StrokeThickness" Value="1"/>
-    </Style>
 
     <Style x:Key="GALinePieceLegendStyle" TargetType="GAGraph:ChartLegendItem">
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -84,7 +60,6 @@
                                     <LineGeometry.EndPoint>
                                         <Point X="20" Y="8"></Point>
                                     </LineGeometry.EndPoint>
-
                                 </LineGeometry>
                             </Path.Data>
                         </Path>

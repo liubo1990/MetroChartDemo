@@ -30,7 +30,6 @@
     
 #endif
 
-    //public class ColumnPiece : PieceBase
     public class GAColumnPiece : GAMultiPiece
     {
 
@@ -69,10 +68,10 @@
         public GAColumnPiece()
         {
 #if NETFX_CORE
-            this.DefaultStyleKey = typeof(ColumnPiece);
+            this.DefaultStyleKey = typeof(GAColumnPiece);
 #endif
 #if SILVERLIGHT
-            this.DefaultStyleKey = typeof(ColumnPiece);
+            this.DefaultStyleKey = typeof(GAColumnPiece);
 #endif
             Loaded += ColumnPiece_Loaded;
         }
@@ -110,10 +109,11 @@
         {
             slice = this.GetTemplateChild("Slice") as Border;
             RegisterMouseEvents(slice);
-            getIsNegative();
+            setup();
         }
 
-        private void getIsNegative()
+
+        private void setup()
         {
             bottomText = this.GetTemplateChild("BottomNumber") as AutoSizeTextBlock;
             topText = this.GetTemplateChild("TopNumber") as AutoSizeTextBlock;

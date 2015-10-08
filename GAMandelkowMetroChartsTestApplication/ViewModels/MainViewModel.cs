@@ -212,11 +212,11 @@ namespace GAMandelkowMetroChartsTestApplication.ViewModels
             scatterData3.seriesDisplayName = "Series 4";
             scatterData3.Items.Add(new GraphSeriesDataPoint("mon", 1));
             scatterData3.Items.Add(new GraphSeriesDataPoint("tue", -6));
-            scatterData3.Items.Add(new GraphSeriesDataPoint("wed", 20));
-            scatterData3.Items.Add(new GraphSeriesDataPoint("thur", -4));
-            scatterData3.Items.Add(new GraphSeriesDataPoint("fri", 7));
-            scatterData3.Items.Add(new GraphSeriesDataPoint("sat", 5));
-            scatterData3.Items.Add(new GraphSeriesDataPoint("sun", 0));
+            scatterData3.Items.Add(new GraphSeriesDataPoint("wed", 18));
+            scatterData3.Items.Add(new GraphSeriesDataPoint("thur", -8));
+            scatterData3.Items.Add(new GraphSeriesDataPoint("fri", 0));
+            scatterData3.Items.Add(new GraphSeriesDataPoint("sat", -6));
+            scatterData3.Items.Add(new GraphSeriesDataPoint("sun", 20));
             
 
             radialSeries = new GraphSeriesInformation();

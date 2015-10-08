@@ -34,8 +34,9 @@
         #region Fields
 
         private bool onApplyTemplateFinished = false;
+
         private ObservableCollection<string> gridLines = new ObservableCollection<string>();
-        //GA added
+
         private ObservableCollection<string> negativeGridLines = new ObservableCollection<string>();
 
         public static readonly DependencyProperty PlotterAreaStyleProperty =
@@ -126,33 +127,32 @@
         public static readonly DependencyProperty MaxDataPointGroupSumProperty =
              DependencyProperty.Register("MaxDataPointGroupSum",
              typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointGroupSumChanged));
-
         /// <summary>
-        /// GA Added this
+        /// 'maximum' negative data point
         /// </summary>
         public static readonly DependencyProperty MinDataPointValueProperty =
            DependencyProperty.Register("MinDataPointValue",
            typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointValueChanged));
-
+        /// <summary>
+        /// maximum positive grid line value
+        /// </summary>
          public static readonly DependencyProperty MaxPositiveGridLineValueProperty =
            DependencyProperty.Register("MaxPositiveGridLineValue",
            typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointValueChanged));
-
+         /// <summary>
+         /// maximum negative grid line value
+         /// </summary>
          public static readonly DependencyProperty MaxNegativeGridLineValueProperty =
            DependencyProperty.Register("MaxNegativeGridLineValue",
            typeof(double), typeof(ChartBase), new PropertyMetadata(0.0, OnMaxDataPointValueChanged));
-
+         /// <summary>
+         /// maximum number of datapoints in a series
+         /// </summary>
          public static readonly DependencyProperty MaxSeriesDataPointCountProperty =
    DependencyProperty.Register("MaxSeriesDataPointCountValue",
    typeof(double), typeof(ChartBase), new PropertyMetadata(0.0));
 
-         public static readonly DependencyProperty GAChartLegendVisibilityProperty =
-   DependencyProperty.Register("GAChartLegendVisibility",
-   typeof(Visibility), typeof(ChartBase), new PropertyMetadata(Visibility.Visible));
-
-         public static readonly DependencyProperty GAChartSeriesTextVisibilityProperty =
-   DependencyProperty.Register("GAChartSeriesTextVisibility",
-   typeof(Visibility), typeof(ChartBase), new PropertyMetadata(Visibility.Visible));
+      
 
         #endregion Fields
 
@@ -474,7 +474,7 @@
                {
 
                }
-                return null;
+               return null;
             }
         }
 
@@ -530,23 +530,6 @@
             }
 
         }
-
-        public Visibility GAChartLegendVisibility
-        {
-            get { return (Visibility)GetValue(GAChartLegendVisibilityProperty); }
-            set { SetValue(GAChartLegendVisibilityProperty, value); }
-            
-        }
-
-        
-        public Visibility GAChartSeriesTextVisibility
-        {
-            get { return (Visibility)GetValue(GAChartSeriesTextVisibilityProperty); }
-            set { SetValue(GAChartSeriesTextVisibilityProperty, value); }
-            
-        }
-
-
 
         /// <summary>
         /// In ColumnGrid we need some space above the column to show the number above the column,
@@ -816,7 +799,7 @@
         /// </summary>
         protected void updateAllGridLines()
         {
-            if (!isGAAlteredChart()) return;
+           // if (!isGAAlteredChart()) return;
 
             double largestAbsoluteDataPointValue = GridLinesMaxValue > Math.Abs(GridLinesMinValue) ? GridLinesMaxValue : Math.Abs(GridLinesMinValue); 
 
@@ -828,19 +811,22 @@
             maximumNegativeXAxisValue = maxNegativeAxisDivisior * axisTickValueDifference;
 
             gridLines.Clear();
-            //positive axis
+
             for (var i = axisTickValueDifference; i <= maximumPositiveXAxisValue; i += axisTickValueDifference)
             {
                 gridLines.Add(i.ToString());
             }
+
             negativeGridLines.Clear();
             for (var i = -axisTickValueDifference; i >= maximumNegativeXAxisValue; i -= axisTickValueDifference)
             {
                 negativeGridLines.Add(i.ToString());
             }
 
-
-            updateChartGridProportions(maximumPositiveXAxisValue, maximumNegativeXAxisValue);
+            if (isGAAlteredChart())
+            {
+                updateChartGridProportions(maximumPositiveXAxisValue, maximumNegativeXAxisValue);
+            }
 
             MaxPositiveGridLineValue = maximumPositiveXAxisValue;
             MaxNegativeGridLineValue = maximumNegativeXAxisValue;
@@ -854,7 +840,8 @@
         {
             Type chartType = this.GetType();
 
-            return (chartType== typeof(ClusteredColumnChart) || chartType == typeof(GAMultipleTypeSeriesChart) || chartType==typeof(GALineScatterChart));
+            return (chartType== typeof(ClusteredColumnChart) || chartType==typeof(StackedColumn100Chart) || chartType==typeof(StackedColumnChart)
+                || chartType == typeof(GAMultipleTypeSeriesChart));
         }
 
         /// <summary>
@@ -1030,7 +1017,7 @@
 
                     RecalcMaxDataPointValue(); //GA fix issue with max value in second group not being picked up - add this line
                     RecalcMinDataPointValue();
-                    UpdateColorsOfDataPoints();
+                    UpdateColorsOfDataPoints(); 
 
                     chartLegendItems.Clear();
                     DataPointGroup firstgroup = groupedSeries.FirstOrDefault();
@@ -1113,11 +1100,10 @@
                     point.GADataPointType = series.DataPointType;
                     Brush dataPointBrush = this.Series.Count == 1 ? GetItemBrush(dataPointIndex) : GetItemBrush(seriesIndexForColour);
 
-
-
                     point.GADataPointStyle = getNewStyle(series.DataPointStyle, dataPointBrush, series.DataPointType,styleType.GetDefaultStyle);
                     if (dataPointIndex == 0)
                     {
+                        // this wont change colours but will get he deafult style if needed
                         series.SeriesLegendStyle = getNewStyle(series.SeriesLegendStyle, dataPointBrush, series.DataPointType, styleType.GetDefaultLegendStyle);
                     }
                     point.GASelectedDataPointStyle = getNewStyle(series.DataPointSelectedStyle, dataPointBrush, series.DataPointType,styleType.GetDefaultSelectedStyle);
@@ -1135,56 +1121,101 @@
             }
 
             MaxSeriesDataPointCountValue = maxCount;
-            //bool legendIsSetInvisible = ChartLegendVisibility == Visibility.Collapsed || ChartLegendVisibility == Visibility.Hidden;
-            //GAChartLegendVisibility = !legendIsSetInvisible && Series.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
-            //GAChartSeriesTextVisibility = !legendIsSetInvisible && Series.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
 
-            if (Series.Count>1) 
+            if (Series.Count > 1)
             {
                 chartLegendItems.Clear();
                 int seriesCounter = 0;
                 foreach (ChartSeries legendSeries in Series)
                 {
 
-                    
+
+                    ChartLegendItemViewModel legendItem = new ChartLegendItemViewModel();
+
+                    var captionBinding = new Binding();
+                    captionBinding.Source = legendSeries;
+                    captionBinding.Mode = BindingMode.OneWay;
+                    captionBinding.Path = new PropertyPath("SeriesTitle");
+                    BindingOperations.SetBinding(legendItem, ChartLegendItemViewModel.CaptionProperty, captionBinding);
+
+                    var brushBinding = new Binding();
+                    brushBinding.Source = DataPointGroups[seriesCounter].DataPoints[0]; ;
+                    brushBinding.Mode = BindingMode.OneWay;
+                    brushBinding.Path = new PropertyPath("ItemBrush");
+                    BindingOperations.SetBinding(legendItem, ChartLegendItemViewModel.ItemBrushProperty, brushBinding);
+
+
+                    var seriesLegendStyleBinding = new Binding();
+                    seriesLegendStyleBinding.Source = legendSeries;
+                    seriesLegendStyleBinding.Mode = BindingMode.OneWay;
+                    seriesLegendStyleBinding.Path = new PropertyPath("SeriesLegendStyle");
+                    BindingOperations.SetBinding(legendItem, ChartLegendItemViewModel.SeriesLegendStyleProperty, seriesLegendStyleBinding);
+
+                    var seriesLegendVisibilityBinding = new Binding();
+                    seriesLegendVisibilityBinding.Source = legendSeries;
+                    seriesLegendVisibilityBinding.Mode = BindingMode.OneWay;
+                    seriesLegendVisibilityBinding.Path = new PropertyPath("SeriesLegendVisibilty");
+                    BindingOperations.SetBinding(legendItem, ChartLegendItemViewModel.SeriesLegendVisibiltyProperty, seriesLegendVisibilityBinding);
+
+                    var seriesLegendDataPointStyleBinding = new Binding();
+                    seriesLegendDataPointStyleBinding.Source = DataPointGroups[seriesCounter].DataPoints[0];
+                    seriesLegendDataPointStyleBinding.Mode = BindingMode.OneWay;
+                    seriesLegendDataPointStyleBinding.Path = new PropertyPath("GADataPointStyle");
+                    BindingOperations.SetBinding(legendItem, ChartLegendItemViewModel.DataPointStyleProperty, seriesLegendDataPointStyleBinding);
+
+                    chartLegendItems.Add(legendItem);
+                    seriesCounter++;
+
+                }
+            }
+            else
+            {
+                chartLegendItems.Clear();
+
+                DataPointGroup firstgroup = groupedSeries.FirstOrDefault();
+                if (firstgroup != null)
+                {
+                    foreach (DataPoint dataPoint in firstgroup.DataPoints)
+                    {
                         ChartLegendItemViewModel legendItem = new ChartLegendItemViewModel();
 
                         var captionBinding = new Binding();
-                        captionBinding.Source = legendSeries;
+                        captionBinding.Source = dataPoint;
                         captionBinding.Mode = BindingMode.OneWay;
-                        captionBinding.Path = new PropertyPath("SeriesTitle");
+                        captionBinding.Path = new PropertyPath("SeriesCaption");
                         BindingOperations.SetBinding(legendItem, ChartLegendItemViewModel.CaptionProperty, captionBinding);
 
-                        //var brushBinding = new Binding();
-                        //brushBinding.Source = legendSeries;
-                        //brushBinding.Mode = BindingMode.OneWay;
-                        //brushBinding.Path = new PropertyPath("ItemBrush");
-                        //BindingOperations.SetBinding(legendItem, ChartLegendItemViewModel.ItemBrushProperty, brushBinding);
-
+                        var brushBinding = new Binding();
+                        brushBinding.Source = dataPoint;
+                        brushBinding.Mode = BindingMode.OneWay;
+                        brushBinding.Path = new PropertyPath("ItemBrush");
+                        BindingOperations.SetBinding(legendItem, ChartLegendItemViewModel.ItemBrushProperty, brushBinding);
 
                         var seriesLegendStyleBinding = new Binding();
-                        seriesLegendStyleBinding.Source = legendSeries;
+                        seriesLegendStyleBinding.Source = Series[0];
                         seriesLegendStyleBinding.Mode = BindingMode.OneWay;
                         seriesLegendStyleBinding.Path = new PropertyPath("SeriesLegendStyle");
                         BindingOperations.SetBinding(legendItem, ChartLegendItemViewModel.SeriesLegendStyleProperty, seriesLegendStyleBinding);
 
                         var seriesLegendVisibilityBinding = new Binding();
-                        seriesLegendVisibilityBinding.Source = legendSeries;
+                        seriesLegendVisibilityBinding.Source = Series[0];
                         seriesLegendVisibilityBinding.Mode = BindingMode.OneWay;
                         seriesLegendVisibilityBinding.Path = new PropertyPath("SeriesLegendVisibilty");
                         BindingOperations.SetBinding(legendItem, ChartLegendItemViewModel.SeriesLegendVisibiltyProperty, seriesLegendVisibilityBinding);
-                  
+
                         var seriesLegendDataPointStyleBinding = new Binding();
-                        seriesLegendDataPointStyleBinding.Source = DataPointGroups[seriesCounter].DataPoints[0];
+                        seriesLegendDataPointStyleBinding.Source = dataPoint;
                         seriesLegendDataPointStyleBinding.Mode = BindingMode.OneWay;
                         seriesLegendDataPointStyleBinding.Path = new PropertyPath("GADataPointStyle");
                         BindingOperations.SetBinding(legendItem, ChartLegendItemViewModel.DataPointStyleProperty, seriesLegendDataPointStyleBinding);
 
                         chartLegendItems.Add(legendItem);
-                        seriesCounter++;
-                    
+                    }
                 }
             }
+
+
+                
            
         }
 
@@ -1192,33 +1223,36 @@
         private enum styleType { GetDefaultStyle, GetDefaultSelectedStyle, GetDefaultLegendStyle };
 
         /// <summary>
-        /// Get a new style, based on existing one, but with new pallette colours if needed
+        /// Get a new style, based on an existing one, with new pallette colours overriding the fill and stroke, ONLY if none have been supplied in the style
         /// </summary>
         /// <param name="style">The existing style to be checked and altered. If null, a default style will be taken from the datapointType class</param>
-        /// <param name="dataPointBrush">The brush taken from the pallette</param>
+        /// <param name="dataPointBrush">The brush that will be used if none is supplied in the style</param>
         /// <param name="dataPointType">The class that will render the datapoint</param>
-        /// <param name="getDefaultType">The type of default style to retrieve - ie default, selectedDefault , mouse over (if I do this)</param>
+        /// <param name="getDefaultType">The type of default style to retrieve - ie default, selectedDefault , defaultLegend</param>
         /// <returns></returns>
         private Style getNewStyle(Style style, Brush dataPointBrush,Type dataPointType,styleType getDefaultType)
         {
             if (style==null)
             {
-                object classInstance = Activator.CreateInstance(dataPointType);
-                style = (Style) dataPointType.GetMethod(getDefaultType.ToString()).Invoke(classInstance, null);
+                style = getDefaultStyle(dataPointType, getDefaultType);
             }
 
             Setter existingColourSetter = null;
-            DependencyProperty targetProperty=null;
-            DependencyProperty targetProperty2 = null;
+            Setter existingStrokeSetter = null;
+            DependencyProperty fillProperty=null;
+            DependencyProperty strokeProperty = null;
+
+            // shapes (ie rectangles, lines etc) use the fill and stroke properties, border uses its own, others not supported
             if (style.TargetType.IsSubclassOf(typeof(Shape)))
             {
-                targetProperty = Shape.FillProperty;
-                targetProperty2 = Shape.StrokeProperty;
+                fillProperty = Shape.FillProperty;
+                strokeProperty = Shape.StrokeProperty;
                 
             }
             else if (style.TargetType==typeof(Border))
             {
-                targetProperty = Border.BackgroundProperty;
+                fillProperty = Border.BackgroundProperty;
+                strokeProperty = Border.BorderBrushProperty;
             }
             else
             {
@@ -1226,18 +1260,36 @@
                 //throw new NotImplementedException("Only classes that inherit shape or border element can be used as style for data points");
             }
 
-            existingColourSetter = Helpers.getCalculatedSetter(style, targetProperty.Name, false);
-            if (existingColourSetter != null) return style;
+            existingColourSetter = Helpers.getCalculatedSetter(style, fillProperty.Name, false);
+            existingStrokeSetter = Helpers.getCalculatedSetter(style, strokeProperty.Name, false);
+
+            if (existingColourSetter != null && existingStrokeSetter!=null) return style; // dont replace the colours if they have been specified
 
             Style newStyle = new Style(style.TargetType, style);
-            newStyle.Setters.Add(new Setter(targetProperty, dataPointBrush));
-            if (targetProperty2!=null)
+            if (existingColourSetter==null)
             {
-                newStyle.Setters.Add(new Setter(targetProperty2, dataPointBrush));
+                newStyle.Setters.Add(new Setter(fillProperty, dataPointBrush));
+            }
+
+            if (existingStrokeSetter == null)
+            {
+                newStyle.Setters.Add(new Setter(strokeProperty, dataPointBrush));
             }
 
             return newStyle;
 
+        }
+
+        /// <summary>
+        /// Get the default style for the series
+        /// </summary>
+        /// <param name="dataPointType">The class type of the datapoint</param>
+        /// <param name="getDefaultType">The default style to return styleType.GetDefaultStyle, GetDefaultSelectedStyle, GetDefaultLegendStyle </param>
+        /// <returns></returns>
+        private static Style getDefaultStyle(Type dataPointType, styleType getDefaultType)
+        {
+            object classInstance = Activator.CreateInstance(dataPointType);
+            return (Style)dataPointType.GetMethod(getDefaultType.ToString()).Invoke(classInstance, null);
         }
 
        
@@ -1268,7 +1320,7 @@
         private void UpdateColorsOfDataPoints()
         {
             int index = 0;
-            foreach(var dataPointGroup in groupedSeries)
+            foreach (var dataPointGroup in groupedSeries)
             {
                 index = 0;
                 foreach (DataPoint dataPoint in dataPointGroup.DataPoints)
@@ -1277,116 +1329,21 @@
                     index++;
                 }
             }
+
+            
+            //int SeriesIndex = 0;
+            //foreach (var dataPointGroup in groupedSeries)
+            //{
+            //    int index = 0;
+            //    foreach (DataPoint dataPoint in dataPointGroup.DataPoints)
+            //    {
+            //        Brush dataPointBrush = this.Series.Count == 1 ? GetItemBrush(index) : GetItemBrush(SeriesIndex);
+            //        dataPoint.SetValue(DataPoint.ItemBrushProperty, dataPointBrush);
+            //        index++;
+            //    }
+            //    SeriesIndex++;
+            //}
         }
-
-        //************************************************************************************************************************
-        //TODO : look at this and see what is needed and how to improve
-
-        /// <summary>
-        /// update the legend styles for the GALine and bullet charts
-        /// </summary>
-        /// <param name="dataPointGroup"></param>
-        private void updateDataPointGroupLegendStyles(DataPointGroup dataPointGroup)
-        {
-
-            Style lineStyle = dataPointGroup.GALineStyle;
-            Style bulletStyle = dataPointGroup.GABulletStyle;
-            Style selectedBulletStyle = dataPointGroup.GAScatterSelectedBulletStyle;
-
-            updateStylesWithDefaultsIfNeeded(ref lineStyle, ref bulletStyle, ref selectedBulletStyle);
-
-            if (lineStyle != null && bulletStyle != null && selectedBulletStyle!=null && dataPointGroup.DataPoints.Count>0)
-            {
-
-                Style newBulletStyle;
-                Style newLineStyle;
-
-                updateStylesForPalettes(dataPointGroup, lineStyle, bulletStyle, out newBulletStyle, out newLineStyle);
-
-                dataPointGroup.GALegendLineStyle = newLineStyle;
-               
-                foreach (DataPoint point in dataPointGroup.DataPoints)
-                {
-                    point.GADataPointStyle = newBulletStyle;
-                    point.GASelectedDataPointStyle = selectedBulletStyle;
-                }
-                createLegendLines(dataPointGroup, bulletStyle);
-            }
-                    
-        }
-
-        /// <summary>
-        /// create the line start and end point for the legend
-        /// </summary>
-        /// <param name="dataPointGroup"></param>
-        /// <param name="bulletStyle"></param>
-        private static void createLegendLines(DataPointGroup dataPointGroup, Style bulletStyle)
-        {
-            //get the start and end positions for the line in the Legend
-            Point start = new Point(0, 0);
-            Point end = new Point(0, 0);
-            var bulletHeight = bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Height");
-            var bulletWidth = bulletStyle.Setters.OfType<Setter>().FirstOrDefault(s => s.Property.Name == "Width");
-            if (bulletHeight != null)
-            {
-                start.Y = ((double)bulletHeight.Value) / 2;
-                end.Y = start.Y;
-            }
-
-            if (bulletWidth != null)
-            {
-                end.X = ((double)bulletWidth.Value) * 3;
-            }
-
-            dataPointGroup.GALegendLinePointEnd = end;
-            dataPointGroup.GALegendLinePointStart = start;
-        }
-
-        /// <summary>
-        /// update the styles with pallette information
-        /// </summary>
-        /// <param name="dataPointGroup"></param>
-        /// <param name="lineStyle"></param>
-        /// <param name="bulletStyle"></param>
-        /// <param name="newBulletStyle">A style based on bulletStyle but with new fill and stroke colours</param>
-        /// <param name="newLineStyle">A style based on lineStyle but with new stroke colour from palette if required</param>
-        private void updateStylesForPalettes(DataPointGroup dataPointGroup, Style lineStyle, Style bulletStyle, 
-            out Style newBulletStyle, out Style newLineStyle)
-        {
-            GALineScatterStyling styling = new GALineScatterStyling(lineStyle, bulletStyle, dataPointGroup.DataPoints[0]);
-
-            //bullet styles = style 'based on existing' but with brush's overridden to account for any pallette colours
-            newBulletStyle = new Style(typeof(Rectangle), bulletStyle);
-            newBulletStyle.Setters.Add(new Setter(Rectangle.FillProperty, styling.fillBrush));
-            newBulletStyle.Setters.Add(new Setter(Rectangle.StrokeProperty, styling.bulletLineBrush));
-
-            newLineStyle = new Style(typeof(Path), lineStyle);
-            newLineStyle.Setters.Add(new Setter(Path.StrokeProperty, styling.lineBrush));
-        }
-
-        /// <summary>
-        /// Use the default GALine and GAScatterBullet styles if none supplied
-        /// </summary>
-        /// <param name="lineStyle"></param>
-        /// <param name="bulletStyle"></param>
-        private void updateStylesWithDefaultsIfNeeded(ref Style lineStyle, ref Style bulletStyle, ref Style selectedBulletStyle)
-        {
-            if (lineStyle == null)
-            {
-                lineStyle = TryFindResource("GALineStyle") as Style;
-            }
-
-            if (bulletStyle == null)
-            {
-                bulletStyle = TryFindResource("GAScatterBulletStyle") as Style;
-            }
-
-            if (selectedBulletStyle == null)
-            {
-                selectedBulletStyle = TryFindResource("GAScatterBulletSelectedStyle") as Style;
-            }
-        }
-
 
         private void CreateDataPointBindings(DataPoint datapoint, DataPointGroup dataPointGroup)
         {
